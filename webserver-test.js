@@ -7,9 +7,9 @@ var url = require('url');
 
 http.listen(8080); //listen to port 8080
 
-function handler(req, res) { //create server
+function handler(req, res) { //create server (request, response)
     var loc = url.parse(req.url, true);
-    var filename = "." + loc.pathname;
+    var filename = "." + "/example-web/" + loc.pathname;
     // fs.readFile(__dirname + '/example-web/index.html', function (err, data) { //read file index.html in public folder
     fs.readFile(filename, function (err, data) { //read file index.html in public folder
         if (err) {
