@@ -9,7 +9,11 @@ http.listen(8080); //listen to port 8080
 
 function handler(req, res) { //create server (request, response)
     var loc = url.parse(req.url, true);
-    var filename = "." + "/example-web/" + loc.pathname;
+    if (loc.pathname == "/") {
+        var filename = "." + "/example-web/" + "index.html";
+    } else {
+        var filename = "." + "/example-web/" + loc.pathname;
+    }
     // fs.readFile(__dirname + '/example-web/index.html', function (err, data) { //read file index.html in public folder
     fs.readFile(filename, function (err, data) { //read file index.html in public folder
         if (err) {
