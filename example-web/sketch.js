@@ -4,5 +4,6 @@ function setup() {
 }
 
 function draw() {
-    // your "draw loop" code goes here
+    fill(255, 0, 0);
+    rect(100, 100, 100, 200);
 }
