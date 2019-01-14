@@ -6,6 +6,8 @@ var redirectURI;
 var scope;
 var currentWindow;
 
+// Parse URL, if no info present then present with link to click to get validation credentials
+
 function setup() {
     createCanvas(windowWidth, windowHeight);
     // any additional setup code goes here
