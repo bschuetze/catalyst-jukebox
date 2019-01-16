@@ -97,11 +97,9 @@ function mouseClicked() {
         // })
         // .then(response => response.json())
         // .then(data => console.log(data));
-        let currentSong = spotifyPlayerRequest("GET", "currently-playing", {"Content-Type": "application/json"});
+        spotifyPlayerRequest("GET", "currently-playing", {"Content-Type": "application/json"}, currentlyPlaying);
         spotifyPlayerRequest("PUT", "pause", { "Content-Type": "application/json", "Accept": "application/ json" });
         // spotifyPlayerRequest("PUT", "play", { "Content-Type": "application/json", "Accept": "application/ json"});
-        console.log("Current Song:");
-        console.log(currentSong);
     }
     // Get all users
     // fetch("https://api.spotify.com/v1/me/player/recently-played")
@@ -109,7 +107,17 @@ function mouseClicked() {
     //     .then(data => console.log(data));
 }
 
-function spotifyPlayerRequest(reqMethod, reqFunc, reqHeader) {
+function currentlyPlaying(data) {
+    console.log("Current Song:");
+    console.log(data);
+}
+
+function logData(data) {
+    console.log("Logging Data:");
+    console.log(data);
+}
+
+function spotifyPlayerRequest(reqMethod, reqFunc, reqHeader, respFunc) {
     let completeHeader = reqHeader;
     completeHeader["Authorization"] = token;
     console.log(completeHeader);
@@ -131,16 +139,26 @@ function spotifyPlayerRequest(reqMethod, reqFunc, reqHeader) {
             return response.json().then(data => {
                 // process your JSON data further
                 console.log("JSON Response");
-                console.log(data)
-                return data;
+                if (data.hasOwnProperty("error")) {
+                    requestError(data);
+                }
+                if (respFunc !== undefined) {
+                    respFunc(data);
+                } else {
+                    console.log(data);
+                }
             });
         } else {
             return response.text().then(text => {
                 // this is text, do something with it
                 console.log("Other Response");
-                console.log("Content: " + text + "\nResponse header: " + response.headers.get("content-type"));
-                console.log(response.headers);
-                return null;
+                // console.log("Content: " + text + "\nResponse header: " + response.headers.get("content-type"));
+                // console.log(response.headers);
+                if (respFunc !== undefined) {
+                    respFunc(text);
+                } else {
+                    console.log(text);
+                }
             });
         }
     }); // end response method
@@ -149,4 +167,18 @@ function spotifyPlayerRequest(reqMethod, reqFunc, reqHeader) {
 
         // .then(response => {if (true) {response.json()}})
         // .then(data => console.log(data));
+}
+
+// There was an error with the request, handle it here
+function requestError(data) {
+    console.log("ERROR");
+    if (data["error"].hasOwnProperty("status")) {
+        console.log("  status: " + data["error"]["status"]);
+        if (data["error"]["status"] == 401) {
+            authorized = false;
+        }
+    }
+    if (data["error"].hasOwnProperty("message")) {
+        console.log("  message: " + data["error"]["message"]);
+    }
 }
