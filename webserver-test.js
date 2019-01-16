@@ -6,7 +6,7 @@ var fs = require('fs'); //require filesystem module
 var url = require('url');
 var path = require('path');
 
-http.listen(8080); //listen to port 8080
+http.listen(6474); //listen to port 6474
 
 function handler(req, res) { //create server (request, response)
     // Get the location of the request

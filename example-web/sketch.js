@@ -14,10 +14,12 @@ function setup() {
     authorized = false;
     authorizeURL = "https://accounts.spotify.com/authorize";
     clientID = "";
-    redirectURI = "redirect_uri=http://127.0.0.1:5500/example-web/";
+    // redirectURI = "redirect_uri=http://127.0.0.1:5500/example-web/";
+    redirectURI = "redirect_uri=http://192.168.0.5:6474/";
     scope = "scope=user-modify-playback-state playlist-read-private user-read-recently-played user-read-currently-playing";
     currentWindow = window.location;
     console.log(currentWindow);
+    // if (currentWindow.)
 }
 
 function draw() {
