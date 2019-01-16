@@ -83,8 +83,8 @@ function mouseClicked() {
     } else {
         // Currently this will only work if authorized with a token, there are more steps if wanting 
         // to use a code based auth
-        fetch("https://api.spotify.com/v1/" + userID + "/player/recently-played", {
-            headers: { "Content-Type": "application/json; charset=utf-8",
+        fetch("https://api.spotify.com/v1/" + userID + "/player/currently-playing", {
+            headers: { "Content-Type": "application/json",
                        "Authorization": token},
             method: "GET"
             // body: JSON.stringify({
