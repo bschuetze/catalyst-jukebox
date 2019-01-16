@@ -5,6 +5,9 @@ var http = require('http').createServer(handler); //require http server, and cre
 var fs = require('fs'); //require filesystem module
 var url = require('url');
 var path = require('path');
+// Validation
+const { body,validationResult } = require('express-validator/check');
+const { sanitizeBody } = require('express-validator/filter');
 
 http.listen(6474); //listen to port 6474
 
