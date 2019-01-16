@@ -135,7 +135,8 @@ function spotifyPlayerRequest(reqMethod, reqFunc, reqHeader) {
             return response.text().then(text => {
                 // this is text, do something with it
                 console.log("Other Response");
-                console.log("Content: " + text + "\nResponse header: " + response.headers);
+                console.log("Content: " + text + "\nResponse header: " + response.headers.get("content-type"));
+                console.log(response.headers);
             });
         }
     }); // end response method
