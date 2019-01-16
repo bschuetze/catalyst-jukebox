@@ -118,7 +118,24 @@ function spotifyPlayerRequest(reqMethod, reqFunc, reqHeader) {
         //     username: 'Elon Musk',
         //     email: 'elonmusk@gmail.com',
         // })
-    })
-        .then(response => response.json())
-        .then(data => console.log(data));
+    }).then(response => {
+        // Response method originally found from here: https://stackoverflow.com/questions/37121301/how-to-check-if-the-response-of-a-fetch-is-a-json-object-in-javascript
+        let contentType = response.headers.get("content-type");
+        if (contentType && contentType.indexOf("application/json") !== -1) {
+            return response.json().then(data => {
+                // process your JSON data further
+                console.log(data)
+            });
+        } else {
+            return response.text().then(text => {
+                // this is text, do something with it
+                console.log(text);
+            });
+        }
+    }); // end response method
+
+
+
+        // .then(response => {if (true) {response.json()}})
+        // .then(data => console.log(data));
 }
