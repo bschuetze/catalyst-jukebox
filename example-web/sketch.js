@@ -36,7 +36,10 @@ function setup() {
         let response = currentWindow.hash.split("&");
         console.log(response);
         console.log(response[0]);
-        token = "Bearer " + response[0];
+        let tempToken = response[0].split("=");
+        // token = "Bearer " + response[0];
+        token = "Bearer " + tempToken[1];
+        console.log(token);
     } else {
         authorized = false;
     }
