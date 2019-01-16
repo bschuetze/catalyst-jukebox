@@ -8,6 +8,9 @@ var currentWindow;
 var responseType;
 var userID;
 
+// Helpful links: 
+// https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API
+
 // Parse URL, if no info present then present with link to click to get validation credentials
 
 function setup() {
@@ -95,7 +98,8 @@ function mouseClicked() {
         // .then(response => response.json())
         // .then(data => console.log(data));
         spotifyPlayerRequest("GET", "currently-playing", {"Content-Type": "application/json"});
-        spotifyPlayerRequest("PUT", "play", {"Content-Type": "application/json"});
+        spotifyPlayerRequest("PUT", "pause", { "Content-Type": "application/json", "Accept": "application/ json" });
+        // spotifyPlayerRequest("PUT", "play", { "Content-Type": "application/json", "Accept": "application/ json"});
     }
     // Get all users
     // fetch("https://api.spotify.com/v1/me/player/recently-played")
