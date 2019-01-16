@@ -6,6 +6,7 @@ var redirectURI;
 var scope;
 var currentWindow;
 var responseType;
+var userID;
 
 // Parse URL, if no info present then present with link to click to get validation credentials
 
@@ -15,6 +16,7 @@ function setup() {
     authorized = false;
     authorizeURL = "https://accounts.spotify.com/authorize";
     clientID = "";
+    userID = "me";
     // Response type varies based on what you want to use
     // Implicit Grant Flow = token
     // Authorization Code Flow = code
@@ -61,6 +63,10 @@ function updateClientID(cid) {
     clientID = "client_id=" + cid;
 }
 
+function updateUserID(uid) {
+    userID = uid;
+}
+
 function mouseClicked() {
     if (!authorized) {
         console.log(authorizeURL + "?" + clientID + "&response_type=" + responseType + "&" + redirectURI + "&" + scope);
@@ -77,7 +83,7 @@ function mouseClicked() {
     } else {
         // Currently this will only work if authorized with a token, there are more steps if wanting 
         // to use a code based auth
-        fetch("https://api.spotify.com/v1/me/player/recently-played", {
+        fetch("https://api.spotify.com/v1/" + userID + "/player/recently-played", {
             headers: { "Content-Type": "application/json; charset=utf-8",
                        "Authorization": token},
             method: "GET"
