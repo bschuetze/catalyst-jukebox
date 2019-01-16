@@ -97,9 +97,11 @@ function mouseClicked() {
         // })
         // .then(response => response.json())
         // .then(data => console.log(data));
-        spotifyPlayerRequest("GET", "currently-playing", {"Content-Type": "application/json"});
+        let currentSong = spotifyPlayerRequest("GET", "currently-playing", {"Content-Type": "application/json"});
         spotifyPlayerRequest("PUT", "pause", { "Content-Type": "application/json", "Accept": "application/ json" });
         // spotifyPlayerRequest("PUT", "play", { "Content-Type": "application/json", "Accept": "application/ json"});
+        console.log("Current Song:");
+        console.log(currentSong);
     }
     // Get all users
     // fetch("https://api.spotify.com/v1/me/player/recently-played")
@@ -130,6 +132,7 @@ function spotifyPlayerRequest(reqMethod, reqFunc, reqHeader) {
                 // process your JSON data further
                 console.log("JSON Response");
                 console.log(data)
+                return data;
             });
         } else {
             return response.text().then(text => {
@@ -137,6 +140,7 @@ function spotifyPlayerRequest(reqMethod, reqFunc, reqHeader) {
                 console.log("Other Response");
                 console.log("Content: " + text + "\nResponse header: " + response.headers.get("content-type"));
                 console.log(response.headers);
+                return null;
             });
         }
     }); // end response method
