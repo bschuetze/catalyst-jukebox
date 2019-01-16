@@ -72,17 +72,21 @@ function updateUserID(uid) {
 
 function mouseClicked() {
     if (!authorized) {
-        console.log(authorizeURL + "?" + clientID + "&response_type=" + responseType + "&" + redirectURI + "&" + scope);
-        fetch(authorizeURL + "?" + clientID + "&response_type=code&" + redirectURI + "&" + scope, {
-            // headers: { "Content-Type": "application/json; charset=utf-8"},
-            method: "GET"
-            // body: JSON.stringify({
-            //     username: 'Elon Musk',
-            //     email: 'elonmusk@gmail.com',
-            // })
-        })
+        if (clientID == "") {
+            console.log("Client ID is required");
+        } else {
+            console.log(authorizeURL + "?" + clientID + "&response_type=" + responseType + "&" + redirectURI + "&" + scope);
+            fetch(authorizeURL + "?" + clientID + "&response_type=code&" + redirectURI + "&" + scope, {
+                // headers: { "Content-Type": "application/json; charset=utf-8"},
+                method: "GET"
+                // body: JSON.stringify({
+                //     username: 'Elon Musk',
+                //     email: 'elonmusk@gmail.com',
+                // })
+            })
         // .then(response => response.json())
         // .then(data => console.log(data));
+        }
     } else {
         // Currently this will only work if authorized with a token, there are more steps if wanting 
         // to use a code based auth
