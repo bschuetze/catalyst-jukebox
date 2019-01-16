@@ -83,20 +83,42 @@ function mouseClicked() {
     } else {
         // Currently this will only work if authorized with a token, there are more steps if wanting 
         // to use a code based auth
-        fetch("https://api.spotify.com/v1/" + userID + "/player/currently-playing", {
-            headers: { "Content-Type": "application/json",
-                       "Authorization": token},
-            method: "GET"
-            // body: JSON.stringify({
-            //     username: 'Elon Musk',
-            //     email: 'elonmusk@gmail.com',
-            // })
-        })
-        .then(response => response.json())
-        .then(data => console.log(data));
+        // fetch("https://api.spotify.com/v1/" + userID + "/player/currently-playing", {
+        //     headers: { "Content-Type": "application/json",
+        //                "Authorization": token},
+        //     method: "GET"
+        //     // body: JSON.stringify({
+        //     //     username: 'Elon Musk',
+        //     //     email: 'elonmusk@gmail.com',
+        //     // })
+        // })
+        // .then(response => response.json())
+        // .then(data => console.log(data));
+        spotifyPlayerRequest("GET", "currently-playing", {"Content-Type": "application/json"});
+        spotifyPlayerRequest("PUT", "play", {"Content-Type": "application/json"});
     }
     // Get all users
     // fetch("https://api.spotify.com/v1/me/player/recently-played")
     //     .then(response => response.json())
     //     .then(data => console.log(data));
+}
+
+function spotifyPlayerRequest(reqMethod, reqFunc, reqHeader) {
+    let completeHeader = reqHeader;
+    completeHeader["Authorization"] = token;
+    console.log(completeHeader);
+    // {
+    //     "Content-Type": "application/json",
+    //         "Authorization": token
+    // }
+    fetch("https://api.spotify.com/v1/" + userID + "/player/" + reqFunc, {
+        headers: req,
+        method: reqMethod
+        // body: JSON.stringify({
+        //     username: 'Elon Musk',
+        //     email: 'elonmusk@gmail.com',
+        // })
+    })
+        .then(response => response.json())
+        .then(data => console.log(data));
 }
