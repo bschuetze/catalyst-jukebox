@@ -22,7 +22,7 @@ function setup() {
     responseType = "token";
     // redirectURI = "redirect_uri=http://127.0.0.1:5500/example-web/";
     redirectURI = "redirect_uri=http://192.168.0.5:6474/";
-    scope = "scope=user-modify-playback-state playlist-read-private user-read-recently-played user-read-currently-playing";
+    scope = "scope=user-read-playback-state user-modify-playback-state playlist-read-private user-read-recently-played user-read-currently-playing";
     currentWindow = window.location;
     console.log(currentWindow);
     if (currentWindow.search.substr(1, 4) == "code") {
@@ -33,11 +33,11 @@ function setup() {
         authorized = true;
         console.log("Authorized - token");
         // Access token has the form #access_token=XXXXXX&token_type=Bearer&expires_in=3600
-        let response = currentWindow.hash.split("&");
-        console.log(response);
-        console.log(response[0]);
-        let tempToken = response[0].split("=");
-        // token = "Bearer " + response[0];
+        let authResponse = currentWindow.hash.split("&");
+        console.log(authResponse);
+        console.log(authResponse[0]);
+        let tempToken = authResponse[0].split("=");
+        // token = "Bearer " + authResponse[0];
         token = "Bearer " + tempToken[1];
         console.log(token);
     } else {
