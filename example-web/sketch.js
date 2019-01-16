@@ -19,7 +19,22 @@ function setup() {
     scope = "scope=user-modify-playback-state playlist-read-private user-read-recently-played user-read-currently-playing";
     currentWindow = window.location;
     console.log(currentWindow);
-    // if (currentWindow.)
+    if (currentWindow.search == "") {
+        // No authentication has taken place
+        authorized = false;
+    } else if (currentWindow.search.substr(1, 4) == "code") {
+        // Authentication has taken place
+        authorized = true;
+        console.log("Authorized");
+    } else {
+        authorized = false;
+    }
+    if (!authorized) {
+        // get current url for redirecting
+        redirectURI = "redirect_uri=";
+        redirectURI = redirectURI + currentWindow.protocol + "//" + currentWindow.hostname + ":" + currentWindow.port;
+        console.log(redirectURI);
+    }
 }
 
 function draw() {
@@ -33,7 +48,7 @@ function updateClientID(cid) {
 
 function mouseClicked() {
     if (!authorized) {
-        console.log(authorizeURL + "?" + clientID + "&response_type=code&" + redirectURI + "&" + scope)
+        console.log(authorizeURL + "?" + clientID + "&response_type=code&" + redirectURI + "&" + scope);
         fetch(authorizeURL + "?" + clientID + "&response_type=code&" + redirectURI + "&" + scope, {
             // headers: { "Content-Type": "application/json; charset=utf-8"},
             method: "GET"
