@@ -25,16 +25,22 @@ function setup() {
     scope = "scope=user-modify-playback-state playlist-read-private user-read-recently-played user-read-currently-playing";
     currentWindow = window.location;
     console.log(currentWindow);
-    if (currentWindow.search == "") {
-        // No authentication has taken place
-        authorized = false;
-    } else if (currentWindow.search.substr(1, 4) == "code") {
+    if (currentWindow.search.substr(1, 4) == "code") {
         // Authentication has taken place
         authorized = true;
-        console.log("Authorized");
+        console.log("Authorized - code");
+    } else if (currentWindow.hash.substr(1, 12) == "access_token") {
+        authorized = true;
+        console.log("Authorized - token");
+        // Access token has the form #access_token=XXXXXX&token_type=Bearer&expires_in=3600
+        let response = currentWindow.hash.split("&");
+        console.log(response);
+        console.log(response[0]);
+        token = "Bearer " + response[0];
     } else {
         authorized = false;
     }
+
     if (!authorized) {
         // get current url for redirecting
         redirectURI = "redirect_uri=";
@@ -66,6 +72,8 @@ function mouseClicked() {
         // .then(response => response.json())
         // .then(data => console.log(data));
     } else {
+        // Currently this will only work if authorized with a token, there are more steps if wanting 
+        // to use a code based auth
         fetch("https://api.spotify.com/v1/me/player/recently-played", {
             headers: { "Content-Type": "application/json; charset=utf-8",
                        "Authorization": token},
