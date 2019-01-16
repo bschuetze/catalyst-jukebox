@@ -14,6 +14,8 @@ function handler(req, res) { //create server (request, response)
     if (loc.pathname == "/") {
         // index page
         var filename = "." + "/example-web/" + "index.html";
+    } else if (loc.pathname == "/login") {
+        var filename = "." + "/example-web/" + "login.html";
     } else {
         var filename = "." + "/example-web/" + loc.pathname;
     }
