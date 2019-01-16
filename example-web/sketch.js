@@ -124,12 +124,14 @@ function spotifyPlayerRequest(reqMethod, reqFunc, reqHeader) {
         if (contentType && contentType.indexOf("application/json") !== -1) {
             return response.json().then(data => {
                 // process your JSON data further
+                console.log("JSON Response");
                 console.log(data)
             });
         } else {
             return response.text().then(text => {
                 // this is text, do something with it
-                console.log(text);
+                console.log("Other Response");
+                console.log("Content: " + text + "\nResponse header: " + response.headers);
             });
         }
     }); // end response method
