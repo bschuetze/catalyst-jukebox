@@ -32,7 +32,7 @@ function setup() {
     if (!authorized) {
         // get current url for redirecting
         redirectURI = "redirect_uri=";
-        redirectURI = redirectURI + currentWindow.protocol + "//" + currentWindow.hostname + ":" + currentWindow.port;
+        redirectURI = redirectURI + currentWindow.protocol + "//" + currentWindow.hostname + ":" + currentWindow.port + "/";
         console.log(redirectURI);
     }
 }
