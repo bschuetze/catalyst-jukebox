@@ -112,7 +112,7 @@ function spotifyPlayerRequest(reqMethod, reqFunc, reqHeader) {
     //         "Authorization": token
     // }
     fetch("https://api.spotify.com/v1/" + userID + "/player/" + reqFunc, {
-        headers: req,
+        headers: completeHeader,
         method: reqMethod
         // body: JSON.stringify({
         //     username: 'Elon Musk',
