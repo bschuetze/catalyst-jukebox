@@ -5,6 +5,7 @@ var clientID; // Located at: https://developer.spotify.com/dashboard/application
 var redirectURI;
 var scope;
 var currentWindow;
+var responseType;
 
 // Parse URL, if no info present then present with link to click to get validation credentials
 
@@ -14,6 +15,11 @@ function setup() {
     authorized = false;
     authorizeURL = "https://accounts.spotify.com/authorize";
     clientID = "";
+    // Response type varies based on what you want to use
+    // Implicit Grant Flow = token
+    // Authorization Code Flow = code
+    // more info: https://developer.spotify.com/documentation/general/guides/authorization-guide/
+    responseType = "token";
     // redirectURI = "redirect_uri=http://127.0.0.1:5500/example-web/";
     redirectURI = "redirect_uri=http://192.168.0.5:6474/";
     scope = "scope=user-modify-playback-state playlist-read-private user-read-recently-played user-read-currently-playing";
@@ -48,7 +54,7 @@ function updateClientID(cid) {
 
 function mouseClicked() {
     if (!authorized) {
-        console.log(authorizeURL + "?" + clientID + "&response_type=code&" + redirectURI + "&" + scope);
+        console.log(authorizeURL + "?" + clientID + "&response_type=" + responseType + "&" + redirectURI + "&" + scope);
         fetch(authorizeURL + "?" + clientID + "&response_type=code&" + redirectURI + "&" + scope, {
             // headers: { "Content-Type": "application/json; charset=utf-8"},
             method: "GET"
