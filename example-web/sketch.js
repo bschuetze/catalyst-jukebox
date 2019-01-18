@@ -7,6 +7,7 @@ var scope;
 var currentWindow;
 var responseType;
 var userID;
+var spotifyState;
 
 // Helpful links: 
 // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API
@@ -24,7 +25,7 @@ function setup() {
     // Implicit Grant Flow = token
     // Authorization Code Flow = code
     // more info: https://developer.spotify.com/documentation/general/guides/authorization-guide/
-    responseType = "token";
+    responseType = "code";
     // redirectURI = "redirect_uri=http://127.0.0.1:5500/example-web/";
     redirectURI = "redirect_uri=http://192.168.0.5:6474/";
     scope = "scope=user-read-playback-state user-modify-playback-state playlist-read-private user-read-recently-played user-read-currently-playing";
@@ -55,6 +56,7 @@ function setup() {
         redirectURI = redirectURI + currentWindow.protocol + "//" + currentWindow.hostname + ":" + currentWindow.port + "/";
         console.log(redirectURI);
     }
+    state = "1gdt7bSwi51b8";
 }
 
 function draw() {
@@ -76,7 +78,7 @@ function mouseClicked() {
             console.log("Client ID is required");
         } else {
             console.log(authorizeURL + "?" + clientID + "&response_type=" + responseType + "&" + redirectURI + "&" + scope);
-            fetch(authorizeURL + "?" + clientID + "&response_type=code&" + redirectURI + "&" + scope, {
+            fetch(authorizeURL + "?" + clientID + "&response_type=" + responseType + "&" + redirectURI + "&" + scope + "&state=" + spotifyState, {
                 // headers: { "Content-Type": "application/json; charset=utf-8"},
                 method: "GET"
                 // body: JSON.stringify({
