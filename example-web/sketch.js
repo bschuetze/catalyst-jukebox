@@ -56,7 +56,7 @@ function setup() {
         redirectURI = redirectURI + currentWindow.protocol + "//" + currentWindow.hostname + ":" + currentWindow.port + "/";
         console.log(redirectURI);
     }
-    state = "1gdt7bSwi51b8";
+    state = "";
 }
 
 function draw() {
@@ -72,12 +72,16 @@ function updateUserID(uid) {
     userID = uid;
 }
 
+function updateSpotifyState(s) {
+    state = s;
+}
+
 function mouseClicked() {
     if (!authorized) {
         if (clientID == "") {
             console.log("Client ID is required");
         } else {
-            console.log(toWebLink(authorizeURL + "?" + clientID + "&response_type=" + responseType + "&" + redirectURI + "&" + scope));
+            console.log(toWebLink(authorizeURL + "?" + clientID + "&response_type=" + responseType + "&" + redirectURI + "&" + scope + "&state=" + spotifyState));
             fetch(toWebLink(authorizeURL + "?" + clientID + "&response_type=" + responseType + "&" + redirectURI + "&" + scope + "&state=" + spotifyState), {
                 // headers: { "Content-Type": "application/json; charset=utf-8"},
                 method: "GET"
