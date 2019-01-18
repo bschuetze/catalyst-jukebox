@@ -73,7 +73,7 @@ function updateUserID(uid) {
 }
 
 function updateSpotifyState(s) {
-    state = s;
+    spotifyState = s;
 }
 
 function mouseClicked() {
