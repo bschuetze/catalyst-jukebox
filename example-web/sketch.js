@@ -86,8 +86,8 @@ function mouseClicked() {
                 //     email: 'elonmusk@gmail.com',
                 // })
             })
-        // .then(response => response.json())
-        // .then(data => console.log(data));
+        .then(response => response.json())
+        .then(data => console.log(data));
         }
     } else {
         // Currently this will only work if authorized with a token, there are more steps if wanting 
