@@ -1,6 +1,6 @@
 var token;
 var authorized;
-var authorizeURL;
+const authorizeURL = "https://accounts.spotify.com/authorize";
 var clientID; // Located at: https://developer.spotify.com/dashboard/applications/
 var redirectURI;
 var scope;
@@ -18,7 +18,7 @@ function setup() {
     createCanvas(windowWidth, windowHeight);
     // any additional setup code goes here
     authorized = false;
-    authorizeURL = "https://accounts.spotify.com/authorize";
+    
     clientID = "";
     userID = "me";
     // Response type varies based on what you want to use

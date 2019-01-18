@@ -6,8 +6,36 @@ var fs = require('fs'); //require filesystem module
 var url = require('url');
 var path = require('path');
 // Validation
-const { body,validationResult } = require('express-validator/check');
-const { sanitizeBody } = require('express-validator/filter');
+// const { body,validationResult } = require('express-validator/check');
+// const { sanitizeBody } = require('express-validator/filter');
+
+// Auth variables
+var authorizeURL;
+var clientID; // Located at: https://developer.spotify.com/dashboard/applications/
+var redirectURI;
+var scope;
+var responseType;
+
+// function spotifyAuth() {
+
+
+
+//     if (clientID == "") {
+//         console.log("Client ID is required");
+//     } else {
+//         console.log(authorizeURL + "?" + clientID + "&response_type=" + responseType + "&" + redirectURI + "&" + scope);
+//         fetch(authorizeURL + "?" + clientID + "&response_type=code&" + redirectURI + "&" + scope, {
+//             // headers: { "Content-Type": "application/json; charset=utf-8"},
+//             method: "GET"
+//             // body: JSON.stringify({
+//             //     username: 'Elon Musk',
+//             //     email: 'elonmusk@gmail.com',
+//             // })
+//         })
+//         // .then(response => response.json())
+//         // .then(data => console.log(data));
+//     }
+// }
 
 http.listen(6474); //listen to port 6474
 
