@@ -25,7 +25,7 @@ function setup() {
     // Implicit Grant Flow = token
     // Authorization Code Flow = code
     // more info: https://developer.spotify.com/documentation/general/guides/authorization-guide/
-    responseType = "code";
+    responseType = "token";
     // redirectURI = "redirect_uri=http://127.0.0.1:5500/example-web/";
     redirectURI = "redirect_uri=http://192.168.0.5:6474/";
     scope = "scope=user-read-playback-state user-modify-playback-state playlist-read-private user-read-recently-played user-read-currently-playing";
