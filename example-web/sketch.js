@@ -86,8 +86,9 @@ function mouseClicked() {
                 //     email: 'elonmusk@gmail.com',
                 // })
             })
-        .then(response => response.json())
-        .then(data => console.log(data));
+        .then(response => webResponse(response));
+        // .then(response => response.json())
+        // .then(data => console.log(data));
         }
     } else {
         // Currently this will only work if authorized with a token, there are more steps if wanting 
@@ -121,6 +122,37 @@ function currentlyPlaying(data) {
 function logData(data) {
     console.log("Logging Data:");
     console.log(data);
+}
+
+function webResponse(response) {
+    // Response method originally found from here: https://stackoverflow.com/questions/37121301/how-to-check-if-the-response-of-a-fetch-is-a-json-object-in-javascript
+    let contentType = response.headers.get("content-type");
+    if (contentType && contentType.indexOf("application/json") !== -1) {
+        return response.json().then(data => {
+            // process your JSON data further
+            console.log("JSON Response");
+            if (data.hasOwnProperty("error")) {
+                requestError(data);
+            }
+            if (respFunc !== undefined) {
+                respFunc(data);
+            } else {
+                console.log(data);
+            }
+        });
+    } else {
+        return response.text().then(text => {
+            // this is text, do something with it
+            console.log("Other Response");
+            // console.log("Content: " + text + "\nResponse header: " + response.headers.get("content-type"));
+            // console.log(response.headers);
+            if (respFunc !== undefined) {
+                respFunc(text);
+            } else {
+                console.log(text);
+            }
+        });
+    }
 }
 
 function spotifyPlayerRequest(reqMethod, reqFunc, reqHeader, respFunc) {
