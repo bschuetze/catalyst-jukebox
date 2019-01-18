@@ -124,7 +124,7 @@ function logData(data) {
     console.log(data);
 }
 
-function webResponse(response) {
+function webResponse(response, respFunc) {
     // Response method originally found from here: https://stackoverflow.com/questions/37121301/how-to-check-if-the-response-of-a-fetch-is-a-json-object-in-javascript
     let contentType = response.headers.get("content-type");
     if (contentType && contentType.indexOf("application/json") !== -1) {
