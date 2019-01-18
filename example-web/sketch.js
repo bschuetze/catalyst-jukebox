@@ -77,8 +77,8 @@ function mouseClicked() {
         if (clientID == "") {
             console.log("Client ID is required");
         } else {
-            console.log(authorizeURL + "?" + clientID + "&response_type=" + responseType + "&" + redirectURI + "&" + scope);
-            fetch(authorizeURL + "?" + clientID + "&response_type=" + responseType + "&" + redirectURI + "&" + scope + "&state=" + spotifyState, {
+            console.log(toWebLink(authorizeURL + "?" + clientID + "&response_type=" + responseType + "&" + redirectURI + "&" + scope));
+            fetch(toWebLink(authorizeURL + "?" + clientID + "&response_type=" + responseType + "&" + redirectURI + "&" + scope + "&state=" + spotifyState), {
                 // headers: { "Content-Type": "application/json; charset=utf-8"},
                 method: "GET"
                 // body: JSON.stringify({
@@ -122,6 +122,15 @@ function currentlyPlaying(data) {
 function logData(data) {
     console.log("Logging Data:");
     console.log(data);
+}
+
+function toWebLink(link) {
+    let subLink = link.split(" ");
+    let newLink = subLink[0];
+    for (let i = 1; i < subLink.length; i++) {
+        newLink = newLink + "%20" + subLink[i];
+    }
+    return newLink;
 }
 
 function webResponse(response, respFunc) {
