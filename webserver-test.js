@@ -53,9 +53,10 @@ function handler(req, res) { //create server (request, response)
     if (req.method == "POST") {
         if (loc.pathname == "/submitClientID") {
             if (req.headers.referer == "http://" + ip.address() + ":6474/login")
-            console.log(req.body);
+            console.log("Writing Head");
             res.writeHead(200, { "Content-Type": "application/json" }); //write HTML
-            res.write({"Auth-URL": "spotifyauth.com"})
+            console.log("Writing Body");
+            res.write({"Auth-URL": "spotifyauth.com"});
         }
         return res.end();
     }
@@ -99,7 +100,7 @@ function handler(req, res) { //create server (request, response)
                 return res.end("404 Not Found");
             }
             res.writeHead(200, { 'Content-Type': type }); //write HTML
-            res.write(data); //write data from index.html
+            res.write(data); //write data from page
             return res.end();
         });
     }
