@@ -42,6 +42,39 @@ function buttonOut() {
 }
 
 function buttonPress() {
+    let clientIDInput = input.value;
+    console.log("Raw Client ID: " + clientIDInput);
+    let sanitizedInput = sanitizeAlphaNumeric(clientIDInput);
+    console.log("Sanitized ID: " + sanitizedInput);
+}
+
+function sanitizeAlphaNumeric(str) {
+    let sanitizedString = "";
+    for (let i = 0; i < str.length; i++) {
+        if (isAlphaNumeric(str[i])) {
+            sanitizedString = sanitizedString + str[i];
+        }
+    }
+    return sanitizedString;
+}
+
+function isAlphaNumeric(char) {
+    if (char.length != 1) {
+        // Not a single character string
+        return false;
+    }
+    if (char.match(/[A-Z]/ig).length == 1) {
+        // i -> ignore case, g -> global
+        // Method: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/match
+        // Character is in the alphabet
+        return true;
+    }
+    if (char.match(/[0-9]/g).length == 1) {
+        // Character is a number
+        return true;
+    }
+    // Not character or number so false
+    return false;
 }
 
 function buttonDown() {
