@@ -62,6 +62,7 @@ function handler(req, res) { //create server (request, response)
                 // Code originally from: https://stackoverflow.com/questions/4295782/how-to-process-post-data-in-node-js
                 // BEGIN SNIPPET
                 let body = "";
+                let bodyJSON = {};
                 req.on('data', function (data) {
                     if (body.length > 1e6) {
                         // Request is coming with large amounts of data, not a good idea to continue to parse it
@@ -72,6 +73,8 @@ function handler(req, res) { //create server (request, response)
                 req.on("end", function () {
                     console.log("Parsed body result:");
                     console.log(body);
+                    bodyJSON = body.json;
+                    console.log(bodyJSON);
                     // clientID = qs.parse(body);
                 })
                 // END SNIPPET
