@@ -83,7 +83,7 @@ function handler(req, res) { //create server (request, response)
                     }
                 })
                 // END SNIPPET
-                let retURL = toWebLink(authorizeURL + "?" + clientID + "&response_type=code&" + redirectURI + "&" + scope + "&" + state);
+                let retURL = "" + toWebLink(authorizeURL + "?" + clientID + "&response_type=code&" + redirectURI + "&" + scope + "&" + state);
                 // Return auth URL
                 res.writeHead(200, { "Content-Type": "application/json" }); //write HTML
                 
