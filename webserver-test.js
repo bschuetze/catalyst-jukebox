@@ -56,7 +56,7 @@ function handler(req, res) { //create server (request, response)
             console.log("Writing Head");
             res.writeHead(200, { "Content-Type": "application/json" }); //write HTML
             console.log("Writing Body");
-            res.write({"Auth-URL": "spotifyauth.com"});
+            res.write("{\"Auth-URL\": \"spotifyauth.com\"}");
         }
         return res.end();
     }
