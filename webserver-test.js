@@ -7,30 +7,29 @@ var url = require('url');
 var path = require('path');
 var ip = require('ip');
 var crypto = require('crypto');
+var qs = require('querystring');
 
 // Server variables
 var port = 6474;
 
 // Auth variables
 const authorizeURL = "https://accounts.spotify.com/authorize";
-var clientID; // Located at: https://developer.spotify.com/dashboard/applications/
+var clientID = ""; // Located at: https://developer.spotify.com/dashboard/applications/
 var redirectURI = "redirect_uri=http://" + ip.address() + ":" + port + "/login";
 var scope = "scope=user-read-playback-state user-modify-playback-state playlist-read-private user-read-recently-played user-read-currently-playing";
 var responseType = "code";
-const state =  crypto.randomBytes(8).toString("hex"); // Generate random 16 char hex string
+const state = "state=" + crypto.randomBytes(8).toString("hex"); // Generate random 16 char hex string
 console.log("state: " + state); // REMOVE AFTER TESTING
 // Above line found here: https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript/8084248#8084248
 
 
 // function spotifyAuth() {
 
-
-
 //     if (clientID == "") {
 //         console.log("Client ID is required");
 //     } else {
-//         console.log(authorizeURL + "?" + clientID + "&response_type=" + responseType + "&" + redirectURI + "&" + scope);
-//         fetch(authorizeURL + "?" + clientID + "&response_type=code&" + redirectURI + "&" + scope, {
+//         console.log(authorizeURL + "?" + clientID + "&response_type=" + responseType + "&" + redirectURI + "&" + scope + "&" + state);
+//         fetch(toWebLink(authorizeURL + "?" + clientID + "&response_type=code&" + redirectURI + "&" + scope + "&" + state), {
 //             // headers: { "Content-Type": "application/json; charset=utf-8"},
 //             method: "GET"
 //             // body: JSON.stringify({
@@ -59,8 +58,28 @@ function handler(req, res) { //create server (request, response)
         console.log("POST Request");
         if (loc.pathname == "/submitClientID") {
             if (req.headers.referer == "http://" + ip.address() + ":6474/login") {
+                // Update client ID
+                // Code originally from: https://stackoverflow.com/questions/4295782/how-to-process-post-data-in-node-js
+                // BEGIN SNIPPET
+                let body = "";
+                req.on('data', function (data) {
+                    if (body.length > 1e6) {
+                        // Request is coming with large amounts of data, not a good idea to continue to parse it
+                        request.connection.destroy();
+                    }
+                    body += data;
+                });
+                req.on("end", function () {
+                    console.log("Parsed body result:");
+                    console.log(body);
+                    // clientID = qs.parse(body);
+                })
+                // END SNIPPET
+                let retURL = toWebLink(authorizeURL + "?" + clientID + "&response_type=code&" + redirectURI + "&" + scope + "&" + state);
+                // Return auth URL
                 res.writeHead(200, { "Content-Type": "application/json" }); //write HTML
-                res.write("{\"Auth-URL\": \"spotifyauth.com\"}");
+                
+                res.write("{\"Auth-URL\": " + retURL + "}");
             } else {
                 console.log("ClientID request does not match expected source");
                 res.writeHead(401, { 'Content-Type': 'text/html' }); //display 404 on error
