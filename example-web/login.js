@@ -58,7 +58,7 @@ function buttonPress() {
                 cid: sanitizedInput
             })
         })
-        .then(response => webResponse(response));
+        .then(response => webResponse(response, redirect));
     }
 }
 
@@ -93,6 +93,14 @@ function isAlphaNumeric(char) {
     }
     // Not character or number so false
     return false;
+}
+
+function authRedirect(link) {
+    if (link == null || !link.hasOwnProperty("Auth-URL")) {
+        console.log("Link not provided");
+        return;
+    }
+    window.location.href = "" + link["Auth-URL"];
 }
 
 function webResponse(response, respFunc) {
