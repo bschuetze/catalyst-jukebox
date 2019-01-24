@@ -59,6 +59,10 @@ function sanitizeAlphaNumeric(str) {
 }
 
 function isAlphaNumeric(char) {
+    if (char == null) {
+        // Null value is not a character
+        return false;
+    }
     if (char.length != 1) {
         // Not a single character string
         return false;
