@@ -6,16 +6,21 @@ var fs = require('fs'); //require filesystem module
 var url = require('url');
 var path = require('path');
 var ip = require('ip');
-// Validation
-// const { body,validationResult } = require('express-validator/check');
-// const { sanitizeBody } = require('express-validator/filter');
+var crypto = require('crypto');
+
+// Server variables
+var port = 6474;
 
 // Auth variables
-var authorizeURL;
+const authorizeURL = "https://accounts.spotify.com/authorize";
 var clientID; // Located at: https://developer.spotify.com/dashboard/applications/
-var redirectURI;
-var scope;
-var responseType;
+var redirectURI = "redirect_uri=http://" + ip.address() + ":" + port + "/login";
+var scope = "scope=user-read-playback-state user-modify-playback-state playlist-read-private user-read-recently-played user-read-currently-playing";
+var responseType = "code";
+const state =  crypto.randomBytes(8).toString("hex"); // Generate random 16 char hex string
+console.log("state: " + state); // REMOVE AFTER TESTING
+// Above line found here: https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript/8084248#8084248
+
 
 // function spotifyAuth() {
 
@@ -38,7 +43,7 @@ var responseType;
 //     }
 // }
 
-var port = 6474;
+
 
 http.listen(port); //listen to port 6474
 console.log("NodeJS server at '" + ip.address() + "' listening on port '" + port + "'");
@@ -107,4 +112,13 @@ function handler(req, res) { //create server (request, response)
         res.write(data); //write data from page
         return res.end();
     });
+}
+
+function toWebLink(link) {
+    let subLink = link.split(" ");
+    let newLink = subLink[0];
+    for (let i = 1; i < subLink.length; i++) {
+        newLink = newLink + "%20" + subLink[i];
+    }
+    return newLink;
 }
