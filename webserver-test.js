@@ -76,7 +76,7 @@ function handler(req, res) { //create server (request, response)
                     // console.log(typeof body);
                     bodyJSON = JSON.parse(body);
                     console.log(bodyJSON);
-                    if (bodyJSON.indexOf("cid") !== -1) {
+                    if (bodyJSON.hasOwnProperty("cid")) {
                         // cid exists in the response
                         clientID = bodyJSON["cid"];
                     } else {
