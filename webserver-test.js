@@ -52,11 +52,14 @@ function handler(req, res) { //create server (request, response)
     // Check if POST request
     if (req.method == "POST") {
         if (loc.pathname == "/submitClientID") {
-            if (req.headers.referer == "http://" + ip.address() + ":6474/login")
-            console.log("Writing Head");
-            res.writeHead(200, { "Content-Type": "application/json" }); //write HTML
-            console.log("Writing Body");
-            res.write("{\"Auth-URL\": \"spotifyauth.com\"}");
+            if (req.headers.referer == "http://" + ip.address() + ":6474/login") {
+                res.writeHead(200, { "Content-Type": "application/json" }); //write HTML
+                res.write("{\"Auth-URL\": \"spotifyauth.com\"}");
+            } else {
+                console.log("ClientID request does not match expected source");
+                res.writeHead(401, { 'Content-Type': 'text/html' }); //display 404 on error
+                return res.end("Unauthorized Origin");
+            }
         }
         return res.end();
     }
@@ -95,8 +98,6 @@ function handler(req, res) { //create server (request, response)
 
         // fs.readFile(__dirname + '/example-web/index.html', function (err, data) { //read file index.html in public folder
         fs.readFile(filename, function (err, data) { //read file index.html in public folder
-            console.log("Data:");
-            console.log(data);
             if (err) {
                 res.writeHead(404, { 'Content-Type': 'text/html' }); //display 404 on error
                 return res.end("404 Not Found");
