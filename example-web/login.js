@@ -67,13 +67,13 @@ function isAlphaNumeric(char) {
         // Not a single character string
         return false;
     }
-    if (char.match(/[A-Z]/ig).length == 1) {
+    if (char.match(/[A-Z]/ig) != null) {
         // i -> ignore case, g -> global
         // Method: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/match
         // Character is in the alphabet
         return true;
     }
-    if (char.match(/[0-9]/g).length == 1) {
+    if (char.match(/[0-9]/g) != null) {
         // Character is a number
         return true;
     }
