@@ -58,7 +58,7 @@ function buttonPress() {
                 cid: sanitizedInput
             })
         })
-        .then(response => webResponse(response, redirect));
+        .then(response => webResponse(response, authRedirect));
     }
 }
 
