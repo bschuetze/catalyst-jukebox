@@ -29,7 +29,7 @@ function setup() {
     // redirectURI = "redirect_uri=http://127.0.0.1:5500/example-web/";
     redirectURI = "redirect_uri=http://192.168.0.5:6474/";
     scope = "scope=user-read-playback-state user-modify-playback-state playlist-read-private user-read-recently-played user-read-currently-playing";
-    currentWindow = window.location;
+    currentWindow = window.location.origin + "/submitClientID";
     console.log(currentWindow);
     if (currentWindow.search.substr(1, 4) == "code") {
         // Authentication has taken place

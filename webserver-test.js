@@ -40,16 +40,29 @@ var responseType;
 http.listen(6474); //listen to port 6474
 
 function handler(req, res) { //create server (request, response)
-    console.log(req);
+    console.log(req.headers);
+
     // Get the location of the request
     var loc = url.parse(req.url, true);
-    if (loc.pathname == "/") {
-        // index page
-        var filename = "." + "/example-web/" + "index.html";
-    } else if (loc.pathname == "/login") {
-        var filename = "." + "/example-web/" + "login.html";
-    } else {
-        var filename = "." + "/example-web/" + loc.pathname;
+
+    // Check if POST request
+    if (req.method == "POST") {
+        if (loc.pathname == "/submitClientID") {
+            console.log(req.body);
+        }
+    }
+
+    // View a page
+    if (req.method == "GET") {
+        if (loc.pathname == "/") {
+            // index page
+            var filename = "." + "/example-web/" + "index.html";
+        } else if (loc.pathname == "/login") {
+            var filename = "." + "/example-web/" + "login.html";
+        // } else if (loc.pathname == "/login") {
+        } else {
+            var filename = "." + "/example-web/" + loc.pathname;
+        }
     }
 
     // Content type

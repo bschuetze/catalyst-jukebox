@@ -46,6 +46,16 @@ function buttonPress() {
     console.log("Raw Client ID: " + clientIDInput);
     let sanitizedInput = sanitizeAlphaNumeric(clientIDInput);
     console.log("Sanitized ID: " + sanitizedInput);
+    
+    // Make HTTP request to server with info
+    let destinationURL = window.location.origin + "/submitClientID";
+    fetch(destinationURL, {
+        headers: { "Content-Type": "application/json"},
+        method: "POST",
+        body: JSON.stringify({
+            cid: sanitizedInput
+        })
+    })
 }
 
 function sanitizeAlphaNumeric(str) {
