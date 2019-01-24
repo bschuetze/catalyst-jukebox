@@ -46,16 +46,21 @@ function buttonPress() {
     console.log("Raw Client ID: " + clientIDInput);
     let sanitizedInput = sanitizeAlphaNumeric(clientIDInput);
     console.log("Sanitized ID: " + sanitizedInput);
-    
-    // Make HTTP request to server with info
-    let destinationURL = window.location.origin + "/submitClientID";
-    fetch(destinationURL, {
-        headers: { "Content-Type": "application/json"},
-        method: "POST",
-        body: JSON.stringify({
-            cid: sanitizedInput
+    if (sanitizedInput.length == 0) {
+        console.log("Client ID cannot be empty");
+    } else {
+        // Make HTTP request to server with info
+        let destinationURL = window.location.origin + "/submitClientID";
+        fetch(destinationURL, {
+            headers: { "Content-Type": "application/json"},
+            method: "POST",
+            body: JSON.stringify({
+                cid: sanitizedInput
+            })
         })
-    })
+        .then(response => response.json())
+        .then(data => console.log(data));
+    }
 }
 
 function sanitizeAlphaNumeric(str) {

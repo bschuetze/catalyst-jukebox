@@ -54,9 +54,9 @@ function handler(req, res) { //create server (request, response)
         if (loc.pathname == "/submitClientID") {
             if (req.headers.referer == "http://" + ip.address() + ":6474/login")
             console.log(req.body);
-            res.writeHead(200, { 'Content-Type': "application/json" }); //write HTML
+            res.writeHead(200, { "Content-Type": "application/json" }); //write HTML
+            res.write({"Auth-URL": "spotifyauth.com"})
         }
-
         return res.end();
     }
 
