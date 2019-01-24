@@ -78,17 +78,18 @@ function handler(req, res) { //create server (request, response)
                     if (bodyJSON.hasOwnProperty("cid")) {
                         // cid exists in the response
                         clientID = bodyJSON["cid"];
+
+                        // END SNIPPET
+                        let retURL = "" + toWebLink(authorizeURL + "?" + clientID + "&response_type=code&" + redirectURI + "&" + scope + "&" + state);
+                        console.log(retURL);
+                        // Return auth URL
+                        res.writeHead(200, { "Content-Type": "application/json" }); //write HTML
+
+                        res.write("{\"Auth-URL\": \"" + retURL + "\"}");
                     } else {
                         console.log("No 'cid' field found in JSON data");
                     }
                 })
-                // END SNIPPET
-                let retURL = "" + toWebLink(authorizeURL + "?" + clientID + "&response_type=code&" + redirectURI + "&" + scope + "&" + state);
-                console.log(retURL);
-                // Return auth URL
-                res.writeHead(200, { "Content-Type": "application/json" }); //write HTML
-                
-                res.write("{\"Auth-URL\": \"" + retURL + "\"}");
             } else {
                 console.log("ClientID request does not match expected source");
                 res.writeHead(401, { 'Content-Type': 'text/html' }); //display 404 on error
