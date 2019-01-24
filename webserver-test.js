@@ -73,10 +73,15 @@ function handler(req, res) { //create server (request, response)
                 req.on("end", function () {
                     console.log("Parsed body result:");
                     console.log(body);
-                    console.log(typeof body);
-                    // bodyJSON = body.json();
-                    // console.log(bodyJSON);
-                    // clientID = qs.parse(body);
+                    // console.log(typeof body);
+                    bodyJSON = JSON.parse(body);
+                    console.log(bodyJSON);
+                    if (bodyJSON.indexOf("cid") !== -1) {
+                        // cid exists in the response
+                        clientID = bodyJSON["cid"];
+                    } else {
+                        console.log("No 'cid' field found in JSON data");
+                    }
                 })
                 // END SNIPPET
                 let retURL = toWebLink(authorizeURL + "?" + clientID + "&response_type=code&" + redirectURI + "&" + scope + "&" + state);
