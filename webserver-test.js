@@ -77,7 +77,7 @@ function handler(req, res) { //create server (request, response)
                     bodyJSON = JSON.parse(body);
                     if (bodyJSON.hasOwnProperty("cid")) {
                         // cid exists in the response
-                        clientID = bodyJSON["cid"];
+                        clientID = "client_id=" + bodyJSON["cid"];
 
                         // END SNIPPET
                         let retURL = "" + toWebLink(authorizeURL + "?" + clientID + "&response_type=code&" + redirectURI + "&" + scope + "&" + state);
