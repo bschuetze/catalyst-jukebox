@@ -26,7 +26,7 @@ function setup() {
     // Text
     textSize(width * 0.070);
     textAlign(CENTER);
-    text("Enter Spotify Client ID", input.x, height * 0.15, input.width, height * 0.15);
+    text("Enter Spotify Client ID", input.x, height * 0.15, input.width, max(height * 0.15, width * 0.080));
 }
 
 function draw() {
