@@ -5,6 +5,7 @@ var http = require('http').createServer(handler); //require http server, and cre
 var fs = require('fs'); //require filesystem module
 var url = require('url');
 var path = require('path');
+var ip = require('ip');
 // Validation
 // const { body,validationResult } = require('express-validator/check');
 // const { sanitizeBody } = require('express-validator/filter');
@@ -37,7 +38,10 @@ var responseType;
 //     }
 // }
 
-http.listen(6474); //listen to port 6474
+var port = 6474;
+
+http.listen(port); //listen to port 6474
+console.log("NodeJS server at '" + ip.address() + "' listening on port '" + port + "'");
 
 function handler(req, res) { //create server (request, response)
     console.log(req.headers);
@@ -48,9 +52,12 @@ function handler(req, res) { //create server (request, response)
     // Check if POST request
     if (req.method == "POST") {
         if (loc.pathname == "/submitClientID") {
+            if (req.headers.referer == "http://" + ip.address() + ":6474/login")
             console.log(req.body);
             res.writeHead(200, { 'Content-Type': "application/json" }); //write HTML
         }
+
+        return res.end();
     }
 
     // View a page
