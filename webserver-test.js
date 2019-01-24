@@ -51,6 +51,7 @@ function handler(req, res) { //create server (request, response)
 
     // Check if POST request
     if (req.method == "POST") {
+        console.log("POST Request");
         if (loc.pathname == "/submitClientID") {
             if (req.headers.referer == "http://" + ip.address() + ":6474/login") {
                 res.writeHead(200, { "Content-Type": "application/json" }); //write HTML
@@ -65,14 +66,15 @@ function handler(req, res) { //create server (request, response)
     }
 
     // View a page
+    var filename;
     if (loc.pathname == "/") {
         // index page
-        var filename = "." + "/example-web/" + "index.html";
+        filename = "." + "/example-web/" + "index.html";
     } else if (loc.pathname == "/login") {
-        var filename = "." + "/example-web/" + "login.html";
+        filename = "." + "/example-web/" + "login.html";
     // } else if (loc.pathname == "/login") {
     } else {
-        var filename = "." + "/example-web/" + loc.pathname;
+        filename = "." + "/example-web/" + loc.pathname;
     }
     
     // Content type
