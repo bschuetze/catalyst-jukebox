@@ -49,5 +49,5 @@ function buttonDown() {
 }
 
 function buttonUp() {
-    button.style("color: black")
+    button.style("color: black");
 }

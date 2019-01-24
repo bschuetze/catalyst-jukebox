@@ -40,6 +40,7 @@ var responseType;
 http.listen(6474); //listen to port 6474
 
 function handler(req, res) { //create server (request, response)
+    console.log(req);
     // Get the location of the request
     var loc = url.parse(req.url, true);
     if (loc.pathname == "/") {
