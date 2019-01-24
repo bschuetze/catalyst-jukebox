@@ -84,8 +84,8 @@ function handler(req, res) { //create server (request, response)
                         console.log(retURL);
                         // Return auth URL
                         res.writeHead(200, { "Content-Type": "application/json" }); //write HTML
-
                         res.write("{\"Auth-URL\": \"" + retURL + "\"}");
+                        return res.end();
                     } else {
                         console.log("No 'cid' field found in JSON data");
                     }
@@ -95,8 +95,9 @@ function handler(req, res) { //create server (request, response)
                 res.writeHead(401, { 'Content-Type': 'text/html' }); //display 404 on error
                 return res.end("Unauthorized Origin");
             }
+        } else {
+            return res.end();
         }
-        return res.end();
     }
 
     // View a page
