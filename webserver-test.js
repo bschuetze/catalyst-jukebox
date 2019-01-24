@@ -95,6 +95,8 @@ function handler(req, res) { //create server (request, response)
 
         // fs.readFile(__dirname + '/example-web/index.html', function (err, data) { //read file index.html in public folder
         fs.readFile(filename, function (err, data) { //read file index.html in public folder
+            console.log("Data:");
+            console.log(data);
             if (err) {
                 res.writeHead(404, { 'Content-Type': 'text/html' }); //display 404 on error
                 return res.end("404 Not Found");
