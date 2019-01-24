@@ -73,8 +73,9 @@ function handler(req, res) { //create server (request, response)
                 req.on("end", function () {
                     console.log("Parsed body result:");
                     console.log(body);
-                    bodyJSON = body.json();
-                    console.log(bodyJSON);
+                    console.log(typeof body);
+                    // bodyJSON = body.json();
+                    // console.log(bodyJSON);
                     // clientID = qs.parse(body);
                 })
                 // END SNIPPET
