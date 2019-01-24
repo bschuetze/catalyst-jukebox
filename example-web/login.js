@@ -42,7 +42,7 @@ function buttonOut() {
 }
 
 function buttonPress() {
-    let clientIDInput = input.value;
+    let clientIDInput = input.value();
     console.log("Raw Client ID: " + clientIDInput);
     let sanitizedInput = sanitizeAlphaNumeric(clientIDInput);
     console.log("Sanitized ID: " + sanitizedInput);
