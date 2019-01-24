@@ -100,6 +100,7 @@ function authRedirect(link) {
         console.log("Link not provided");
         return;
     }
+    console.log("" + link["Auth-URL"])
     window.location.href = "" + link["Auth-URL"];
 }
 
