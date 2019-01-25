@@ -69,7 +69,7 @@ function handler(req, res) { //create server (request, response)
                         request.connection.destroy();
                     }
                     body += data;
-                });
+                }); // END SNIPPET
                 req.on("end", function () {
                     console.log("Parsed body result:");
                     console.log(body);
@@ -79,7 +79,7 @@ function handler(req, res) { //create server (request, response)
                         // cid exists in the response
                         clientID = "client_id=" + bodyJSON["cid"];
 
-                        // END SNIPPET
+                        
                         let retURL = "" + toWebLink(authorizeURL + "?" + clientID + "&response_type=code&" + redirectURI + "&" + scope + "&" + state);
                         console.log(retURL);
                         // Return auth URL
@@ -108,7 +108,7 @@ function handler(req, res) { //create server (request, response)
                         request.connection.destroy();
                     }
                     body += data;
-                });
+                }); // // END SNIPPET
                 req.on("end", function () {
                     console.log("Parsed body result:");
                     console.log(body);
@@ -117,13 +117,23 @@ function handler(req, res) { //create server (request, response)
                     if (bodyJSON.hasOwnProperty("code")) {
                         // code exists in the response
                         if (bodyJSON.hasOwnProperty("state")) {
-                            console.log(bodyJSON["code"]);
-                            console.log(bodyJSON["state"]);
-
+                            if ("state=" + bodyJSON["state"] == state) {
+                                res.writeHead(200, { 'Content-Type': 'text/html' });
+                                return res.end("Okay");
+                            } else {
+                                console.log("Incorrect 'state' field found in JSON data, expected:\n" + 
+                                            state + "\nbut found:\m" + "state=" + bodyJSON["state"]);
+                                res.writeHead(400, { 'Content-Type': 'text/html' }); //display 404 on error
+                                return res.end("Incorrect state provided");
+                            }
+                        } else {
+                            console.log("No 'state' field found in JSON data");
+                            res.writeHead(400, { 'Content-Type': 'text/html' }); //display 404 on error
+                            return res.end("No state provided");
                         }
                         // clientID = "client_id=" + bodyJSON["cid"];
 
-                        // // END SNIPPET
+                        
                         // let retURL = "" + toWebLink(authorizeURL + "?" + clientID + "&response_type=code&" + redirectURI + "&" + scope + "&" + state);
                         // console.log(retURL);
                         // // Return auth URL
@@ -132,6 +142,8 @@ function handler(req, res) { //create server (request, response)
                         // return res.end();
                     } else {
                         console.log("No 'code' field found in JSON data");
+                        res.writeHead(400, { 'Content-Type': 'text/html' }); //display 404 on error
+                        return res.end("No code provided");
                     }
                 })
             } else {
