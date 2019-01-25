@@ -1,4 +1,5 @@
-var input;
+var cidInput;
+var secretInput;
 var button;
 
 function setup() {
@@ -7,16 +8,18 @@ function setup() {
     background(230);
 
     // Text input
-    input = createElement("textarea");
-    input.size(width * 0.8, height * 0.1);
-    input.position(width * 0.1, height * 0.3);
-    input.style("font-size: 24px; padding: 10px");
+    cidInput = createElement("textarea");
+    cidInput.placeholder = "Enter your Client ID";
+    cidInput.size(width * 0.8, height * 0.1);
+    cidInput.position(width * 0.1, height * 0.3);
+    cidInput.style("font-size: 24px; padding: 10px");
 
     // Text input
-    input = createElement("textarea");
-    input.size(width * 0.8, height * 0.1);
-    input.position(width * 0.1, (height * 0.3) + height * 0.2);
-    input.style("font-size: 24px; padding: 10px");
+    secretInput = createElement("textarea");
+    secretInput.placeholder = "Enter your Client Secret";
+    secretInput.size(width * 0.8, height * 0.1);
+    secretInput.position(width * 0.1, (height * 0.3) + height * 0.2);
+    secretInput.style("font-size: 24px; padding: 10px");
 
     // Button
     button = createButton("Submit");
@@ -32,7 +35,7 @@ function setup() {
     // Text
     textSize(width * 0.070);
     textAlign(CENTER);
-    text("Enter Spotify Client ID", input.x, height * 0.15, input.width, max(height * 0.15, width * 0.080));
+    text("Enter Spotify Client Details", input.x, height * 0.15, input.width, max(height * 0.15, width * 0.080));
 }
 
 function draw() {
