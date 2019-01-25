@@ -30,6 +30,7 @@ function setup() {
 }
 
 function draw() {
+    checkAuthURL(window.location);
     noLoop();
 }
 
@@ -51,14 +52,15 @@ function buttonPress() {
     } else {
         // Make HTTP request to server with info
         let destinationURL = window.location.origin + "/submitClientID";
-        fetch(destinationURL, {
-            headers: { "Content-Type": "application/json"},
-            method: "POST",
-            body: JSON.stringify({
-                cid: sanitizedInput
-            })
-        })
-        .then(response => webResponse(response, authRedirect));
+        webRequest(destinationURL, "POST", {"Content-Type": "application/json"}, {cid: sanitizedInput}, authRedirect);
+        // fetch(destinationURL, {
+        //     headers: { "Content-Type": "application/json"},
+        //     method: "POST",
+        //     body: JSON.stringify({
+        //         cid: sanitizedInput
+        //     })
+        // })
+        // .then(response => webResponse(response, authRedirect));
     }
 }
 
@@ -93,6 +95,78 @@ function isAlphaNumeric(char) {
     }
     // Not character or number so false
     return false;
+}
+
+function emptyObject(o) {
+    if (o == null) {
+        // If null value is present then no object
+        return true;
+    }
+    if (o.constructor == Object && Object.entries(o).length == 0) {
+        // If is of type object and has no entries
+        return true;
+    }
+    return false;
+}
+
+// Assumes body will be JSON format
+function webRequest(dest, method, header, body, respFunc) {
+    let opts = {};
+
+    // Add method if present
+    if (method != null && method.length > 0) {
+        opts["method"] = method;
+    }
+
+    // Add header if present
+    if (!emptyObject(header)) {
+        opts["headers"] = header;
+    }
+
+    // Add body if present
+    if (!emptyObject(body)) {
+        opts["body"] = JSON.stringify(body);
+    }
+
+    fetch(dest, opts).then(response => webResponse(response, respFunc));
+
+    // fetch(dest, {
+    //     headers: { "Content-Type": "application/json" },
+    //     method: "POST",
+    //     body: JSON.stringify({
+    //         cid: sanitizedInput
+    //     })
+    // }).then(response => webResponse(response, authRedirect));
+}
+
+function checkAuthURL(url) {
+    // url should be window.location object
+    if (url == null) {
+        console.log("Null URL passed to auth check function, aborting");
+        return;
+    }
+    if (url.search.substr(1, 4) == "code") {
+        // Code auth present in URL, pass data to server.
+        console.log("Code auth data present in URL, passing to server");
+        let destinationURL = window.location.origin + "/submitCode";
+        let body = parseCode(url.search);
+        webRequest(destinationURL, "POST", { "Content-Type": "application/json" }, body);
+    }
+}
+
+function parseCode(search) {
+    // Search has the form "?code=jkxd&state=lksdgjh"
+    let temp = search.split("&");
+    let c = "";
+    let s = "";
+    if (temp[0].substr(0, 1) == "?") {
+        // Remove the question mark from the search input
+        c = temp[0].substr(1, temp[0].length - 1);
+    }
+    if (temp.size > 1) {
+        s = temp[1];
+    }
+    return {code: c, state: s};
 }
 
 function authRedirect(link) {

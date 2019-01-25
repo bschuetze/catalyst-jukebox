@@ -95,7 +95,48 @@ function handler(req, res) { //create server (request, response)
                 res.writeHead(401, { 'Content-Type': 'text/html' }); //display 404 on error
                 return res.end("Unauthorized Origin");
             }
-        } else {
+        } else if (loc.pathname == "/submitCode") {
+            console.log(req.headers.referer);
+            if (req.headers.referer == "http://" + ip.address() + ":6474/login") {
+                // Update client ID
+                // Code originally from: https://stackoverflow.com/questions/4295782/how-to-process-post-data-in-node-js
+                // BEGIN SNIPPET
+                let body = "";
+                let bodyJSON = {};
+                req.on('data', function (data) {
+                    if (body.length > 1e6) {
+                        // Request is coming with large amounts of data, not a good idea to continue to parse it
+                        request.connection.destroy();
+                    }
+                    body += data;
+                });
+                req.on("end", function () {
+                    console.log("Parsed body result:");
+                    console.log(body);
+                    // console.log(typeof body);
+                    bodyJSON = JSON.parse(body);
+                    if (bodyJSON.hasOwnProperty("cid")) {
+                        // cid exists in the response
+                        clientID = "client_id=" + bodyJSON["cid"];
+
+                        // END SNIPPET
+                        let retURL = "" + toWebLink(authorizeURL + "?" + clientID + "&response_type=code&" + redirectURI + "&" + scope + "&" + state);
+                        console.log(retURL);
+                        // Return auth URL
+                        res.writeHead(200, { "Content-Type": "application/json" }); //write HTML
+                        res.write("{\"Auth-URL\": \"" + retURL + "\"}");
+                        return res.end();
+                    } else {
+                        console.log("No 'cid' field found in JSON data");
+                    }
+                })
+            } else {
+                console.log("Code submission request does not match expected source");
+                res.writeHead(401, { 'Content-Type': 'text/html' }); //display 404 on error
+                return res.end("Unauthorized Origin");
+            }
+        }
+        else {
             return res.end();
         }
     }
