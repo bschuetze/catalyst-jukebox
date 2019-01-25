@@ -16,6 +16,10 @@ var port = 6474;
 const authorizeURL = "https://accounts.spotify.com/authorize";
 var clientID = ""; // Located at: https://developer.spotify.com/dashboard/applications/
 var clientSecret = "";
+const refreshURL = "https://accounts.spotify.com/api/token"
+var clientDataLoaded = false;
+var authCodeLoaded = false;
+var authorized = false;
 var authCode = "";
 var redirectURI = "redirect_uri=http://" + ip.address() + ":" + port + "/login";
 var scope = "scope=user-read-playback-state user-modify-playback-state playlist-read-private user-read-recently-played user-read-currently-playing";
@@ -33,6 +37,8 @@ fs.readFile("client-data.txt", "utf8", function (error, data) {
             clientID = split[0];
             clientSecret = split[1];
             console.log("Loaded client data");
+            clientDataLoaded = true;
+            completeAuth();
         } else {
             console.log("Incorrect amount of data present, expected 2 but got " + split.length)
         }
@@ -46,11 +52,23 @@ fs.readFile("auth-code.txt", "utf8", function (error, data) {
         if (data != null && data.length > 0) {
             authCode = data;
             console.log("Loaded authorization code");
+            authCodeLoaded = true;
+            completeAuth();
         } else {
             console.log("Code data not present in file");
         }
     }
 });
+
+function completeAuth() {
+    if (!authCodeLoaded || !clientDataLoaded || authorized) {
+        // Loading hasn't finished yet.
+        return;
+    }
+    webRequest(refreshURL, "POST", {}, 
+            {"grant_type": "authorization_code", "code": authCode, "redirect_uri": redirectURI, 
+            "client_id": clientID, "client_secret": clientSecret});
+}
 
 // function spotifyAuth() {
 
@@ -120,6 +138,7 @@ function handler(req, res) { //create server (request, response)
                     // Save values
                     let tempcid = bodyJSON["cid"];
                     let tempsecret = bodyJSON["secret"];
+                    clientDataLoaded = true;
                     fs.writeFile("client-data.txt", tempcid + ";" + tempsecret, function (error) {
                         if (error) {
                             console.log("ERROR, client file not written");
@@ -167,6 +186,7 @@ function handler(req, res) { //create server (request, response)
                         if (bodyJSON.hasOwnProperty("state")) {
                             if ("state=" + bodyJSON["state"] == state) {
                                 authCode = bodyJSON["code"];
+                                authCodeLoaded = true;
                                 fs.writeFile("auth-code.txt", authCode, function (error) {
                                     if (error) {
                                         console.log("ERROR, auth code file not written");
