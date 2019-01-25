@@ -114,19 +114,24 @@ function handler(req, res) { //create server (request, response)
                     console.log(body);
                     // console.log(typeof body);
                     bodyJSON = JSON.parse(body);
-                    if (bodyJSON.hasOwnProperty("cid")) {
-                        // cid exists in the response
-                        clientID = "client_id=" + bodyJSON["cid"];
+                    if (bodyJSON.hasOwnProperty("code")) {
+                        // code exists in the response
+                        if (bodyJSON.hasOwnProperty("state")) {
+                            console.log(bodyJSON["code"]);
+                            console.log(bodyJSON["state"]);
 
-                        // END SNIPPET
-                        let retURL = "" + toWebLink(authorizeURL + "?" + clientID + "&response_type=code&" + redirectURI + "&" + scope + "&" + state);
-                        console.log(retURL);
-                        // Return auth URL
-                        res.writeHead(200, { "Content-Type": "application/json" }); //write HTML
-                        res.write("{\"Auth-URL\": \"" + retURL + "\"}");
-                        return res.end();
+                        }
+                        // clientID = "client_id=" + bodyJSON["cid"];
+
+                        // // END SNIPPET
+                        // let retURL = "" + toWebLink(authorizeURL + "?" + clientID + "&response_type=code&" + redirectURI + "&" + scope + "&" + state);
+                        // console.log(retURL);
+                        // // Return auth URL
+                        // res.writeHead(200, { "Content-Type": "application/json" }); //write HTML
+                        // res.write("{\"Auth-URL\": \"" + retURL + "\"}");
+                        // return res.end();
                     } else {
-                        console.log("No 'cid' field found in JSON data");
+                        console.log("No 'code' field found in JSON data");
                     }
                 })
             } else {

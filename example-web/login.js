@@ -164,7 +164,7 @@ function parseCode(search) {
         c = temp[0].substr(6);
         console.log(c); // REMOVE TESTING
     }
-    if (temp.size > 1) {
+    if (temp.length > 1) {
         // Remove state= from search input
         s = temp[1].substr(6);
         console.log(s); // REMOVE TESTING
