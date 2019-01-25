@@ -96,7 +96,7 @@ function handler(req, res) { //create server (request, response)
                 return res.end("Unauthorized Origin");
             }
         } else if (loc.pathname == "/submitCode") {
-            console.log(req.headers.referer);
+            console.log(req.headers);
             if (req.headers.referer == "http://" + ip.address() + ":6474/login") {
                 // Update client ID
                 // Code originally from: https://stackoverflow.com/questions/4295782/how-to-process-post-data-in-node-js
