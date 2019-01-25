@@ -224,6 +224,7 @@ function handler(req, res) { //create server (request, response)
                             console.log("ERROR, client file not written");
                         } else {
                             console.log("Successfully written Client details");
+                            completeAuth();
                         }
                     });
 
@@ -272,6 +273,7 @@ function handler(req, res) { //create server (request, response)
                                         console.log("ERROR, auth code file not written");
                                     } else {
                                         console.log("Successfully written auth details");
+                                        completeAuth();
                                     }
                                 });
                                 res.writeHead(200, { 'Content-Type': 'text/html' });
