@@ -8,8 +8,14 @@ function setup() {
 
     // Text input
     input = createElement("textarea");
-    input.size(width * 0.8, height * 0.3);
+    input.size(width * 0.8, height * 0.1);
     input.position(width * 0.1, height * 0.3);
+    input.style("font-size: 24px; padding: 10px");
+
+    // Text input
+    input = createElement("textarea");
+    input.size(width * 0.8, height * 0.1);
+    input.position(width * 0.1, (height * 0.3) + height * 0.2);
     input.style("font-size: 24px; padding: 10px");
 
     // Button

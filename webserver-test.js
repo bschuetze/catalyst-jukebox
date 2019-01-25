@@ -21,7 +21,7 @@ var responseType = "code";
 const state = "state=" + crypto.randomBytes(8).toString("hex"); // Generate random 16 char hex string
 console.log("state: " + state); // REMOVE AFTER TESTING
 // Above line found here: https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript/8084248#8084248
-
+// Load client id and secret 
 
 // function spotifyAuth() {
 
