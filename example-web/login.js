@@ -33,7 +33,7 @@ function setup() {
     button.mouseReleased(buttonUp);
 
     // Text
-    textSize(width * 0.070);
+    textSize(width * 0.060);
     textAlign(CENTER);
     text("Enter Spotify Client Details", cidInput.x, height * 0.15, cidInput.width, max(height * 0.15, width * 0.080));
 }
