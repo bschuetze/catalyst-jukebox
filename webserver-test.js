@@ -15,6 +15,7 @@ var port = 6474;
 // Auth variables
 const authorizeURL = "https://accounts.spotify.com/authorize";
 var clientID = ""; // Located at: https://developer.spotify.com/dashboard/applications/
+var clientSecret = "";
 var redirectURI = "redirect_uri=http://" + ip.address() + ":" + port + "/login";
 var scope = "scope=user-read-playback-state user-modify-playback-state playlist-read-private user-read-recently-played user-read-currently-playing";
 var responseType = "code";
@@ -22,6 +23,14 @@ const state = "state=" + crypto.randomBytes(8).toString("hex"); // Generate rand
 console.log("state: " + state); // REMOVE AFTER TESTING
 // Above line found here: https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript/8084248#8084248
 // Load client id and secret 
+fs.readFile("client-data.txt", function (error, data) {
+    if (error) {
+        console.log("Unable to read from client data file");
+    } else {
+        console.log(data);
+        console.log(typeof data);
+    }
+});
 
 // function spotifyAuth() {
 
