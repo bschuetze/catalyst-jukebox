@@ -23,8 +23,8 @@ function setup() {
 
     // Button
     button = createButton("Submit");
-    button.size(input.width, height * 0.15);
-    button.position(input.x, height * 0.7);
+    button.size(cidInput.width, height * 0.15);
+    button.position(cidInput.x, height * 0.7);
     button.style("border: none; background-color: #1ED761; color: black; font-size: 10vmin; font-family: Verdana, Arial");
     button.mouseClicked(buttonPress);
     button.mouseOver(buttonHover);
@@ -35,7 +35,7 @@ function setup() {
     // Text
     textSize(width * 0.070);
     textAlign(CENTER);
-    text("Enter Spotify Client Details", input.x, height * 0.15, input.width, max(height * 0.15, width * 0.080));
+    text("Enter Spotify Client Details", cidInput.x, height * 0.15, cidInput.width, max(height * 0.15, width * 0.080));
 }
 
 function draw() {
@@ -52,7 +52,7 @@ function buttonOut() {
 }
 
 function buttonPress() {
-    let clientIDInput = input.value();
+    let clientIDInput = cidInput.value();
     console.log("Raw Client ID: " + clientIDInput);
     let sanitizedInput = sanitizeAlphaNumeric(clientIDInput);
     console.log("Sanitized ID: " + sanitizedInput);
