@@ -126,7 +126,7 @@ function emptyObject(o) {
     return false;
 }
 
-// Assumes body will be JSON format
+// Assumes body will be JSON format or string
 function webRequest(dest, method, header, body, respFunc) {
     let opts = {};
 
@@ -142,7 +142,13 @@ function webRequest(dest, method, header, body, respFunc) {
 
     // Add body if present
     if (!emptyObject(body)) {
-        opts["body"] = JSON.stringify(body);
+        if (typeof body == "object") {
+            // JSON format
+            opts["body"] = JSON.stringify(body);
+        }
+        if (typeof body == "string") {
+            opts["body"] = body;
+        }
     }
 
     fetch(dest, opts).then(response => webResponse(response, respFunc));
