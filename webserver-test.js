@@ -218,6 +218,7 @@ function handler(req, res) { //create server (request, response)
                     // Save values
                     let tempcid = bodyJSON["cid"];
                     let tempsecret = bodyJSON["secret"];
+                    clientSecret = bodyJSON["secret"];
                     clientDataLoaded = true;
                     fs.writeFile("client-data.txt", tempcid + ";" + tempsecret, function (error) {
                         if (error) {
