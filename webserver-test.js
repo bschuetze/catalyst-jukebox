@@ -69,6 +69,8 @@ function completeAuth() {
     webRequest(refreshURL, "POST", {}, 
             "grant_type=authorization_code" + "&" +"code=" + authCode + "&" + "redirect_uri=" +
             redirectURI + "&" + "client_id=" + clientID + "&" + "client_secret=" + clientSecret);
+    console.log("grant_type=authorization_code" + "&" + "code=" + authCode + "&" + "redirect_uri=" +
+        redirectURI + "&" + "client_id=" + clientID + "&" + "client_secret=" + clientSecret)
 }
 
 // Assumes body will be JSON format or string
