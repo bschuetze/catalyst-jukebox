@@ -1,13 +1,14 @@
 // Webserver test, initial code will be used from: 
 // https://www.w3schools.com/nodejs/nodejs_raspberrypi_webserver_websocket.asp
 
-var http = require('http').createServer(handler); //require http server, and create server with function handler()
-var fs = require('fs'); //require filesystem module
-var url = require('url');
-var path = require('path');
-var ip = require('ip');
-var crypto = require('crypto');
-var qs = require('querystring');
+const http = require('http').createServer(handler); //require http server, and create server with function handler()
+const fs = require('fs'); //require filesystem module
+const url = require('url');
+const path = require('path');
+const ip = require('ip');
+const crypto = require('crypto');
+const qs = require('querystring');
+const fetch = require('node-fetch');
 
 // Server variables
 var port = 6474;
