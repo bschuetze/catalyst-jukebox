@@ -27,8 +27,13 @@ fs.readFile("client-data.txt", "utf8", function (error, data) {
     if (error) {
         console.log("Unable to read from client data file");
     } else {
-        console.log(data);
-        console.log(typeof data);
+        let split = data.split(";");
+        if (split.length == 2) {
+            clientID = split[0];
+            clientSecret = split[1];
+        } else {
+            console.log("Incorrect amount of data present, expected 2 but got " + split.length)
+        }
     }
 });
 
@@ -108,9 +113,9 @@ function handler(req, res) { //create server (request, response)
                         }
                     });
 
-                    clientID = "client_id=" + bodyJSON["cid"];
+                    clientID = bodyJSON["cid"];
                     
-                    let retURL = "" + toWebLink(authorizeURL + "?" + clientID + "&response_type=code&" + redirectURI + "&" + scope + "&" + state);
+                    let retURL = "" + toWebLink(authorizeURL + "?client_id=" + clientID + "&response_type=code&" + redirectURI + "&" + scope + "&" + state);
                     console.log(retURL);
                     // Return auth URL
                     res.writeHead(200, { "Content-Type": "application/json" }); //write HTML
