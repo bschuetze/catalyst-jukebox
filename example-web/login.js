@@ -9,14 +9,14 @@ function setup() {
 
     // Text input
     cidInput = createElement("textarea");
-    cidInput.placeholder = "Enter your Client ID";
+    cidInput.elt.placeholder = "Enter your Client ID";
     cidInput.size(width * 0.8, height * 0.1);
     cidInput.position(width * 0.1, height * 0.3);
     cidInput.style("font-size: 24px; padding: 10px");
 
     // Text input
     secretInput = createElement("textarea");
-    secretInput.placeholder = "Enter your Client Secret";
+    secretInput.elt.placeholder = "Enter your Client Secret";
     secretInput.size(width * 0.8, height * 0.1);
     secretInput.position(width * 0.1, (height * 0.3) + height * 0.2);
     secretInput.style("font-size: 24px; padding: 10px");
