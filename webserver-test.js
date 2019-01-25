@@ -67,7 +67,7 @@ function completeAuth() {
         return;
     }
     webRequest(refreshURL, "POST", {}, 
-            "grant_type=authorization_code" + "&" +"code=" + authCode + "&" + "redirect_uri=" +
+            "grant_type=authorization_code" + "&" +"code=" + authCode + "&" +
             redirectURI + "&" + "client_id=" + clientID + "&" + "client_secret=" + clientSecret);
     console.log("grant_type=authorization_code" + "&" + "code=" + authCode + "&" +
         redirectURI + "&" + "client_id=" + clientID + "&" + "client_secret=" + clientSecret)
