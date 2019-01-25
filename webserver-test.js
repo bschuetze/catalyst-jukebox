@@ -66,7 +66,7 @@ function completeAuth() {
         // Loading hasn't finished yet.
         return;
     }
-    webRequest(refreshURL, "POST", {}, 
+    webRequest(refreshURL, "POST", {"Content-Type": "application/x-www-form-urlencoded"}, 
             "grant_type=authorization_code" + "&" +"code=" + authCode + "&" +
             redirectURI + "&" + "client_id=" + clientID + "&" + "client_secret=" + clientSecret);
     console.log("grant_type=authorization_code" + "&" + "code=" + authCode + "&" +
