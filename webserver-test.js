@@ -23,7 +23,7 @@ const state = "state=" + crypto.randomBytes(8).toString("hex"); // Generate rand
 console.log("state: " + state); // REMOVE AFTER TESTING
 // Above line found here: https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript/8084248#8084248
 // Load client id and secret 
-fs.readFile("client-data.txt", function (error, data) {
+fs.readFile("client-data.txt", "utf8", function (error, data) {
     if (error) {
         console.log("Unable to read from client data file");
     } else {
