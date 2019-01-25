@@ -16,6 +16,7 @@ var port = 6474;
 const authorizeURL = "https://accounts.spotify.com/authorize";
 var clientID = ""; // Located at: https://developer.spotify.com/dashboard/applications/
 var clientSecret = "";
+var authCode = "";
 var redirectURI = "redirect_uri=http://" + ip.address() + ":" + port + "/login";
 var scope = "scope=user-read-playback-state user-modify-playback-state playlist-read-private user-read-recently-played user-read-currently-playing";
 var responseType = "code";
@@ -31,8 +32,22 @@ fs.readFile("client-data.txt", "utf8", function (error, data) {
         if (split.length == 2) {
             clientID = split[0];
             clientSecret = split[1];
+            console.log("Loaded client data");
         } else {
             console.log("Incorrect amount of data present, expected 2 but got " + split.length)
+        }
+    }
+});
+
+fs.readFile("auth-code.txt", "utf8", function (error, data) {
+    if (error) {
+        console.log("Unable to read from auth code file");
+    } else {
+        if (data != null && data.length > 0) {
+            authCode = data;
+            console.log("Loaded authorization code");
+        } else {
+            console.log("Code data not present in file");
         }
     }
 });
@@ -151,6 +166,14 @@ function handler(req, res) { //create server (request, response)
                         // code exists in the response
                         if (bodyJSON.hasOwnProperty("state")) {
                             if ("state=" + bodyJSON["state"] == state) {
+                                authCode = bodyJSON["code"];
+                                fs.writeFile("auth-code.txt", authCode, function (error) {
+                                    if (error) {
+                                        console.log("ERROR, auth code file not written");
+                                    } else {
+                                        console.log("Successfully written auth details");
+                                    }
+                                });
                                 res.writeHead(200, { 'Content-Type': 'text/html' });
                                 return res.end("Okay");
                             } else {
@@ -164,15 +187,6 @@ function handler(req, res) { //create server (request, response)
                             res.writeHead(400, { 'Content-Type': 'text/html' }); //display 404 on error
                             return res.end("No state provided");
                         }
-                        // clientID = "client_id=" + bodyJSON["cid"];
-
-                        
-                        // let retURL = "" + toWebLink(authorizeURL + "?" + clientID + "&response_type=code&" + redirectURI + "&" + scope + "&" + state);
-                        // console.log(retURL);
-                        // // Return auth URL
-                        // res.writeHead(200, { "Content-Type": "application/json" }); //write HTML
-                        // res.write("{\"Auth-URL\": \"" + retURL + "\"}");
-                        // return res.end();
                     } else {
                         console.log("No 'code' field found in JSON data");
                         res.writeHead(400, { 'Content-Type': 'text/html' }); //display 404 on error
