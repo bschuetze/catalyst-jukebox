@@ -160,11 +160,14 @@ function parseCode(search) {
     let c = "";
     let s = "";
     if (temp[0].substr(0, 1) == "?") {
-        // Remove the question mark from the search input
-        c = temp[0].substr(1, temp[0].length - 1);
+        // Remove ?code= from the search input
+        c = temp[0].substr(6);
+        console.log(c); // REMOVE TESTING
     }
     if (temp.size > 1) {
-        s = temp[1];
+        // Remove state= from search input
+        s = temp[1].substr(6);
+        console.log(s); // REMOVE TESTING
     }
     return {code: c, state: s};
 }
