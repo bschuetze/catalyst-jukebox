@@ -53,24 +53,32 @@ function buttonOut() {
 
 function buttonPress() {
     let clientIDInput = cidInput.value();
-    console.log("Raw Client ID: " + clientIDInput);
-    let sanitizedInput = sanitizeAlphaNumeric(clientIDInput);
-    console.log("Sanitized ID: " + sanitizedInput);
-    if (sanitizedInput.length == 0) {
+    let clientSecretInput = secretInput.value();
+    
+    let sanitizedClientID = sanitizeAlphaNumeric(clientIDInput);
+    let sanitizedClientSecret = sanitizeAlphaNumeric(clientSecretInput);
+
+    if (sanitizedClientID.length == 0) {
         console.log("Client ID cannot be empty");
-    } else {
-        // Make HTTP request to server with info
-        let destinationURL = window.location.origin + "/submitClientID";
-        webRequest(destinationURL, "POST", {"Content-Type": "application/json"}, {cid: sanitizedInput}, authRedirect);
-        // fetch(destinationURL, {
-        //     headers: { "Content-Type": "application/json"},
-        //     method: "POST",
-        //     body: JSON.stringify({
-        //         cid: sanitizedInput
-        //     })
-        // })
-        // .then(response => webResponse(response, authRedirect));
+        return;
     }
+
+    if (sanitizedClientSecret.length == 0) {
+        console.log("Client Secret cannot be empty");
+        return;
+    }
+    
+    // Make HTTP request to server with info
+    let destinationURL = window.location.origin + "/submitClientID";
+    webRequest(destinationURL, "POST", {"Content-Type": "application/json"}, {cid: sanitizedClientID, secret: sanitizedClientSecret}, authRedirect);
+    // fetch(destinationURL, {
+    //     headers: { "Content-Type": "application/json"},
+    //     method: "POST",
+    //     body: JSON.stringify({
+    //         cid: sanitizedClientID
+    //     })
+    // })
+    // .then(response => webResponse(response, authRedirect));
 }
 
 function sanitizeAlphaNumeric(str) {
@@ -143,7 +151,7 @@ function webRequest(dest, method, header, body, respFunc) {
     //     headers: { "Content-Type": "application/json" },
     //     method: "POST",
     //     body: JSON.stringify({
-    //         cid: sanitizedInput
+    //         cid: sanitizedClientID
     //     })
     // }).then(response => webResponse(response, authRedirect));
 }

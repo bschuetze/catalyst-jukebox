@@ -75,20 +75,39 @@ function handler(req, res) { //create server (request, response)
                     console.log(body);
                     // console.log(typeof body);
                     bodyJSON = JSON.parse(body);
-                    if (bodyJSON.hasOwnProperty("cid")) {
-                        // cid exists in the response
-                        clientID = "client_id=" + bodyJSON["cid"];
 
-                        
-                        let retURL = "" + toWebLink(authorizeURL + "?" + clientID + "&response_type=code&" + redirectURI + "&" + scope + "&" + state);
-                        console.log(retURL);
-                        // Return auth URL
-                        res.writeHead(200, { "Content-Type": "application/json" }); //write HTML
-                        res.write("{\"Auth-URL\": \"" + retURL + "\"}");
-                        return res.end();
-                    } else {
-                        console.log("No 'cid' field found in JSON data");
+                    if (!bodyJSON.hasOwnProperty("cid")) {
+                        console.log("Client ID field not found in JSON data");
+                        res.writeHead(400, { 'Content-Type': 'text/html' }); //display 404 on error
+                        return res.end("No Client ID found in data");
                     }
+
+                    if (!bodyJSON.hasOwnProperty("secret")) {
+                        console.log("Client Secret field not found in JSON data");
+                        res.writeHead(400, { 'Content-Type': 'text/html' }); //display 404 on error
+                        return res.end("No Client Secret found in data");
+                    }
+
+                    // Save values
+                    let tempcid = bodyJSON["cid"];
+                    let tempsecret = bodyJSON["secret"];
+                    fs.writeFile("client-data.txt", tempcid + ";" + tempsecret, function (error) {
+                        if (error) {
+                            console.log("ERROR, client file not written");
+                        } else {
+                            console.log("Successfully written Client details");
+                        }
+                    });
+
+                    clientID = "client_id=" + bodyJSON["cid"];
+                    
+                    let retURL = "" + toWebLink(authorizeURL + "?" + clientID + "&response_type=code&" + redirectURI + "&" + scope + "&" + state);
+                    console.log(retURL);
+                    // Return auth URL
+                    res.writeHead(200, { "Content-Type": "application/json" }); //write HTML
+                    res.write("{\"Auth-URL\": \"" + retURL + "\"}");
+                    return res.end();
+
                 })
             } else {
                 console.log("ClientID request does not match expected source");
