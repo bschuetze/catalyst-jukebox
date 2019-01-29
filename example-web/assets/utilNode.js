@@ -1,3 +1,5 @@
+const fetch = require('node-fetch');
+
 module.exports = {
     // toWebLink,
     // webRequest,
