@@ -19,7 +19,9 @@ var clientID = ""; // Located at: https://developer.spotify.com/dashboard/applic
 var clientSecret = "";
 const refreshURL = "https://accounts.spotify.com/api/token"
 var clientDataLoaded = false;
+var refreshDataLoaded = false;
 var authToken = "";
+var refreshToken = "";
 var authCodeLoaded = false;
 var authorized = false;
 var authCode = "";
@@ -63,16 +65,43 @@ fs.readFile("auth-code.txt", "utf8", function (error, data) {
     }
 });
 
+fs.readFile("refresh-token.txt", "utf8", function (error, data) {
+    if (error) {
+        console.log("Unable to read from refresh token file");
+    } else {
+        if (data != null && data.length > 0) {
+            authCode = data;
+            console.log("Loaded refresh token");
+        } else {
+            console.log("Refresh not present in file");
+        }
+    }
+    // Need this to be true to progress, even if not in file as it will only be there once an authorization
+    // has taken place.
+    refreshDataLoaded = true;
+    completeAuth();
+});
+
 function completeAuth() {
-    if (!authCodeLoaded || !clientDataLoaded || authorized) {
+    if (!refreshDataLoaded || !authCodeLoaded || !clientDataLoaded || authorized) {
         // Loading hasn't finished yet.
+        console.log("Not ready to authorize");
         return;
     }
-    webRequest(refreshURL, "POST", {"Content-Type": "application/x-www-form-urlencoded"}, 
-            "grant_type=authorization_code" + "&" +"code=" + authCode + "&" +
+    if (refreshToken == null || refreshToken == "") {
+        console.log("No refresh token, using client ID and Secret")
+        webRequest(refreshURL, "POST", { "Content-Type": "application/x-www-form-urlencoded" },
+            "grant_type=authorization_code" + "&" + "code=" + authCode + "&" +
             redirectURI + "&" + "client_id=" + clientID + "&" + "client_secret=" + clientSecret, authCallback);
-    console.log("grant_type=authorization_code" + "&" + "code=" + authCode + "&" +
-        redirectURI + "&" + "client_id=" + clientID + "&" + "client_secret=" + clientSecret);
+        console.log("grant_type=authorization_code" + "&" + "code=" + authCode + "&" +
+            redirectURI + "&" + "client_id=" + clientID + "&" + "client_secret=" + clientSecret);
+    } else {
+        console.log("Refresh token found, attempting to authorize");
+        ebRequest(refreshURL, "POST", { "Content-Type": "application/x-www-form-urlencoded" },
+            "grant_type=refresh_token" + "&" + "refresh_token=" + refreshToken + "&" + 
+            "client_id=" + clientID + "&" + "client_secret=" + clientSecret, authCallback);
+    }
+    
 }
 
 function refreshAuth() {
@@ -105,7 +134,20 @@ function authCallback(data) {
     } else {
         console.log("No Auth error detected");
         if (data.hasOwnProperty("access_token")) {
+            console.log("Setting access token");
             authToken = data["access_token"];
+            if (data.hasOwnProperty("refresh_token")) {
+                console.log("Setting refresh token");
+                refreshToken = data["refresh_token"];
+                fs.writeFile("refresh-token.txt", refreshToken, function (error) {
+                    if (error) {
+                        console.log("ERROR, refresh token file not written");
+                    } else {
+                        console.log("Successfully written refresh token details");
+                    }
+                });
+                refreshDataLoaded = true;
+            }
             // start auth timeout
             if (data.hasOwnProperty("expires_in")) {
                 console.log("Setting refresh timer for: " + (((data["expires_in"] - (5 * 60)) * 1000)) + " milliseconds"); // 5 minute window
@@ -117,6 +159,7 @@ function authCallback(data) {
                 authTimeOut = setTimeout(refreshAuth, (3600 - (5 * 60) * 1000));
                 // authTimeOut = setTimeout(refreshAuth, 10000); // Testing purposes only
             }
+            authorized = true;
         } else {
             console.log("No access token found");
             console.log(data);
