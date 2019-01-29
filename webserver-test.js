@@ -159,7 +159,7 @@ function authCallback(data) {
                 // Set timeout (time in ms, with 5 minute window)
                 authTimeOut = setTimeout(refreshAuth, (((data["expires_in"] - (5 * 60)) * 1000)));
             } else {
-                console.log(data);
+                // console.log(data);
                 console.log("No timeout data provided, setting timeout for " + (3600 - (5 * 60)));
                 authTimeOut = setTimeout(refreshAuth, (3600 - (5 * 60) * 1000));
                 // authTimeOut = setTimeout(refreshAuth, 10000); // Testing purposes only
@@ -228,7 +228,7 @@ function webResponse(response, respFunc) {
     let contentType = response.headers.get("content-type");
     if (contentType && contentType.indexOf("application/json") !== -1) {
         console.log("JSON Response");
-        console.log(response);
+        // console.log(response);
         return response.json().then(data => {
             // process your JSON data further
             if (respFunc !== undefined) {
