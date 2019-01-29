@@ -19,6 +19,7 @@ var clientID = ""; // Located at: https://developer.spotify.com/dashboard/applic
 var clientSecret = "";
 const refreshURL = "https://accounts.spotify.com/api/token"
 var clientDataLoaded = false;
+var authToken = "";
 var authCodeLoaded = false;
 var authorized = false;
 var authCode = "";
@@ -26,6 +27,7 @@ var redirectURI = "redirect_uri=http://" + ip.address() + ":" + port + "/login";
 var scope = "scope=user-read-playback-state user-modify-playback-state playlist-read-private user-read-recently-played user-read-currently-playing";
 var responseType = "code";
 const state = "state=" + crypto.randomBytes(8).toString("hex"); // Generate random 16 char hex string
+var authTimeOut;
 console.log("state: " + state); // REMOVE AFTER TESTING
 // Above line found here: https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript/8084248#8084248
 // Load client id and secret 
@@ -73,6 +75,16 @@ function completeAuth() {
         redirectURI + "&" + "client_id=" + clientID + "&" + "client_secret=" + clientSecret);
 }
 
+function refreshAuth() {
+    if (authTimeOut == null) {
+        console.log("Auth timeout not defined");
+        return;
+    }
+    console.log("Time running out on current token" + ", refreshing...")
+    authorized = false;
+    completeAuth();
+}
+
 // Auth check function
 function authCallback(data) {
     if (data == null || data == {}) {
@@ -82,11 +94,29 @@ function authCallback(data) {
     if (data.hasOwnProperty("error")) {
         console.log("Auth error: " + data["error"]);
         if (data.hasOwnProperty("error_description")) {
-            console.log("Auth error description: " + data["error_description"]);
+            if (data["error_description"] == "Authorization code expired") {
+                console.log("Auth code has expired, please renew at: http://" + ip.address() + "/login")
+            } else {
+                console.log("Auth error description: " + data["error_description"]);
+            }
         }
     } else {
         console.log("No Auth error detected");
-        console.log(data);
+        if (data.hasOwnProperty("access_token")) {
+            authToken = data["access_token"];
+            // start auth timeout
+            if (data.hasOwnProperty["expires_in"]) {
+                console.log("Setting refresh timer for: " + (data["expires_in"] - (5 * 60)) + " seconds"); // 5 minute window
+                // Set timeout (time in ms, with 5 minute window)
+                setTimeout(refreshAuth, ((data["expires_in"] - (5 * 60) * 1000)));
+            } else {
+                console.log("No timeout data provided, setting timeout for " + (3600 - (5 * 60)));
+                setTimeout(refreshAuth, (3600 - (5 * 60) * 1000));
+            }
+        } else {
+            console.log("No access token found");
+            console.log(data);
+        }
     }
 }
 
