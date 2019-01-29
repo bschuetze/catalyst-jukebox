@@ -285,7 +285,7 @@ function handler(req, res) { //create server (request, response)
     // Get the location of the request
     var loc = url.parse(req.url, true);
 
-    console.log("Request from: " + loc);
+    console.log("Request from: " + loc.href);
 
     _favicon(req, res, function cont(favError) {
         if (favError) return done(favError);
