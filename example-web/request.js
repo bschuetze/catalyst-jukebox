@@ -1,5 +1,6 @@
 var trackURI;
 var button;
+const songLimit = 3;
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
@@ -8,8 +9,8 @@ function setup() {
 
     // Text input
     trackURI = createElement("textarea");
-    trackURI.elt.placeholder = "Enter track URI's (space separated)";
-    trackURI.size(width * 0.8, height * 0.1);
+    trackURI.elt.placeholder = "Enter up to " + songLimit + " track URIs (space separated)";
+    trackURI.size(width * 0.8, height * 0.3);
     trackURI.position(width * 0.1, height * 0.3);
     trackURI.style("font-size: 24px; padding: 10px");
 
@@ -27,7 +28,7 @@ function setup() {
     // Text
     textSize(width * 0.060);
     textAlign(CENTER);
-    text("", trackURI.x, height * 0.15, trackURI.width, max(height * 0.15, width * 0.080));
+    text("Request Jukebox Songs", trackURI.x, height * 0.15, trackURI.width, max(height * 0.15, width * 0.080));
 }
 
 function draw() {
