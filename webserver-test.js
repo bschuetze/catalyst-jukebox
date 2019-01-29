@@ -424,6 +424,8 @@ function handler(req, res) { //create server (request, response)
         } else if (loc.pathname == "/login") {
             filename = "." + "/example-web/" + "login.html";
             // } else if (loc.pathname == "/login") {
+        } else if (loc.pathname == "/request") {
+            filename = "." + "/example-web/" + "request.html";
         } else {
             filename = "." + "/example-web/" + loc.pathname;
         }
