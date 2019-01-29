@@ -70,7 +70,7 @@ fs.readFile("refresh-token.txt", "utf8", function (error, data) {
         console.log("Unable to read from refresh token file");
     } else {
         if (data != null && data.length > 0) {
-            authCode = data;
+            refreshToken = data;
             console.log("Loaded refresh token");
         } else {
             console.log("Refresh not present in file");
