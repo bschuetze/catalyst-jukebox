@@ -107,15 +107,15 @@ function authCallback(data) {
         if (data.hasOwnProperty("access_token")) {
             authToken = data["access_token"];
             // start auth timeout
-            if (data.hasOwnProperty["expires_in"]) {
+            if (data.hasOwnProperty("expires_in")) {
                 console.log("Setting refresh timer for: " + (data["expires_in"] - (5 * 60)) + " seconds"); // 5 minute window
                 // Set timeout (time in ms, with 5 minute window)
                 authTimeOut = setTimeout(refreshAuth, ((data["expires_in"] - (5 * 60) * 1000)));
             } else {
                 console.log(data);
                 console.log("No timeout data provided, setting timeout for " + (3600 - (5 * 60)));
-                // authTimeOut = setTimeout(refreshAuth, (3600 - (5 * 60) * 1000));
-                authTimeOut = setTimeout(refreshAuth, 10000);
+                authTimeOut = setTimeout(refreshAuth, (3600 - (5 * 60) * 1000));
+                // authTimeOut = setTimeout(refreshAuth, 10000); // Testing purposes only
             }
         } else {
             console.log("No access token found");
