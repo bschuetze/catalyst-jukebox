@@ -71,6 +71,18 @@ module.exports = {
         //         cid: sanitizedClientID
         //     })
         // }).then(response => webResponse(response, authRedirect));
+    },
+
+    emptyObject: function(o) {
+        if (o == null) {
+            // If null value is present then no object
+            return true;
+        }
+        if (o.constructor == Object && Object.entries(o).length == 0) {
+            // If is of type object and has no entries
+            return true;
+        }
+        return false;
     }
 
 };
