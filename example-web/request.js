@@ -1,3 +1,5 @@
+const util = require("./assets/util.js");
+
 var trackURI;
 var button;
 const songLimit = 3;
