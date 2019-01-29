@@ -47,12 +47,12 @@ module.exports = {
         }
 
         // Add header if present
-        if (!emptyObject(header)) {
+        if (!module.exports.emptyObject(header)) {
             opts["headers"] = header;
         }
 
         // Add body if present
-        if (!emptyObject(body)) {
+        if (!module.exports.emptyObject(body)) {
             if (typeof body == "object") {
                 // JSON format
                 opts["body"] = JSON.stringify(body);
@@ -62,7 +62,7 @@ module.exports = {
             }
         }
 
-        fetch(dest, opts).then(response => util.webResponse(response, respFunc));
+        fetch(dest, opts).then(response => module.exports.webResponse(response, respFunc));
 
         // fetch(dest, {
         //     headers: { "Content-Type": "application/json" },
