@@ -57,13 +57,15 @@ function buttonPress() {
     // Make HTTP request to server with info
     let destinationURL = window.location.origin + "/submitTrackID";
     let trackJSON = {};
-    trackJSON["tracks"] = [];
+    let correctTracks = [];
 
     for (let i = 0; i < tracks.length; i++) {
         if (checkSpotifyURI(tracks[i])) {
-            trackJSON["tracks"].put(tracks[i]);
+            correctTracks.put(tracks[i]);
         }
     }
+    
+    trackJSON["tracks"] = correctTracks;
 
     webRequest(destinationURL, "POST", { "Content-Type": "application/json" }, trackJSON);
 }
