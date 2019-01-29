@@ -1,13 +1,13 @@
 module.exports = {
-    toWebLink,
-    webRequest,
-    webResponse,
-    emptyObject
+    // toWebLink,
+    // webRequest,
+    // webResponse,
+    // emptyObject
 
-    // toWebLink: toWebLink,
-    // webRequest: webRequest,
-    // webResponse: webResponse,
-    // emptyObject: emptyObject
+    toWebLink: toWebLink,
+    webRequest: webRequest,
+    webResponse: webResponse,
+    emptyObject: emptyObject
 
 
     // toWebLink: function (link) {
@@ -100,7 +100,7 @@ module.exports = {
 
 
 
-var toWebLink = function (link) {
+function toWebLink (link) {
     let subLink = link.split(" ");
     let newLink = subLink[0];
     for (let i = 1; i < subLink.length; i++) {
@@ -109,7 +109,7 @@ var toWebLink = function (link) {
     return newLink;
 }
 
-var webResponse = function (response, respFunc) {
+function webResponse (response, respFunc) {
     // Response method originally found from here: https://stackoverflow.com/questions/37121301/how-to-check-if-the-response-of-a-fetch-is-a-json-object-in-javascript
     let contentType = response.headers.get("content-type");
     if (contentType && contentType.indexOf("application/json") !== -1) {
@@ -140,7 +140,7 @@ var webResponse = function (response, respFunc) {
 }
 
 // Assumes body will be JSON format or string
-var webRequest = function (dest, method, header, body, respFunc) {
+function webRequest (dest, method, header, body, respFunc) {
     let opts = {};
 
     // Add method if present
@@ -175,7 +175,7 @@ var webRequest = function (dest, method, header, body, respFunc) {
     // }).then(response => webResponse(response, authRedirect));
 }
 
-var emptyObject = function (o) {
+function emptyObject (o) {
     if (o == null) {
         // If null value is present then no object
         return true;
