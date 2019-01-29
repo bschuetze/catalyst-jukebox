@@ -204,12 +204,13 @@ function webResponse(response, respFunc) {
     let contentType = response.headers.get("content-type");
     if (contentType && contentType.indexOf("application/json") !== -1) {
         console.log("JSON Response");
-        console.log(response);
+        // console.log(response);
         return response.json().then(data => {
             // process your JSON data further
             if (respFunc !== undefined) {
                 respFunc(data);
             } else {
+                console.log("Data:")
                 console.log(data);
             }
         });
