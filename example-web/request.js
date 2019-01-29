@@ -61,10 +61,10 @@ function buttonPress() {
 
     for (let i = 0; i < tracks.length; i++) {
         if (checkSpotifyURI(tracks[i])) {
-            correctTracks.put(tracks[i]);
+            correctTracks.push(tracks[i]);
         }
     }
-    
+
     trackJSON["tracks"] = correctTracks;
 
     webRequest(destinationURL, "POST", { "Content-Type": "application/json" }, trackJSON);
