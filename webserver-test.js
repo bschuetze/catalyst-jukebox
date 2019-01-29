@@ -285,7 +285,8 @@ function handler(req, res) { //create server (request, response)
     // Get the location of the request
     var loc = url.parse(req.url, true);
 
-    favicon(req, res, function cont(req, res) {
+    favicon(req, res, function cont(favError) {
+        if (favError) return done(favError);
         // Check if POST request
         if (req.method == "POST") {
             console.log("POST Request");
