@@ -12,7 +12,7 @@ const fetch = require('node-fetch');
 const servefav = require('serve-favicon');
 // import util
 // import {toWebLink, webResponse} from "./example-web/assets/util.js";
-require("./example-web/assets/util.js")()
+const util = require("./example-web/assets/util.js");
 
 // Server variables
 var port = 6474;
@@ -205,7 +205,7 @@ function webRequest(dest, method, header, body, respFunc) {
         }
     }
 
-    fetch(dest, opts).then(response => webResponse(response, respFunc));
+    fetch(dest, opts).then(response => util.webResponse(response, respFunc));
 
     // fetch(dest, {
     //     headers: { "Content-Type": "application/json" },
