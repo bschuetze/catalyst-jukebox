@@ -68,9 +68,25 @@ function completeAuth() {
     }
     webRequest(refreshURL, "POST", {"Content-Type": "application/x-www-form-urlencoded"}, 
             "grant_type=authorization_code" + "&" +"code=" + authCode + "&" +
-            redirectURI + "&" + "client_id=" + clientID + "&" + "client_secret=" + clientSecret);
+            redirectURI + "&" + "client_id=" + clientID + "&" + "client_secret=" + clientSecret, authCallback);
     console.log("grant_type=authorization_code" + "&" + "code=" + authCode + "&" +
-        redirectURI + "&" + "client_id=" + clientID + "&" + "client_secret=" + clientSecret)
+        redirectURI + "&" + "client_id=" + clientID + "&" + "client_secret=" + clientSecret);
+}
+
+function authCallback(data) {
+    if (data == null || data == {}) {
+        console.log("No return data provided");
+        return;
+    }
+    if (data.hasOwnProperty("error")) {
+        console.log("Auth error: " + data["error"]);
+        if (data.hasOwnProperty("error_description")) {
+            console.log("Auth error description: " + data["error_description"]);
+        }
+    } else {
+        console.log("No Auth error detected");
+        console.log(data);
+    }
 }
 
 // Assumes body will be JSON format or string
@@ -132,6 +148,7 @@ function webResponse(response, respFunc) {
             if (respFunc !== undefined) {
                 respFunc(data);
             } else {
+                console.log("Data:")
                 console.log(data);
             }
         });
