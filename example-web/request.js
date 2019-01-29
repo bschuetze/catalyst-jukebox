@@ -59,7 +59,7 @@ function buttonPress() {
     let trackJSON = {};
     let correctTracks = [];
 
-    for (let i = 0; i < tracks.length; i++) {
+    for (let i = 0; i < Math.min(tracks.length, songLimit); i++) {
         if (checkSpotifyURI(tracks[i])) {
             correctTracks.push(tracks[i]);
         }
