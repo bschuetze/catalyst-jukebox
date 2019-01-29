@@ -10,6 +10,7 @@ const crypto = require('crypto');
 const qs = require('querystring');
 const fetch = require('node-fetch');
 const servefav = require('serve-favicon');
+require("./example-web/assets/util.js")();
 
 // Server variables
 var port = 6474;
@@ -463,11 +464,3 @@ function handler(req, res) { //create server (request, response)
     });
 }
 
-function toWebLink(link) {
-    let subLink = link.split(" ");
-    let newLink = subLink[0];
-    for (let i = 1; i < subLink.length; i++) {
-        newLink = newLink + "%20" + subLink[i];
-    }
-    return newLink;
-}
