@@ -97,7 +97,7 @@ function completeAuth() {
             redirectURI + "&" + "client_id=" + clientID + "&" + "client_secret=" + clientSecret);
     } else {
         console.log("Refresh token found, attempting to authorize");
-        ebRequest(refreshURL, "POST", { "Content-Type": "application/x-www-form-urlencoded" },
+        webRequest(refreshURL, "POST", { "Content-Type": "application/x-www-form-urlencoded" },
             "grant_type=refresh_token" + "&" + "refresh_token=" + refreshToken + "&" + 
             "client_id=" + clientID + "&" + "client_secret=" + clientSecret, authCallback);
     }
