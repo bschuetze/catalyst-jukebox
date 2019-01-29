@@ -9,7 +9,7 @@ function setup() {
 
     // Text input
     trackURI = createElement("textarea");
-    trackURI.elt.placeholder = "Enter up to " + songLimit + " track URIs (space separated)";
+    trackURI.elt.placeholder = "Enter up to " + trackLimit + " track URIs (space separated)";
     trackURI.size(width * 0.8, height * 0.3);
     trackURI.position(width * 0.1, height * 0.3);
     trackURI.style("font-size: 24px; padding: 10px");
