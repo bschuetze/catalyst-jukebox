@@ -10,7 +10,7 @@ const crypto = require('crypto');
 const qs = require('querystring');
 const fetch = require('node-fetch');
 const servefav = require('serve-favicon');
-require("./example-web/assets/util.js")();
+require("./example-web/assets/util.js");
 
 // Server variables
 var port = 6474;
