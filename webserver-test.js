@@ -95,14 +95,14 @@ function completeAuth() {
     }
     if (refreshToken == null || refreshToken == "") {
         console.log("No refresh token, using client ID and Secret")
-        webRequest(refreshURL, "POST", { "Content-Type": "application/x-www-form-urlencoded" },
+        util.webRequest(refreshURL, "POST", { "Content-Type": "application/x-www-form-urlencoded" },
             "grant_type=authorization_code" + "&" + "code=" + authCode + "&" +
             redirectURI + "&" + "client_id=" + clientID + "&" + "client_secret=" + clientSecret, authCallback);
         console.log("grant_type=authorization_code" + "&" + "code=" + authCode + "&" +
             redirectURI + "&" + "client_id=" + clientID + "&" + "client_secret=" + clientSecret);
     } else {
         console.log("Refresh token found, attempting to authorize");
-        webRequest(refreshURL, "POST", { "Content-Type": "application/x-www-form-urlencoded" },
+        util.webRequest(refreshURL, "POST", { "Content-Type": "application/x-www-form-urlencoded" },
             "grant_type=refresh_token" + "&" + "refresh_token=" + refreshToken + "&" + 
             "client_id=" + clientID + "&" + "client_secret=" + clientSecret, authCallback);
     }
@@ -181,7 +181,7 @@ function authCallback(data) {
 }
 
 // // Assumes body will be JSON format or string
-// function webRequest(dest, method, header, body, respFunc) {
+// function util.webRequest(dest, method, header, body, respFunc) {
 //     let opts = {};
 
 //     // Add method if present
