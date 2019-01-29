@@ -127,6 +127,9 @@ function authCallback(data) {
         if (data.hasOwnProperty("error_description")) {
             if (data["error_description"] == "Authorization code expired") {
                 console.log("Auth code has expired, please renew at: http://" + ip.address() + "/login")
+            } else if (data["error_description"] == "Invalid refresh token") {
+                console.log("Invalid refresh token, removing");
+                refreshToken = "";
             } else {
                 console.log("Auth error description: " + data["error_description"]);
             }
