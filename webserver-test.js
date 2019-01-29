@@ -196,14 +196,30 @@ function handler(req, res) { //create server (request, response)
         // Check if POST request
         if (req.method == "POST") {
             console.log("POST Request");
-            if (loc.pathname == "/submitClientID") {
+            if (loc.pathname == "/submitTrackID") {
+                // Code originally from: https://stackoverflow.com/questions/4295782/how-to-process-post-data-in-node-js
+                // BEGIN SNIPPET
+                let body = "";
+                let bodyJSON = {};
+                req.on("data", function (data) {
+                    if (body.length > 1e6) {
+                        // Request is coming with large amounts of data, not a good idea to continue to parse it
+                        request.connection.destroy();
+                    }
+                    body += data;
+                }); // END SNIPPET
+                req.on("end", function () {
+                    bodyJSON = JSON.parse(body);
+                    console.log(bodyJSON);
+                })
+            } else if (loc.pathname == "/submitClientID") {
                 if (req.headers.origin == "http://" + ip.address() + ":6474") {
                     // Update client ID
                     // Code originally from: https://stackoverflow.com/questions/4295782/how-to-process-post-data-in-node-js
                     // BEGIN SNIPPET
                     let body = "";
                     let bodyJSON = {};
-                    req.on('data', function (data) {
+                    req.on("data", function (data) {
                         if (body.length > 1e6) {
                             // Request is coming with large amounts of data, not a good idea to continue to parse it
                             request.connection.destroy();

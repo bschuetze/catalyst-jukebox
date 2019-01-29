@@ -44,70 +44,57 @@ function buttonOut() {
 }
 
 function buttonPress() {
+    let trackInput = trackURI.value();
+    let tracks = trackInput.split(" ");
 
 
-
-    let clientIDInput = trackURI.value();
-    let clientSecretInput = secretInput.value();
-
-    let sanitizedClientID = sanitizeAlphaNumeric(clientIDInput);
-    let sanitizedClientSecret = sanitizeAlphaNumeric(clientSecretInput);
-
-    if (sanitizedClientID.length == 0) {
-        console.log("Client ID cannot be empty");
+    if (tracks.length == 0) {
+        console.log("You haven't entered anything!");
         return;
     }
 
-    if (sanitizedClientSecret.length == 0) {
-        console.log("Client Secret cannot be empty");
-        return;
-    }
 
     // Make HTTP request to server with info
-    let destinationURL = window.location.origin + "/submitClientID";
-    webRequest(destinationURL, "POST", { "Content-Type": "application/json" }, { cid: sanitizedClientID, secret: sanitizedClientSecret }, authRedirect);
+    let destinationURL = window.location.origin + "/submitTrackID";
+    let trackJSON = {};
+    trackJSON["tracks"] = [];
+
+    for (let i = 0; i < tracks.length; i++) {
+        if (checkSpotifyURI(tracks[i])) {
+            trackJSON["tracks"].put(tracks[i]);
+        }
+    }
+
+    webRequest(destinationURL, "POST", { "Content-Type": "application/json" }, trackJSON);
 }
 
-function checkAuthURL(url) {
-    // url should be window.location object
-    if (url == null) {
-        console.log("Null URL passed to auth check function, aborting");
-        return;
+// Ensures a track URI is properly formed
+function checkSpotifyURI(s) {
+    if (s == null || s.length == 0) {
+        console.log("Spotify URI must not be empty");
+        return false;
     }
-    if (url.search.substr(1, 4) == "code") {
-        // Code auth present in URL, pass data to server.
-        console.log("Code auth data present in URL, passing to server");
-        let destinationURL = window.location.origin + "/submitCode";
-        let body = parseCode(url.search);
-        webRequest(destinationURL, "POST", { "Content-Type": "application/json" }, body);
-    }
-}
 
-function parseCode(search) {
-    // Search has the form "?code=jkxd&state=lksdgjh"
-    let temp = search.split("&");
-    let c = "";
-    let s = "";
-    if (temp[0].substr(0, 1) == "?") {
-        // Remove ?code= from the search input
-        c = temp[0].substr(6);
-        console.log(c); // REMOVE TESTING
+    let uri = s.split(":");
+    
+    if (uri.length != 3) {
+        console.log("Spotify URI must consist of 3 parts, 'spotify:track:xxxxxxx'");
+        return false;
     }
-    if (temp.length > 1) {
-        // Remove state= from search input
-        s = temp[1].substr(6);
-        console.log(s); // REMOVE TESTING
+    if (uri[0] != "spotify") {
+        console.log("Spotify URI is malformed");
+        return false;
     }
-    return { code: c, state: s };
-}
+    if (uri[1] != "track") {
+        console.log("Request must be a track");
+        return false;
+    }
+    if (uri[2] != sanitizeAlphaNumeric(uri[2])) {
+        console.log("Spotify URI track id is malformed");
+        return false;
+    }
 
-function authRedirect(link) {
-    if (link == null || !link.hasOwnProperty("Auth-URL")) {
-        console.log("Link not provided");
-        return;
-    }
-    console.log("" + link["Auth-URL"])
-    window.location.href = "" + link["Auth-URL"];
+    return true;
 }
 
 function buttonDown() {
