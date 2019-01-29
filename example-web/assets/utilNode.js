@@ -1,8 +1,13 @@
 module.exports = {
-    toWebLink: toWebLink,
-    webRequest: webRequest,
-    webResponse: webResponse,
-    emptyObject: emptyObject
+    toWebLink,
+    webRequest,
+    webResponse,
+    emptyObject
+
+    // toWebLink: toWebLink,
+    // webRequest: webRequest,
+    // webResponse: webResponse,
+    // emptyObject: emptyObject
 
 
     // toWebLink: function (link) {
