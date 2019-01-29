@@ -63,14 +63,6 @@ function webRequest(dest, method, header, body, respFunc) {
     }
 
     fetch(dest, opts).then(response => webResponse(response, respFunc));
-
-    // fetch(dest, {
-    //     headers: { "Content-Type": "application/json" },
-    //     method: "POST",
-    //     body: JSON.stringify({
-    //         cid: sanitizedClientID
-    //     })
-    // }).then(response => webResponse(response, authRedirect));
 }
 
 function emptyObject(o) {
@@ -82,5 +74,38 @@ function emptyObject(o) {
         // If is of type object and has no entries
         return true;
     }
+    return false;
+}
+
+function sanitizeAlphaNumeric(str) {
+    let sanitizedString = "";
+    for (let i = 0; i < str.length; i++) {
+        if (isAlphaNumeric(str[i])) {
+            sanitizedString = sanitizedString + str[i];
+        }
+    }
+    return sanitizedString;
+}
+
+function isAlphaNumeric(char) {
+    if (char == null) {
+        // Null value is not a character
+        return false;
+    }
+    if (char.length != 1) {
+        // Not a single character string
+        return false;
+    }
+    if (char.match(/[A-Z]/ig) != null) {
+        // i -> ignore case, g -> global
+        // Method: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/match
+        // Character is in the alphabet
+        return true;
+    }
+    if (char.match(/[0-9]/g) != null) {
+        // Character is a number
+        return true;
+    }
+    // Not character or number so false
     return false;
 }

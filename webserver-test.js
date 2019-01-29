@@ -180,75 +180,6 @@ function authCallback(data) {
     }
 }
 
-// // Assumes body will be JSON format or string
-// function util.webRequest(dest, method, header, body, respFunc) {
-//     let opts = {};
-
-//     // Add method if present
-//     if (method != null && method.length > 0) {
-//         opts["method"] = method;
-//     }
-
-//     // Add header if present
-//     if (!emptyObject(header)) {
-//         opts["headers"] = header;
-//     }
-
-//     // Add body if present
-//     if (!emptyObject(body)) {
-//         if (typeof body == "object") {
-//             // JSON format
-//             opts["body"] = JSON.stringify(body);
-//         }
-//         if (typeof body == "string") {
-//             opts["body"] = body;
-//         }
-//     }
-
-//     fetch(dest, opts).then(response => util.webResponse(response, respFunc));
-
-//     // fetch(dest, {
-//     //     headers: { "Content-Type": "application/json" },
-//     //     method: "POST",
-//     //     body: JSON.stringify({
-//     //         cid: sanitizedClientID
-//     //     })
-//     // }).then(response => webResponse(response, authRedirect));
-// }
-
-// function emptyObject(o) {
-//     if (o == null) {
-//         // If null value is present then no object
-//         return true;
-//     }
-//     if (o.constructor == Object && Object.entries(o).length == 0) {
-//         // If is of type object and has no entries
-//         return true;
-//     }
-//     return false;
-// }
-
-// function spotifyAuth() {
-
-//     if (clientID == "") {
-//         console.log("Client ID is required");
-//     } else {
-//         console.log(authorizeURL + "?" + clientID + "&response_type=" + responseType + "&" + redirectURI + "&" + scope + "&" + state);
-//         fetch(toWebLink(authorizeURL + "?" + clientID + "&response_type=code&" + redirectURI + "&" + scope + "&" + state), {
-//             // headers: { "Content-Type": "application/json; charset=utf-8"},
-//             method: "GET"
-//             // body: JSON.stringify({
-//             //     username: 'Elon Musk',
-//             //     email: 'elonmusk@gmail.com',
-//             // })
-//         })
-//         // .then(response => response.json())
-//         // .then(data => console.log(data));
-//     }
-// }
-
-
-
 http.listen(port); //listen to port 6474
 console.log("NodeJS server at '" + ip.address() + "' listening on port '" + port + "'");
 
@@ -435,4 +366,3 @@ function handler(req, res) { //create server (request, response)
         });
     });
 }
-

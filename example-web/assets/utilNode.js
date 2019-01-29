@@ -1,106 +1,14 @@
 const fetch = require('node-fetch');
 
 module.exports = {
-    // toWebLink,
-    // webRequest,
-    // webResponse,
-    // emptyObject
 
     toWebLink: toWebLink,
     webRequest: webRequest,
     webResponse: webResponse,
-    emptyObject: emptyObject
-
-
-    // toWebLink: function (link) {
-    //     let subLink = link.split(" ");
-    //     let newLink = subLink[0];
-    //     for (let i = 1; i < subLink.length; i++) {
-    //         newLink = newLink + "%20" + subLink[i];
-    //     }
-    //     return newLink;
-    // },
-
-    // webResponse: function (response, respFunc) {
-    //     // Response method originally found from here: https://stackoverflow.com/questions/37121301/how-to-check-if-the-response-of-a-fetch-is-a-json-object-in-javascript
-    //     let contentType = response.headers.get("content-type");
-    //     if (contentType && contentType.indexOf("application/json") !== -1) {
-    //         console.log("JSON Response");
-    //         // console.log(response);
-    //         return response.json().then(data => {
-    //             // process your JSON data further
-    //             if (respFunc !== undefined) {
-    //                 respFunc(data);
-    //             } else {
-    //                 console.log("Data:")
-    //                 console.log(data);
-    //             }
-    //         });
-    //     } else {
-    //         return response.text().then(text => {
-    //             // this is text, do something with it
-    //             console.log("Other Response");
-    //             // console.log("Content: " + text + "\nResponse header: " + response.headers.get("content-type"));
-    //             // console.log(response.headers);
-    //             if (respFunc !== undefined) {
-    //                 respFunc(text);
-    //             } else {
-    //                 console.log(text);
-    //             }
-    //         });
-    //     }
-    // }, 
-    // // Assumes body will be JSON format or string
-    // webRequest: function (dest, method, header, body, respFunc) {
-    //     let opts = {};
-
-    //     // Add method if present
-    //     if (method != null && method.length > 0) {
-    //         opts["method"] = method;
-    //     }
-
-    //     // Add header if present
-    //     if (!module.exports.emptyObject(header)) {
-    //         opts["headers"] = header;
-    //     }
-
-    //     // Add body if present
-    //     if (!module.exports.emptyObject(body)) {
-    //         if (typeof body == "object") {
-    //             // JSON format
-    //             opts["body"] = JSON.stringify(body);
-    //         }
-    //         if (typeof body == "string") {
-    //             opts["body"] = body;
-    //         }
-    //     }
-
-    //     fetch(dest, opts).then(response => module.exports.webResponse(response, respFunc));
-
-    //     // fetch(dest, {
-    //     //     headers: { "Content-Type": "application/json" },
-    //     //     method: "POST",
-    //     //     body: JSON.stringify({
-    //     //         cid: sanitizedClientID
-    //     //     })
-    //     // }).then(response => webResponse(response, authRedirect));
-    // },
-
-    // emptyObject: function(o) {
-    //     if (o == null) {
-    //         // If null value is present then no object
-    //         return true;
-    //     }
-    //     if (o.constructor == Object && Object.entries(o).length == 0) {
-    //         // If is of type object and has no entries
-    //         return true;
-    //     }
-    //     return false;
-    // }
+    emptyObject: emptyObject,
+    sanitizeAlphaNumeric: sanitizeAlphaNumeric,
+    isAlphaNumeric: isAlphaNumeric
 };
-
-
-
 
 function toWebLink (link) {
     let subLink = link.split(" ");
@@ -167,14 +75,6 @@ function webRequest (dest, method, header, body, respFunc) {
     }
 
     fetch(dest, opts).then(response => webResponse(response, respFunc));
-
-    // fetch(dest, {
-    //     headers: { "Content-Type": "application/json" },
-    //     method: "POST",
-    //     body: JSON.stringify({
-    //         cid: sanitizedClientID
-    //     })
-    // }).then(response => webResponse(response, authRedirect));
 }
 
 function emptyObject (o) {
@@ -189,48 +89,35 @@ function emptyObject (o) {
     return false;
 }
 
+function sanitizeAlphaNumeric(str) {
+    let sanitizedString = "";
+    for (let i = 0; i < str.length; i++) {
+        if (isAlphaNumeric(str[i])) {
+            sanitizedString = sanitizedString + str[i];
+        }
+    }
+    return sanitizedString;
+}
 
-
-
-
-
-
-
-// function toWebLink(link) {
-//     let subLink = link.split(" ");
-//     let newLink = subLink[0];
-//     for (let i = 1; i < subLink.length; i++) {
-//         newLink = newLink + "%20" + subLink[i];
-//     }
-//     return newLink;
-// }
-
-// function webResponse(response, respFunc) {
-//     // Response method originally found from here: https://stackoverflow.com/questions/37121301/how-to-check-if-the-response-of-a-fetch-is-a-json-object-in-javascript
-//     let contentType = response.headers.get("content-type");
-//     if (contentType && contentType.indexOf("application/json") !== -1) {
-//         console.log("JSON Response");
-//         // console.log(response);
-//         return response.json().then(data => {
-//             // process your JSON data further
-//             if (respFunc !== undefined) {
-//                 respFunc(data);
-//             } else {
-//                 console.log("Data:")
-//                 console.log(data);
-//             }
-//         });
-//     } else {
-//         return response.text().then(text => {
-//             // this is text, do something with it
-//             console.log("Other Response");
-//             // console.log("Content: " + text + "\nResponse header: " + response.headers.get("content-type"));
-//             // console.log(response.headers);
-//             if (respFunc !== undefined) {
-//                 respFunc(text);
-//             } else {
-//                 console.log(text);
-//             }
-//         });
-//     }
-// }
+function isAlphaNumeric(char) {
+    if (char == null) {
+        // Null value is not a character
+        return false;
+    }
+    if (char.length != 1) {
+        // Not a single character string
+        return false;
+    }
+    if (char.match(/[A-Z]/ig) != null) {
+        // i -> ignore case, g -> global
+        // Method: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/match
+        // Character is in the alphabet
+        return true;
+    }
+    if (char.match(/[0-9]/g) != null) {
+        // Character is a number
+        return true;
+    }
+    // Not character or number so false
+    return false;
+}
