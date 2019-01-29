@@ -73,6 +73,7 @@ function completeAuth() {
         redirectURI + "&" + "client_id=" + clientID + "&" + "client_secret=" + clientSecret);
 }
 
+// Auth check function
 function authCallback(data) {
     if (data == null || data == {}) {
         console.log("No return data provided");
