@@ -12,7 +12,7 @@ const fetch = require('node-fetch');
 const servefav = require('serve-favicon');
 // import util
 // import {toWebLink, webResponse} from "./example-web/assets/util.js";
-require("./example-web/assets/util.js").webResponse(response, respFunc);
+require("./example-web/assets/util.js")()
 
 // Server variables
 var port = 6474;
