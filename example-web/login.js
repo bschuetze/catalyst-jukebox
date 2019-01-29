@@ -1,5 +1,3 @@
-const util = require("./assets/util.js");
-
 var cidInput;
 var secretInput;
 var button;

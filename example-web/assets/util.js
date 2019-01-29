@@ -39,6 +39,8 @@ module.exports = {
     }
 };
 
+const toWebLink = module.exports.toWebLink;
+
 // function toWebLink(link) {
 //     let subLink = link.split(" ");
 //     let newLink = subLink[0];
