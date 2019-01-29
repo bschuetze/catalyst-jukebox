@@ -13,7 +13,7 @@ const servefav = require('serve-favicon');
 
 // Server variables
 var port = 6474;
-var favicon = servefav("favicon.ico");
+var _favicon = servefav(path.join(__dirname, "public", "favicon.ico"));
 
 // Auth variables
 const authorizeURL = "https://accounts.spotify.com/authorize";
@@ -285,7 +285,7 @@ function handler(req, res) { //create server (request, response)
     // Get the location of the request
     var loc = url.parse(req.url, true);
 
-    favicon(req, res, function cont(favError) {
+    _favicon(req, res, function cont(favError) {
         if (favError) return done(favError);
         // Check if POST request
         if (req.method == "POST") {
