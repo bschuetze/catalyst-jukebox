@@ -62,7 +62,7 @@ function webRequest(dest, method, header, body, respFunc) {
         }
     }
 
-    fetch(dest, opts).then(response => util.webResponse(response, respFunc));
+    fetch(dest, opts).then(response => webResponse(response, respFunc));
 
     // fetch(dest, {
     //     headers: { "Content-Type": "application/json" },
