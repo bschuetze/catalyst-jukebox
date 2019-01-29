@@ -122,6 +122,7 @@ function authCallback(data) {
         console.log("No return data provided");
         return;
     }
+    let callAuth = false;
     if (data.hasOwnProperty("error")) {
         console.log("Auth error: " + data["error"]);
         if (data.hasOwnProperty("error_description")) {
@@ -130,6 +131,7 @@ function authCallback(data) {
             } else if (data["error_description"] == "Invalid refresh token") {
                 console.log("Invalid refresh token, removing");
                 refreshToken = "";
+                callAuth = true;
             } else {
                 console.log("Auth error description: " + data["error_description"]);
             }
@@ -167,6 +169,9 @@ function authCallback(data) {
             console.log("No access token found");
             console.log(data);
         }
+    }
+    if (callAuth) {
+        completeAuth();
     }
 }
 
