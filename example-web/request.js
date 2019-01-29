@@ -1,6 +1,6 @@
 var trackURI;
 var button;
-const songLimit = 3;
+const trackLimit = 3;
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
@@ -59,9 +59,13 @@ function buttonPress() {
     let trackJSON = {};
     let correctTracks = [];
 
-    for (let i = 0; i < Math.min(tracks.length, songLimit); i++) {
+    for (let i = 0; i < tracks.length; i++) {
         if (checkSpotifyURI(tracks[i])) {
             correctTracks.push(tracks[i]);
+            if (correctTracks.length >= trackLimit) {
+                console.log("Max tracks reached");
+                break;
+            }
         }
     }
 
