@@ -80,8 +80,10 @@ function refreshAuth() {
         console.log("Auth timeout not defined");
         return;
     }
-    console.log("Time running out on current token" + ", refreshing...")
+    console.log("Time running out on current token, refreshing...");
     authorized = false;
+    clearTimeout(authTimeOut);
+    authTimeOut = null;
     completeAuth();
 }
 
@@ -108,10 +110,12 @@ function authCallback(data) {
             if (data.hasOwnProperty["expires_in"]) {
                 console.log("Setting refresh timer for: " + (data["expires_in"] - (5 * 60)) + " seconds"); // 5 minute window
                 // Set timeout (time in ms, with 5 minute window)
-                setTimeout(refreshAuth, ((data["expires_in"] - (5 * 60) * 1000)));
+                authTimeOut = setTimeout(refreshAuth, ((data["expires_in"] - (5 * 60) * 1000)));
             } else {
+                console.log(data);
                 console.log("No timeout data provided, setting timeout for " + (3600 - (5 * 60)));
-                setTimeout(refreshAuth, (3600 - (5 * 60) * 1000));
+                // authTimeOut = setTimeout(refreshAuth, (3600 - (5 * 60) * 1000));
+                authTimeOut = setTimeout(refreshAuth, 10000);
             }
         } else {
             console.log("No access token found");
