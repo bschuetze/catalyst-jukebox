@@ -210,7 +210,9 @@ function handler(req, res) { //create server (request, response)
                 }); // END SNIPPET
                 req.on("end", function () {
                     bodyJSON = JSON.parse(body);
-                    // console.log(bodyJSON);
+                    console.log(bodyJSON);
+                    console.log(bodyJSON["tracks"]);
+                    console.log(bodyJSON["tracks"].length);
                 });
 
                 if (bodyJSON.hasOwnProperty("tracks") && bodyJSON["tracks"].length > 0) {
