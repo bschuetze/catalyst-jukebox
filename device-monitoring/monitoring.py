@@ -17,17 +17,20 @@ print (context)
 print (monitor)
 
 def usb_event(action, device):
-    devicePathFull = device.get("ID_PATH")
-    pathSplit = devicePathFull.split(":")
-    print(pathSplit[len(pathSplit) - 1])
-    try:
-        usbPort = pathSplit[len(pathSplit) - 1]
-        usbPort = usbPort.replace(".", "")
+    if (device.get("ID_PATH") is not None):
+        devicePathFull = device.get("ID_PATH")
+        pathSplit = devicePathFull.split(":")
+        print(pathSplit[len(pathSplit) - 1])
+        try:
+            usbPort = pathSplit[len(pathSplit) - 1]
+            usbPort = usbPort.replace(".", "")
 
-        if ((int(usbPort) >= 12) and (device.get('ID_MODEL') not in USB_BLACKLIST)):
-            print("Monitoring " + device.get('ID_MODEL') + " at usb port " + pathSplit[len(pathSplit) - 1])
-    except:
-        print(pathSplit[len(pathSplit) - 1] + " is not a number of the form X.Y or X.Y.Z")
+            if ((int(usbPort) >= 12) and (device.get('ID_MODEL') not in USB_BLACKLIST)):
+                print("Monitoring " + device.get('ID_MODEL') + " at usb port " + pathSplit[len(pathSplit) - 1])
+        except:
+            print(pathSplit[len(pathSplit) - 1] + " is not a number of the form X.Y or X.Y.Z")
+    else:
+        print("USB device path is None type") 
 
 
 usbObserver = pyudev.MonitorObserver(monitor, usb_event)
