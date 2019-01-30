@@ -30,8 +30,8 @@ def usb_event(action, device):
         print(pathSplit[len(pathSplit) - 1] + " is not a number of the form X.Y or X.Y.Z")
 
 
-usbObs = pyudev.MonitorObserver(monitor, usb_event)
-usbObs.start()
+usbObserver = pyudev.MonitorObserver(monitor, usb_event)
+usbObserver.start()
 
 time.sleep(60)
 
