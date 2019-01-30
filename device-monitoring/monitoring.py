@@ -7,9 +7,10 @@ import time
 # Adding a blacklist for usb device models (device.get('ID_MODEL'))))
 # Add your USB hub here if using one or any other devices you want to ignore
 USB_BLACKLIST = ["USB_2.0_Hub__Safe_"]
+# Pluggable ports start at 1.2
+USB_PORT_START = 12
 
-occupiedPorts = []
-connectedDevices = []
+connectedDevices = {}
 
 context = pyudev.Context()
 
@@ -21,8 +22,6 @@ print (monitor)
 
 def usb_event(action, device):
     if (device.get("ID_PATH") is not None):
-        print(action)
-        print(str(action))
         devicePathFull = device.get("ID_PATH")
         pathSplit = devicePathFull.split(":")
         print(pathSplit[len(pathSplit) - 1])
@@ -30,26 +29,43 @@ def usb_event(action, device):
             usbPort = pathSplit[len(pathSplit) - 1]
             usbPort = usbPort.replace(".", "")
 
-            if ((int(usbPort) >= 12) and (device.get('ID_MODEL') not in USB_BLACKLIST)):
-                if (usbPort in occupiedPorts):
-                    occupiedPorts.remove(usbPort)
-                    connectedDevices.remove({"port": usbPort, "model": device.get("ID_MODEL")})
-                    print("Removed " + device.get('ID_MODEL') + " from usb port " + usbPort)
+            if ((int(usbPort) >= USB_PORT_START) and (device.get('ID_MODEL') not in USB_BLACKLIST)):
+
+                if (action == "add"):
+                    if (usbPort not in connectedDevices):
+                        connectedDevices[usbPort] = device.get("ID_MODEL")
+                        print("Monitoring " + device.get('ID_MODEL') + " at usb port " + usbPort)
+                    else:
+                        print(device.get('ID_MODEL') + " connected at usb port " + usbPort + 
+                        " but port already contains " + connectedDevices[usbPort])
+                        ## NEED TO HANDLE THIS WITH A MANUAL CHECK
+                elif (action == "remove"):
+                    if (usbPort in connectedDevices):
+                        connectedDevices.pop(usbPort)
+                        print("Disconnecting " + device.get('ID_MODEL') + " from usb port " + usbPort)
+                    else:
+                        print(device.get('ID_MODEL') + " disconnecting from usb port " + usbPort + 
+                        " but port is already empty")
+                        ## NEED TO HANDLE THIS WITH A MANUAL CHECK
+
                 else:
-                    occupiedPorts.append(usbPort)
-                    connectedDevices.append({"port": usbPort, "model": device.get("ID_MODEL")})
-                    print("Monitoring " + device.get('ID_MODEL') + " at usb port " + usbPort)
+                    print("Non add/remove action detected")
+                    print("Action: '" + action + "' applied to " + device.get('ID_MODEL') + " from usb port " + usbPort)
+                        
+
+                # if (usbPort in occupiedPorts):
+                #     occupiedPorts.remove(usbPort)
+                #     connectedDevices.remove({"port": usbPort, "model": device.get("ID_MODEL")})
+                #     print("Removed " + device.get('ID_MODEL') + " from usb port " + usbPort)
+                # else:
+                #     occupiedPorts.append(usbPort)
+                #     connectedDevices.append({"port": usbPort, "model": device.get("ID_MODEL")})
+                #     print("Monitoring " + device.get('ID_MODEL') + " at usb port " + usbPort)
 
         except:
             print(pathSplit[len(pathSplit) - 1] + " is not a number of the form X.Y or X.Y.Z")
     else:
-        print("USB device path is None type")
-        print(device)
-        print("Vendor: " + str(device.get('ID_VENDOR_ID')))
-        print("Serial: " + str(device.get('ID_SERIAL')))
-        print("Model: " + str(device.get('ID_MODEL')))
-        print("Type: " + str(device.get('ID_TYPE')))
-        print("Path: " + str(device.get('ID_PATH')))
+        print("USB device path is None type, " + device + " " + action)
 
 
 usbObserver = pyudev.MonitorObserver(monitor, usb_event)
@@ -75,7 +91,7 @@ time.sleep(60)
 #             usbPort = usbPort.replace(".", "")
 
 #             # if (float(pathSplit[len(pathSplit) - 1]) >= 1.2):
-#             if ((int(usbPort) >= 12) and (device.get('ID_MODEL') not in USB_BLACKLIST)):
+#             if ((int(usbPort) >= USB_PORT_START) and (device.get('ID_MODEL') not in USB_BLACKLIST)):
 #                 print("Monitoring " + device.get('ID_MODEL') + " at usb port " + pathSplit[len(pathSplit) - 1])
 #         except:
 #             print(pathSplit[len(pathSplit) - 1] + " is not a number of the form X.Y or X.Y.Z")
