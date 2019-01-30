@@ -74,7 +74,6 @@ usbObserver.start()
 
 time.sleep(60)
 
-
 # for device in context.list_devices(subsystem='usb'):
 #     print(device)
 #     print("Vendor: " + str(device.get('ID_VENDOR_ID')))
