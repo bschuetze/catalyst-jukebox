@@ -30,7 +30,13 @@ def usb_event(action, device):
         except:
             print(pathSplit[len(pathSplit) - 1] + " is not a number of the form X.Y or X.Y.Z")
     else:
-        print("USB device path is None type") 
+        print("USB device path is None type")
+        print(device)
+        print("Vendor: " + str(device.get('ID_VENDOR_ID')))
+        print("Serial: " + str(device.get('ID_SERIAL')))
+        print("Model: " + str(device.get('ID_MODEL')))
+        print("Type: " + str(device.get('ID_TYPE')))
+        print("Path: " + str(device.get('ID_PATH')))
 
 
 usbObserver = pyudev.MonitorObserver(monitor, usb_event)
