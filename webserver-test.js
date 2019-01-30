@@ -213,6 +213,7 @@ function handler(req, res) { //create server (request, response)
                     console.log(bodyJSON);
                     console.log(bodyJSON["tracks"]);
                     console.log(bodyJSON["tracks"].length);
+                    console.log(bodyJSON.hasOwnProperty("tracks"));
                 });
 
                 if (bodyJSON.hasOwnProperty("tracks") && bodyJSON["tracks"].length > 0) {
