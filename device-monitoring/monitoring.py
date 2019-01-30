@@ -2,7 +2,7 @@
 ## PROJECT: Catalyst Jukebox - https://github.com/bschuetze/catalyst-jukebox
 
 import pyudev
-#import
+import time
 
 # Adding a blacklist for usb device models (device.get('ID_MODEL'))))
 # Add your USB hub here if using one or any other devices you want to ignore
@@ -32,6 +32,8 @@ def usb_event(action, device):
 
 usbObs = pyudev.MonitorObserver(monitor, usb_event)
 usbObs.start()
+
+time.sleep(60)
 
 
 # for device in context.list_devices(subsystem='usb'):
