@@ -8,6 +8,9 @@ import time
 # Add your USB hub here if using one or any other devices you want to ignore
 USB_BLACKLIST = ["USB_2.0_Hub__Safe_"]
 
+occupiedPorts = []
+connectedDevices = []
+
 context = pyudev.Context()
 
 monitor = pyudev.Monitor.from_netlink(context)
@@ -18,6 +21,8 @@ print (monitor)
 
 def usb_event(action, device):
     if (device.get("ID_PATH") is not None):
+        print(action)
+        print(str(action))
         devicePathFull = device.get("ID_PATH")
         pathSplit = devicePathFull.split(":")
         print(pathSplit[len(pathSplit) - 1])
@@ -26,7 +31,15 @@ def usb_event(action, device):
             usbPort = usbPort.replace(".", "")
 
             if ((int(usbPort) >= 12) and (device.get('ID_MODEL') not in USB_BLACKLIST)):
-                print("Monitoring " + device.get('ID_MODEL') + " at usb port " + pathSplit[len(pathSplit) - 1])
+                if (usbPort in occupiedPorts):
+                    occupiedPorts.remove(usbPort)
+                    connectedDevices.remove({"port": usbPort, "model": device.get("ID_MODEL")})
+                    print("Removed " + device.get('ID_MODEL') + " from usb port " + usbPort)
+                else:
+                    occupiedPorts.append(usbPort)
+                    connectedDevices.append({"port": usbPort, "model": device.get("ID_MODEL")})
+                    print("Monitoring " + device.get('ID_MODEL') + " at usb port " + usbPort)
+
         except:
             print(pathSplit[len(pathSplit) - 1] + " is not a number of the form X.Y or X.Y.Z")
     else:
