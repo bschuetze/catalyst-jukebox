@@ -9,11 +9,11 @@ import time
 USB_BLACKLIST = ["USB_2.0_Hub__Safe_"]
 # Pluggable ports start at 1.2
 USB_PORT_START = 12
-
+# List of connected devices
 connectedDevices = {}
 
+# Pyudev vars
 context = pyudev.Context()
-
 monitor = pyudev.Monitor.from_netlink(context)
 
 monitor.filter_by('usb')
@@ -24,7 +24,7 @@ def usb_event(action, device):
     if (device.get("ID_PATH") is not None):
         devicePathFull = device.get("ID_PATH")
         pathSplit = devicePathFull.split(":")
-        print(pathSplit[len(pathSplit) - 1])
+        # print(pathSplit[len(pathSplit) - 1])
         try:
             usbPort = pathSplit[len(pathSplit) - 1]
             usbPort = usbPort.replace(".", "")
@@ -64,8 +64,9 @@ def usb_event(action, device):
 
         except:
             print(pathSplit[len(pathSplit) - 1] + " is not a number of the form X.Y or X.Y.Z")
-    else:
-        print("USB device path is None type, " + str(device) + " " + action)
+    # else:
+    #     print("USB device path is None type, " + str(device) + " " + action)
+    print(connectedDevices)
 
 
 usbObserver = pyudev.MonitorObserver(monitor, usb_event)
