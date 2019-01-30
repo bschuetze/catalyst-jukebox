@@ -25,8 +25,12 @@ for device in context.list_devices(subsystem='usb'):
         pathSplit = devicePathFull.split(":")
         print(pathSplit[len(pathSplit) - 1])
         try:
-            if (float(pathSplit[len(pathSplit) - 1]) >= 1.2):
+            usbPort = pathSplit[len(pathSplit) - 1])
+            usbPort = usbPort.replace(".", "")
+
+            # if (float(pathSplit[len(pathSplit) - 1]) >= 1.2):
+            if (int(usbPort) >= 12):
                 print("Monitoring " + device.get('ID_MODEL') + " at usb port " + pathSplit[len(pathSplit) - 1])
         except:
-            print(pathSplit[len(pathSplit) - 1] + " is not a float")
+            print(pathSplit[len(pathSplit) - 1] + " is not a number of the form X.Y or X.Y.Z")
     print("-------------------")
