@@ -24,5 +24,9 @@ for device in context.list_devices(subsystem='usb'):
         devicePathFull = device.get("ID_PATH")
         pathSplit = devicePathFull.split(":")
         print(pathSplit[len(pathSplit) - 1])
-        if (float(pathSplit[len(pathSplit) - 1]) >= 1.2):
-            print("Monitoring " + device.get('ID_MODEL') + " at usb port " + pathSplit[len(pathSplit) - 1])
+        try:
+            if (float(pathSplit[len(pathSplit) - 1]) >= 1.2):
+                print("Monitoring " + device.get('ID_MODEL') + " at usb port " + pathSplit[len(pathSplit) - 1])
+        except:
+            print(pathSplit[len(pathSplit) - 1] + " is not a float")
+    print("-------------------")
