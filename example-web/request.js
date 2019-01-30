@@ -69,9 +69,11 @@ function buttonPress() {
         }
     }
 
-    trackJSON["tracks"] = correctTracks;
-
-    webRequest(destinationURL, "POST", { "Content-Type": "application/json" }, trackJSON);
+    if (correctTracks.length > 0) {
+        // make request if track data exists and is valid
+        trackJSON["tracks"] = correctTracks;
+        webRequest(destinationURL, "POST", { "Content-Type": "application/json" }, trackJSON);
+    }
 }
 
 // Ensures a track URI is properly formed

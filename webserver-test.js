@@ -210,8 +210,18 @@ function handler(req, res) { //create server (request, response)
                 }); // END SNIPPET
                 req.on("end", function () {
                     bodyJSON = JSON.parse(body);
-                    console.log(bodyJSON);
-                })
+                    // console.log(bodyJSON);
+                });
+
+                if (bodyJSON.hasOwnProperty("tracks") && bodyJSON["tracks"].length > 0) {
+                    console.log("Tracks present in POST");
+                    res.writeHead(200, { 'Content-Type': 'text/html' }); //display 404 on error
+                    return res.end("Tracks added to queue");
+                } else {
+                    console.log("Tracks field must exist and not be empty");
+                    res.writeHead(400, { 'Content-Type': 'text/html' });
+                    return res.end("Tracks field must exist and not be empty");
+                }
             } else if (loc.pathname == "/submitClientID") {
                 if (req.headers.origin == "http://" + ip.address() + ":6474") {
                     // Update client ID
