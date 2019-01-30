@@ -23,4 +23,4 @@ for device in context.list_devices(subsystem='usb'):
     if (device.get("ID_PATH") != "None"):
         devicePathFull = device.get("ID_PATH")
         pathSplit = devicePathFull.split(":")
-        print (pathSplit[pathSplit.len - 1])
+        print (pathSplit[len(pathSplit) - 1])
