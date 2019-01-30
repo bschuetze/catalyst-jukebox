@@ -25,7 +25,7 @@ for device in context.list_devices(subsystem='usb'):
         pathSplit = devicePathFull.split(":")
         print(pathSplit[len(pathSplit) - 1])
         try:
-            usbPort = pathSplit[len(pathSplit) - 1])
+            usbPort = pathSplit[len(pathSplit) - 1]
             usbPort = usbPort.replace(".", "")
 
             # if (float(pathSplit[len(pathSplit) - 1]) >= 1.2):
