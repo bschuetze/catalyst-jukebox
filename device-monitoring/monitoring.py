@@ -32,7 +32,7 @@ for device in context.list_devices(subsystem='usb'):
             usbPort = usbPort.replace(".", "")
 
             # if (float(pathSplit[len(pathSplit) - 1]) >= 1.2):
-            if (int(usbPort) >= 12 & device.get('ID_MODEL') not in USB_BLACKLIST):
+            if ((int(usbPort) >= 12) and (device.get('ID_MODEL') not in USB_BLACKLIST)):
                 print("Monitoring " + device.get('ID_MODEL') + " at usb port " + pathSplit[len(pathSplit) - 1])
         except:
             print(pathSplit[len(pathSplit) - 1] + " is not a number of the form X.Y or X.Y.Z")
