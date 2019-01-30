@@ -15,3 +15,5 @@ print (monitor)
 for device in context.list_devices(subsystem='usb'):
     print (device)
     print ("Vendor: " + str(device.get('ID_VENDOR_ID')))
+    print ("Serial: " + str(device.get('ID_SERIAL')))
+    print ("Model: " + str(device.get('ID_MODEL')))
