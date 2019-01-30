@@ -12,5 +12,5 @@ monitor.filter_by('usb')
 print (context)
 print (monitor)
 
-for device in context.list_devices(subsystem='usb'):
+for device in context.list_devices(subsystem='tty'):
     print (device)
