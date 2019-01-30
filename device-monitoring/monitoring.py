@@ -1,6 +1,13 @@
 ## AUTHOR: Brent Schuetze
 ## PROJECT: Catalyst Jukebox - https://github.com/bschuetze/catalyst-jukebox
 
+## Relevant Docs:
+# https://pyudev.readthedocs.io/en/latest/guide.html
+# https://pyudev.readthedocs.io/en/latest/api/pyudev.html#pyudev.Device
+# https://pipenv.readthedocs.io/en/latest/basics/
+# https://stackoverflow.com/questions/25494086/retrieve-usb-information-using-pyudev-with-device-name
+# 
+
 import pyudev
 import time
 
