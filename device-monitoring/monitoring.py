@@ -12,5 +12,6 @@ monitor.filter_by('usb')
 print (context)
 print (monitor)
 
-for device in context.list_devices(subsystem='tty'):
+for device in context.list_devices(subsystem='usb'):
     print (device)
+    print ("Vendor: " + str(device.get('ID_VENDOR_ID')))
