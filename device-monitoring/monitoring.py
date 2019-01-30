@@ -17,3 +17,5 @@ for device in context.list_devices(subsystem='usb'):
     print ("Vendor: " + str(device.get('ID_VENDOR_ID')))
     print ("Serial: " + str(device.get('ID_SERIAL')))
     print ("Model: " + str(device.get('ID_MODEL')))
+    print ("Type: " + str(device.get('ID_TYPE')))
+    print ("Path: " + str(device.get('ID_PATH')))
