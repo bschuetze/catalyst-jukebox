@@ -4,9 +4,14 @@
 import pyudev
 #import
 
-
 context = pyudev.Context()
-monitor = Monitor.from_netlink()
+
+monitor = pyudev.Monitor.from_netlink(context)
+
 monitor.filter_by(susbsytem='usb')
 print (context)
 print (monitor)
+
+for device in context.list_devices():
+    print (device)
+    
