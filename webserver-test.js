@@ -180,6 +180,14 @@ function authCallback(data) {
     }
 }
 
+function usbUpdateCheck(obj) {
+    if (obj.hasOwnProperty("model") && obj.hasOwnProperty("location") && obj.hasOwnProperty("action")) {
+        return (obj["location"].length > 0 && obj["action"].length > 0);
+    } else {
+        return false;
+    }
+}
+
 http.listen(port); //listen to port 6474
 console.log("NodeJS server at '" + ip.address() + "' listening on port '" + port + "'");
 
@@ -211,16 +219,15 @@ function handler(req, res) { //create server (request, response)
                     }); // END SNIPPET
                     req.on("end", function () {
                         bodyJSON = JSON.parse(body);
-                        console.log(bodyJSON);
-
-                        if (bodyJSON.hasOwnProperty("tracks") && bodyJSON["tracks"].length > 0) {
-                            console.log("Tracks present in POST");
+                        if (usbUpdateCheck(bodyJSON)) {
+                            console.log("USB update: " + bodyJSON["model"] + " " + bodyJSON["action"] + " " + 
+                                        bodyJSON["location"]);
                             res.writeHead(200, { 'Content-Type': 'text/html' });
-                            return res.end("Tracks added to queue");
+                            return res.end("USB data updated");
                         } else {
-                            console.log("Tracks field must exist and not be empty");
+                            console.log("USB update does not match expected format");
                             res.writeHead(400, { 'Content-Type': 'text/html' });
-                            return res.end("Tracks field must exist and not be empty");
+                            return res.end("USB update does not match expected format");
                         }
                     });
                 } else {

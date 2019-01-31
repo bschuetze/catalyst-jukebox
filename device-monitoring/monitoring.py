@@ -64,6 +64,8 @@ def usb_event(action, device):
                     if (usbPort not in connectedDevices):
                         connectedDevices[usbPort] = device.get("ID_MODEL")
                         print("Monitoring " + device.get('ID_MODEL') + " at usb port " + usbPort)
+                        # Send info to server
+                        send_usb(action, usbPort, device.device.get("ID_MODEL"))
                     else:
                         print(device.get('ID_MODEL') + " connected at usb port " + usbPort + 
                         " but port already contains " + connectedDevices[usbPort])
@@ -72,6 +74,7 @@ def usb_event(action, device):
                     if (usbPort in connectedDevices):
                         connectedDevices.pop(usbPort)
                         print("Disconnecting " + device.get('ID_MODEL') + " from usb port " + usbPort)
+                        send_usb(action, usbPort, device.device.get("ID_MODEL"))
                     else:
                         print(device.get('ID_MODEL') + " disconnecting from usb port " + usbPort + 
                         " but port is already empty")
@@ -128,8 +131,10 @@ def server_communication(dest, method, header=None, body=None, respFunc=None):
     else:
         print(r)
 
-
-server_communication("http://" + get_ip() + ":" + str(NODE_PORT) + "/usbUpdate", "POST", None, {12: "PixelXL"})
+# act = action, loc = location, mod = model
+def send_usb(act, loc, mod, respFunc=None):
+    dest = "http://" + get_ip() + ":" + str(NODE_PORT) + "/usbUpdate"
+    server_communication(dest, "POST", None, {"model": mod, "location": loc, "action": act}, respFunc)
 
 
 usbObserver = pyudev.MonitorObserver(monitor, usb_event)
