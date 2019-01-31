@@ -196,7 +196,39 @@ function handler(req, res) { //create server (request, response)
         // Check if POST request
         if (req.method == "POST") {
             console.log("POST Request");
-            if (loc.pathname == "/submitTrackID") {
+            if (loc.pathname == "/usbUpdate") {
+                if (req.headers.origin == "http://" + ip.address() + ":6474") {
+                    // Code originally from: https://stackoverflow.com/questions/4295782/how-to-process-post-data-in-node-js
+                    // BEGIN SNIPPET
+                    let body = "";
+                    let bodyJSON = {};
+                    req.on("data", function (data) {
+                        if (body.length > 1e6) {
+                            // Request is coming with large amounts of data, not a good idea to continue to parse it
+                            request.connection.destroy();
+                        }
+                        body += data;
+                    }); // END SNIPPET
+                    req.on("end", function () {
+                        bodyJSON = JSON.parse(body);
+                        console.log(bodyJSON);
+
+                        if (bodyJSON.hasOwnProperty("tracks") && bodyJSON["tracks"].length > 0) {
+                            console.log("Tracks present in POST");
+                            res.writeHead(200, { 'Content-Type': 'text/html' });
+                            return res.end("Tracks added to queue");
+                        } else {
+                            console.log("Tracks field must exist and not be empty");
+                            res.writeHead(400, { 'Content-Type': 'text/html' });
+                            return res.end("Tracks field must exist and not be empty");
+                        }
+                    });
+                } else {
+                    console.log("USB update does not match expected source");
+                    res.writeHead(401, { 'Content-Type': 'text/html' });
+                    return res.end("Unauthorized Origin");
+                }
+            } else if (loc.pathname == "/submitTrackID") {
                 // Code originally from: https://stackoverflow.com/questions/4295782/how-to-process-post-data-in-node-js
                 // BEGIN SNIPPET
                 let body = "";
@@ -247,13 +279,13 @@ function handler(req, res) { //create server (request, response)
 
                         if (!bodyJSON.hasOwnProperty("cid")) {
                             console.log("Client ID field not found in JSON data");
-                            res.writeHead(400, { 'Content-Type': 'text/html' }); //display 404 on error
+                            res.writeHead(400, { 'Content-Type': 'text/html' });
                             return res.end("No Client ID found in data");
                         }
 
                         if (!bodyJSON.hasOwnProperty("secret")) {
                             console.log("Client Secret field not found in JSON data");
-                            res.writeHead(400, { 'Content-Type': 'text/html' }); //display 404 on error
+                            res.writeHead(400, { 'Content-Type': 'text/html' });
                             return res.end("No Client Secret found in data");
                         }
 
@@ -283,7 +315,7 @@ function handler(req, res) { //create server (request, response)
                     })
                 } else {
                     console.log("ClientID request does not match expected source");
-                    res.writeHead(401, { 'Content-Type': 'text/html' }); //display 404 on error
+                    res.writeHead(401, { 'Content-Type': 'text/html' });
                     return res.end("Unauthorized Origin");
                 }
             } else if (loc.pathname == "/submitCode") {
@@ -324,12 +356,12 @@ function handler(req, res) { //create server (request, response)
                                 } else {
                                     console.log("Incorrect 'state' field found in JSON data, expected:\n" +
                                         state + "\nbut found:\m" + "state=" + bodyJSON["state"]);
-                                    res.writeHead(400, { 'Content-Type': 'text/html' }); //display 404 on error
+                                    res.writeHead(400, { 'Content-Type': 'text/html' });
                                     return res.end("Incorrect state provided");
                                 }
                             } else {
                                 console.log("No 'state' field found in JSON data");
-                                res.writeHead(400, { 'Content-Type': 'text/html' }); //display 404 on error
+                                res.writeHead(400, { 'Content-Type': 'text/html' });
                                 return res.end("No state provided");
                             }
                         } else {

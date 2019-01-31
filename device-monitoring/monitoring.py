@@ -128,7 +128,7 @@ def server_communication(dest, method, header=None, body=None, respFunc=None):
     else:
         print(r)
 
-server_communication("http://" + get_ip() + ":" + str(NODE_PORT) + "/login", "GET")
+server_communication("http://" + get_ip() + ":" + str(NODE_PORT) + "/usbUpdate", "POST", None, {12: "PixelXL"})
 
 
 usbObserver = pyudev.MonitorObserver(monitor, usb_event)
