@@ -33,7 +33,7 @@ monitor.filter_by('usb')
 print (context)
 print (monitor)
 
-def 
+# def 
 
 def usb_event(action, device):
     if (device.get("ID_PATH") is not None):
