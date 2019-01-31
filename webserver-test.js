@@ -197,8 +197,7 @@ function handler(req, res) { //create server (request, response)
         if (req.method == "POST") {
             console.log("POST Request");
             if (loc.pathname == "/usbUpdate") {
-                console.log(req.headers)
-                if (req.headers.origin == "http://" + ip.address() + ":6474") {
+                if (req.headers.host == ip.address() + ":" + port) {
                     // Code originally from: https://stackoverflow.com/questions/4295782/how-to-process-post-data-in-node-js
                     // BEGIN SNIPPET
                     let body = "";
@@ -259,8 +258,7 @@ function handler(req, res) { //create server (request, response)
                     }
                 });
             } else if (loc.pathname == "/submitClientID") {
-                console.log(req.headers)
-                if (req.headers.origin == "http://" + ip.address() + ":6474") {
+                if (req.headers.host == ip.address() + ":" + port) {
                     // Update client ID
                     // Code originally from: https://stackoverflow.com/questions/4295782/how-to-process-post-data-in-node-js
                     // BEGIN SNIPPET
@@ -321,7 +319,7 @@ function handler(req, res) { //create server (request, response)
                     return res.end("Unauthorized Origin");
                 }
             } else if (loc.pathname == "/submitCode") {
-                if (req.headers.origin == "http://" + ip.address() + ":6474") {
+                if (req.headers.host == ip.address() + ":" + port) {
                     // Code received
                     // Code originally from: https://stackoverflow.com/questions/4295782/how-to-process-post-data-in-node-js
                     // BEGIN SNIPPET
