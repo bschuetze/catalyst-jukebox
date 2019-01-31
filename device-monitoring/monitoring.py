@@ -14,10 +14,11 @@ import time
 import requests
 import socket
 
+# get_ip() original code from: 
+# https://stackoverflow.com/questions/166506/finding-local-ip-addresses-using-pythons-stdlib
 def get_ip():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     try:
-        # doesn't even have to be reachable
         s.connect(("8.8.8.8", 80))
         IP = s.getsockname()[0]
     except:
@@ -26,8 +27,9 @@ def get_ip():
         s.close()
     return IP
 
-print(get_ip())
 
+# Port that node is listening on
+NODE_PORT = 6474
 # Adding a blacklist for usb device models (device.get('ID_MODEL'))))
 # Add your USB hub here if using one or any other devices you want to ignore
 USB_BLACKLIST = ["USB_2.0_Hub__Safe_"]
@@ -94,6 +96,39 @@ def usb_event(action, device):
             print(pathSplit[len(pathSplit) - 1] + " is not a number of the form X.Y or X.Y.Z")
     # else:
     #     print("USB device path is None type, " + str(device) + " " + action)
+
+
+def server_communication(dest, method, header=None, body=None, respFunc=None):
+    h = {}
+    b = {}
+
+    if header is not None:
+        h = header
+
+    if body is not None:
+        b = body
+
+    if method == "GET":
+        r = requests.get(dest, headers=h, data=b)
+    elif method == "POST":
+        r = requests.post(dest, headers=h, data=b)
+    elif method == "PUT":
+        r = requests.put(dest, headers=h, data=b)
+    elif method == "DELETE":
+        r = requests.delete(dest, headers=h, data=b)
+    elif method == "HEAD":
+        r = requests.head(dest, headers=h, data=b)
+    elif method == "OPTIONS":
+        r = requests.options(dest, headers=h, data=b)
+    else:
+        print("Method not properly defined: " + method)
+
+    if (respFunc is not None):
+        respFunc(r)
+    else:
+        print(r)
+
+server_communication(get_ip() + str(NODE_PORT) + "/login", "GET")
 
 
 usbObserver = pyudev.MonitorObserver(monitor, usb_event)
