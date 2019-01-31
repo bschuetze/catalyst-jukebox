@@ -23,6 +23,7 @@ connectedDevices = {}
 context = pyudev.Context()
 monitor = pyudev.Monitor.from_netlink(context)
 
+
 monitor.filter_by('usb')
 print (context)
 print (monitor)
