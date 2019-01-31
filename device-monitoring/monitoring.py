@@ -97,7 +97,7 @@ def usb_event(action, device):
     # else:
     #     print("USB device path is None type, " + str(device) + " " + action)
 
-
+# Sends JSON data
 def server_communication(dest, method, header=None, body=None, respFunc=None):
     h = {}
     b = {}
@@ -109,17 +109,17 @@ def server_communication(dest, method, header=None, body=None, respFunc=None):
         b = body
 
     if method == "GET":
-        r = requests.get(dest, headers=h, data=b)
+        r = requests.get(dest, headers=h, json=b)
     elif method == "POST":
-        r = requests.post(dest, headers=h, data=b)
+        r = requests.post(dest, headers=h, json=b)
     elif method == "PUT":
-        r = requests.put(dest, headers=h, data=b)
+        r = requests.put(dest, headers=h, json=b)
     elif method == "DELETE":
-        r = requests.delete(dest, headers=h, data=b)
+        r = requests.delete(dest, headers=h, json=b)
     elif method == "HEAD":
-        r = requests.head(dest, headers=h, data=b)
+        r = requests.head(dest, headers=h, json=b)
     elif method == "OPTIONS":
-        r = requests.options(dest, headers=h, data=b)
+        r = requests.options(dest, headers=h, json=b)
     else:
         print("Method not properly defined: " + method)
 
@@ -127,6 +127,7 @@ def server_communication(dest, method, header=None, body=None, respFunc=None):
         respFunc(r)
     else:
         print(r)
+
 
 server_communication("http://" + get_ip() + ":" + str(NODE_PORT) + "/usbUpdate", "POST", None, {12: "PixelXL"})
 
