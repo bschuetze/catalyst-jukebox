@@ -6,10 +6,15 @@
 # https://pyudev.readthedocs.io/en/latest/api/pyudev.html#pyudev.Device
 # https://pipenv.readthedocs.io/en/latest/basics/
 # https://stackoverflow.com/questions/25494086/retrieve-usb-information-using-pyudev-with-device-name
+# http://docs.python-requests.org/en/master/user/quickstart/
 # 
 
 import pyudev
 import time
+import requests
+import socket
+
+print(socket.gethostbyname(socket.gethostname()))
 
 # Adding a blacklist for usb device models (device.get('ID_MODEL'))))
 # Add your USB hub here if using one or any other devices you want to ignore
@@ -27,6 +32,8 @@ monitor = pyudev.Monitor.from_netlink(context)
 monitor.filter_by('usb')
 print (context)
 print (monitor)
+
+def 
 
 def usb_event(action, device):
     if (device.get("ID_PATH") is not None):
