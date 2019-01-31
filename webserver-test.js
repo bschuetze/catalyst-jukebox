@@ -259,6 +259,7 @@ function handler(req, res) { //create server (request, response)
                     }
                 });
             } else if (loc.pathname == "/submitClientID") {
+                console.log(req.headers)
                 if (req.headers.origin == "http://" + ip.address() + ":6474") {
                     // Update client ID
                     // Code originally from: https://stackoverflow.com/questions/4295782/how-to-process-post-data-in-node-js
