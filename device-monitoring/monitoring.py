@@ -49,57 +49,6 @@ print (monitor)
 
 # def 
 
-def usb_event(action, device):
-    if (device.get("ID_PATH") is not None):
-        devicePathFull = device.get("ID_PATH")
-        pathSplit = devicePathFull.split(":")
-        # print(pathSplit[len(pathSplit) - 1])
-        try:
-            usbPort = pathSplit[len(pathSplit) - 1]
-            usbPort = usbPort.replace(".", "")
-
-            if ((int(usbPort) >= USB_PORT_START) and (device.get('ID_MODEL') not in USB_BLACKLIST)):
-
-                if (action == "add"):
-                    if (usbPort not in connectedDevices):
-                        connectedDevices[usbPort] = device.get("ID_MODEL")
-                        print("Monitoring " + device.get('ID_MODEL') + " at usb port " + usbPort)
-                        # Send info to server
-                        send_usb(action, usbPort, device.device.get("ID_MODEL"))
-                    else:
-                        print(device.get('ID_MODEL') + " connected at usb port " + usbPort + 
-                        " but port already contains " + connectedDevices[usbPort])
-                        ## NEED TO HANDLE THIS WITH A MANUAL CHECK
-                elif (action == "remove"):
-                    if (usbPort in connectedDevices):
-                        connectedDevices.pop(usbPort)
-                        print("Disconnecting " + device.get('ID_MODEL') + " from usb port " + usbPort)
-                        send_usb(action, usbPort, device.device.get("ID_MODEL"))
-                    else:
-                        print(device.get('ID_MODEL') + " disconnecting from usb port " + usbPort + 
-                        " but port is already empty")
-                        ## NEED TO HANDLE THIS WITH A MANUAL CHECK
-
-                else:
-                    print("Non add/remove action detected")
-                    print("Action: '" + action + "' applied to " + device.get('ID_MODEL') + " from usb port " + usbPort)
-
-                print("Connected devices: " + str(connectedDevices))
-
-                # if (usbPort in occupiedPorts):
-                #     occupiedPorts.remove(usbPort)
-                #     connectedDevices.remove({"port": usbPort, "model": device.get("ID_MODEL")})
-                #     print("Removed " + device.get('ID_MODEL') + " from usb port " + usbPort)
-                # else:
-                #     occupiedPorts.append(usbPort)
-                #     connectedDevices.append({"port": usbPort, "model": device.get("ID_MODEL")})
-                #     print("Monitoring " + device.get('ID_MODEL') + " at usb port " + usbPort)
-
-        except:
-            print(pathSplit[len(pathSplit) - 1] + " is not a number of the form X.Y or X.Y.Z")
-    # else:
-    #     print("USB device path is None type, " + str(device) + " " + action)
-
 # Sends JSON data
 def server_communication(dest, method, header=None, body=None, respFunc=None):
     h = {}
@@ -135,6 +84,63 @@ def server_communication(dest, method, header=None, body=None, respFunc=None):
 def send_usb(act, loc, mod, respFunc=None):
     dest = "http://" + get_ip() + ":" + str(NODE_PORT) + "/usbUpdate"
     server_communication(dest, "POST", None, {"model": mod, "location": loc, "action": act}, respFunc)
+
+
+def usb_event(action, device):
+    if (device.get("ID_PATH") is not None):
+        devicePathFull = device.get("ID_PATH")
+        pathSplit = devicePathFull.split(":")
+        # print(pathSplit[len(pathSplit) - 1])
+        try:
+            usbPort = pathSplit[len(pathSplit) - 1]
+            usbPort = usbPort.replace(".", "")
+
+            if ((int(usbPort) >= USB_PORT_START) and (device.get('ID_MODEL') not in USB_BLACKLIST)):
+
+                if (action == "add"):
+                    if (usbPort not in connectedDevices):
+                        connectedDevices[usbPort] = device.get("ID_MODEL")
+                        print("Monitoring " + device.get('ID_MODEL') +
+                              " at usb port " + usbPort)
+                        # Send info to server
+                        send_usb(action, usbPort, device.get("ID_MODEL"))
+                    else:
+                        print(device.get('ID_MODEL') + " connected at usb port " + usbPort +
+                              " but port already contains " + connectedDevices[usbPort])
+                        ## NEED TO HANDLE THIS WITH A MANUAL CHECK
+                elif (action == "remove"):
+                    if (usbPort in connectedDevices):
+                        connectedDevices.pop(usbPort)
+                        print("Disconnecting " + device.get('ID_MODEL') +
+                              " from usb port " + usbPort)
+                        send_usb(action, usbPort, device.get("ID_MODEL"))
+                    else:
+                        print(device.get('ID_MODEL') + " disconnecting from usb port " + usbPort +
+                              " but port is already empty")
+                        ## NEED TO HANDLE THIS WITH A MANUAL CHECK
+
+                else:
+                    print("Non add/remove action detected")
+                    print("Action: '" + action + "' applied to " +
+                          device.get('ID_MODEL') + " from usb port " + usbPort)
+
+                print("Connected devices: " + str(connectedDevices))
+
+                # if (usbPort in occupiedPorts):
+                #     occupiedPorts.remove(usbPort)
+                #     connectedDevices.remove({"port": usbPort, "model": device.get("ID_MODEL")})
+                #     print("Removed " + device.get('ID_MODEL') + " from usb port " + usbPort)
+                # else:
+                #     occupiedPorts.append(usbPort)
+                #     connectedDevices.append({"port": usbPort, "model": device.get("ID_MODEL")})
+                #     print("Monitoring " + device.get('ID_MODEL') + " at usb port " + usbPort)
+
+        except:
+            print(pathSplit[len(pathSplit) - 1] +
+                  " is not a number of the form X.Y or X.Y.Z")
+    # else:
+    #     print("USB device path is None type, " + str(device) + " " + action)
+
 
 
 usbObserver = pyudev.MonitorObserver(monitor, usb_event)
