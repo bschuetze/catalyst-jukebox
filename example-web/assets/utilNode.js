@@ -1,7 +1,6 @@
 const fetch = require('node-fetch');
 
 module.exports = {
-
     toWebLink: toWebLink,
     webRequest: webRequest,
     webResponse: webResponse,

@@ -307,7 +307,7 @@ function handler(req, res) { //create server (request, response)
 
                         clientID = bodyJSON["cid"];
 
-                        let retURL = "" + toWebLink(authorizeURL + "?client_id=" + clientID + "&response_type=code&" + redirectURI + "&" + scope + "&" + state);
+                        let retURL = "" + util.toWebLink(authorizeURL + "?client_id=" + clientID + "&response_type=code&" + redirectURI + "&" + scope + "&" + state);
                         console.log(retURL);
                         // Return auth URL
                         res.writeHead(200, { "Content-Type": "application/json" }); //write HTML
