@@ -468,7 +468,15 @@ function SpotifyPlaylist() {
     this.currentlyPlaying = function() {
         this.spotifyRequest(apiURL + "me/player/currently-playing", "GET", {}, {}, function(data) {
             console.log("Song: " + data["item"]["name"]);
-            console.log("Artist(s): " + data["item"]["artists"])
+            let songArtists = "";
+            for (let i = 0; i < data["item"]["artists"].length; i++) {
+                if (i == data["item"]["artists"].length - 1) {
+                    songArtists = songArtists + data["item"]["artists"][i]["name"];
+                } else {
+                    songArtists = songArtists + data["item"]["artists"][i]["name"] + ", ";
+                }
+            }
+            console.log("Artist(s): " + songArtists)
             console.log("Album: " + data["item"]["album"]["name"]);
             console.log("Track URI: " + data["item"]["uri"]);
         });
