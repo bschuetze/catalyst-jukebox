@@ -478,7 +478,13 @@ function SpotifyPlaylist() {
     }
 
     this.spotifyRequest = function(dest, reqMethod, reqHeader, reqBody, respFunc) {
-        let completeHeader = reqHeader;
+        let completeHeader;
+        if (!util.emptyObject(reqHeader)) {
+            completeHeader = reqHeader;
+        } else {
+            completeHeader = {};
+        }
+        console.log(authToken);
         completeHeader["Authorization"] = authToken;
         util.webRequest(dest, reqMethod, completeHeader, reqBody, respFunc);
     }
