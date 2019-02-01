@@ -484,8 +484,7 @@ function SpotifyPlaylist() {
         } else {
             completeHeader = {};
         }
-        console.log(authToken);
-        completeHeader["Authorization"] = authToken;
+        completeHeader["Authorization"] = "Bearer " + authToken;
         util.webRequest(dest, reqMethod, completeHeader, reqBody, respFunc);
     }
 }
