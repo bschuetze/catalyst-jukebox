@@ -470,10 +470,13 @@ function SpotifyPlaylist() {
             console.log("Song: " + data["item"]["name"]);
             let songArtists = "";
             for (let i = 0; i < data["item"]["artists"].length; i++) {
-                if (i == data["item"]["artists"].length - 1) {
-                    songArtists = songArtists + data["item"]["artists"][i]["name"];
+
+                songArtists = songArtists + data["item"]["artists"][i]["name"];
+                
+                if (i == data["item"]["artists"].length - 2) {
+                    songArtists = songArtists + " & ";
                 } else {
-                    songArtists = songArtists + data["item"]["artists"][i]["name"] + ", ";
+                    songArtists = songArtists + ", ";
                 }
             }
             console.log("Artist(s): " + songArtists)
