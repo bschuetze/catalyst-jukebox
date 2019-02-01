@@ -479,14 +479,14 @@ function SpotifyPlaylist() {
 
     this.spotifyRequest = function(dest, reqMethod, reqHeader, reqBody, respFunc) {
         let completeHeader = reqHeader;
-        completeHeader["Authorization"] = token;
+        completeHeader["Authorization"] = authToken;
         util.webRequest(dest, reqMethod, completeHeader, reqBody, respFunc);
     }
 }
 
 // function spotifyPlayerRequest(reqMethod, reqFunc, reqHeader, respFunc) {
 //     let completeHeader = reqHeader;
-//     completeHeader["Authorization"] = authToken;
+//     completeHeader["Authorization"] = token;
 //     console.log(completeHeader);
 //     // {
 //     //     "Content-Type": "application/json",
