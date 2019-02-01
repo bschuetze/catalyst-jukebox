@@ -466,7 +466,12 @@ function User() {
 function SpotifyPlaylist() {
 
     this.currentlyPlaying = function() {
-        this.spotifyRequest(apiURL + "me/player/currently-playing", "GET");
+        this.spotifyRequest(apiURL + "me/player/currently-playing", "GET", {}, {}, function(data) {
+            console.log("Song: " + data["item"]["name"]);
+            console.log("Artist(s): " + data["item"]["artists"])
+            console.log("Album: " + data["item"]["album"]["name"]);
+            console.log("Track URI: " + data["item"]["uri"]);
+        });
     }
 
     this.initPlaylist = function() {
