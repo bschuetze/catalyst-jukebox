@@ -20,7 +20,7 @@ var _favicon = servefav(path.join(__dirname, "public", "favicon.ico"));
 
 // Spotify API variables
 const apiURL = "https://api.spotify.com/v1/"
-
+var spotifyHandler = new SpotifyPlaylist();
 
 // Auth variables
 const authorizeURL = "https://accounts.spotify.com/authorize";
@@ -208,7 +208,12 @@ function handler(req, res) { //create server (request, response)
         // Check if POST request
         if (req.method == "POST") {
             console.log("POST Request");
-            if (loc.pathname == "/usbUpdate") {
+            if (loc.pathname == "/spotifyControl") {
+                spotifyHandler.currentlyPlaying();
+                console.log("Spotify Request");
+                res.writeHead(200, { 'Content-Type': 'text/html' });
+                return res.end("Request successful");
+            } else if (loc.pathname == "/usbUpdate") {
                 if (req.headers.host == ip.address() + ":" + port) {
                     // Code originally from: https://stackoverflow.com/questions/4295782/how-to-process-post-data-in-node-js
                     // BEGIN SNIPPET
