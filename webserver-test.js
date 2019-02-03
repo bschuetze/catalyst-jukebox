@@ -21,6 +21,7 @@ var _favicon = servefav(path.join(__dirname, "public", "favicon.ico"));
 // Spotify API variables
 const apiURL = "https://api.spotify.com/v1/"
 var spotifyHandler = new SpotifyPlaylist();
+const publicPlaylist = true;
 
 // Auth variables
 const authorizeURL = "https://accounts.spotify.com/authorize";
@@ -229,7 +230,7 @@ function handler(req, res) { //create server (request, response)
                                 spotifyHandler.currentlyPlaying();
                                 break;
                             case "get_playlists":
-                                spotifyHandler.getPlaylists();
+                                spotifyHandler.initPlaylist();
                                 break;
                         }
                     }
@@ -494,6 +495,8 @@ function SpotifyPlaylist() {
     this.playlistLimit = 50;
     this.playlistOffset = 0;
     this.totalPlaylists = 0;
+    
+    this.playlistURI = "";
 
     this.currentlyPlaying = function() {
         this.spotifyRequest(apiURL + "me/player/currently-playing", "GET", {}, {}, function(data) {
@@ -520,10 +523,34 @@ function SpotifyPlaylist() {
 
     this.initPlaylist = function() {
         // Get playlists
-        this.getPlaylists();
+        this.getPlaylists(true);
     }
 
-    this.getPlaylists = function() {
+    this.initPlaylistCallback = function() {
+        console.log("callback"); //DEBUGGING, REMOVE
+        let found = false;
+        for (let i = 0; i < this.playlists.length; i++) {
+            if (this.playlists[i]["name"] == "Catalyst Jukebox Playlist") {
+                console.log("Found playlist");
+                this.playlistURI = playlists[i]["uri"];
+                found = true;
+                break;
+            }
+        }
+        if (found) {
+            // Found playlist, no need to make
+        } else {
+            // Need to make playlist
+            let makePlaylistBody = {}
+            makePlaylistBody["name"] = "Catalyst Jukebox Playlist";
+            makePlaylistBody["description"] = "Playlist for the Catalyst Jukebox application";
+            makePlaylistBody["public"] = publicPlaylist;
+
+            this.spotifyRequest(apiURL + "playlists", "POST", {"Content-Type": "application/json"}, makePlaylistBody);
+        }
+    }
+
+    this.getPlaylists = function(callback) {
         // Get the total number of playlists a user has
         // Require to store 'this' as it changes inside the fetch call
         let self = this;
@@ -531,7 +558,11 @@ function SpotifyPlaylist() {
         this.spotifyRequest(apiURL + "me/playlists?limit=0", "GET", {}, {}, function(data) {
             if (!util.emptyObject(data) && data.hasOwnProperty("total")) {
                 self.totalPlaylists = data["total"];
-                self.loadPlaylists();
+                if (callback != null && callback) {
+                    self.loadPlaylists(self.initPlaylistCallback);
+                } else {
+                    self.loadPlaylists();
+                }
             }
         });
     }
