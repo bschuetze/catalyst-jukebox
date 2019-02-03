@@ -23,6 +23,7 @@ const apiURL = "https://api.spotify.com/v1/"
 var spotifyHandler = new SpotifyPlaylist();
 const publicPlaylist = true;
 const deviceName = "raspotify (catalyst-jukebox)";
+const defaultSong = "spotify:track:2Z8WuEywRWYTKe1NybPQEW";
 
 // Auth variables
 const authorizeURL = "https://accounts.spotify.com/authorize";
@@ -652,6 +653,13 @@ function SpotifyPlaylist() {
             console.log("  Album: " + data["item"]["album"]["name"]);
             console.log("  Track URI: " + data["item"]["uri"]);
         });
+    }
+
+    this.setupPlaylist = function() {
+        // Check if playlist is empty
+        // if not, empty it
+        // add default song
+        // play it
     }
 
     this.initPlaylist = function() {
