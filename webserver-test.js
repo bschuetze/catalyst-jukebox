@@ -625,9 +625,16 @@ function SpotifyPlaylist() {
                 }
             });
         } else {
-            console.log("All playlists parsed, total: " + this.playlists.length);
-            if (callback != null && callback) {
-                this.initPlaylistCallback();
+            if (this.playlistOffset != this.totalPlaylists || this.playlists.length != this.totalPlaylists) {
+                // A playlist has been deleted, rebuild list
+                this.playlists = [];
+                this.playlistOffset = 0;
+                this.getPlaylists(callback);
+            } else {
+                console.log("All playlists parsed, total: " + this.playlists.length);
+                if (callback != null && callback) {
+                    this.initPlaylistCallback();
+                }
             }
         }
     }
