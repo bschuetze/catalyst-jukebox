@@ -554,11 +554,14 @@ function SpotifyPlaylist() {
                         if (data["devices"][i]["name"] == deviceName) {
                             console.log("Found " + data["devices"][i]["name"] + " with ID: " + data["devices"][i]["id"]);
                             self.deviceID = data["devices"][i]["id"];
+                            break;
                         }
                     }
                     if (self.deviceID == "") {
                         console.log("Unable to find device with name: " + deviceName);
                         // Retry timeout?
+                    } else {
+                        self.setDevice();
                     }
                 } else {
                     console.log("No devices appearing");
@@ -762,9 +765,9 @@ function SpotifyPlaylist() {
         completeHeader["Authorization"] = "Bearer " + authToken;
         let completeBody;
         if (!util.emptyObject(reqBody)) {
-            completeHeader = reqBody;
+            completeBody = reqBody;
         } else {
-            completeHeader = {};
+            completeBody = {};
         }
         completeBody = JSON.stringify(completeBody);
         util.webRequest(dest, reqMethod, completeHeader, completeBody, respFunc);
