@@ -342,6 +342,8 @@ function handler(req, res) { //create server (request, response)
                                 console.log("ERROR, client file not written");
                             } else {
                                 console.log("Successfully written Client details");
+                                // New details provided, reset auth
+                                authorized = false;
                                 completeAuth();
                             }
                         });
@@ -391,6 +393,8 @@ function handler(req, res) { //create server (request, response)
                                             console.log("ERROR, auth code file not written");
                                         } else {
                                             console.log("Successfully written auth details");
+                                            // New details provided, reset auth
+                                            authorized = false;
                                             completeAuth();
                                         }
                                     });
