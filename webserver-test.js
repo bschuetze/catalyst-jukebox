@@ -489,6 +489,12 @@ function User() {
 
 function SpotifyPlaylist() {
 
+    // Get playlist vars
+    this.playlists = [];
+    this.playlistLimit = 50;
+    this.playlistOffset = 0;
+    this.totalPlaylists = 0;
+
     this.currentlyPlaying = function() {
         this.spotifyRequest(apiURL + "me/player/currently-playing", "GET", {}, {}, function(data) {
             if (data["is_playing"]) {
@@ -518,34 +524,34 @@ function SpotifyPlaylist() {
     }
 
     this.getPlaylists = function() {
-        // Get playlists
-        let playlists = [];
-        let limit = 50;
-        let offset = 0;
-        let total = 0;
-
         // Get the total number of playlists a user has
         this.spotifyRequest(apiURL + "me/playlists?limit=0", "GET", {}, {}, function(data) {
             if (!util.emptyObject(data) && data.hasOwnProperty("total")) {
                 total = data["total"];
+                this.loadPlaylists();
             }
         });
+    }
 
-        while (offset < total) {
-            this.spotifyRequest(apiURL + "me/playlists?limit=" + limit + "&offset=" + offset, "GET", {}, {}, function (data) {
+    this.loadPlaylists = function() {
+        if (this.playlistOffset < this.totalPlaylists) {
+            this.spotifyRequest(apiURL + "me/playlists?limit=" + this.playlistLimit + "&offset=" + this.playlistOffset, "GET", {}, {}, function (data) {
                 if (!util.emptyObject(data) && data.hasOwnProperty("items")) {
                     for (let i = 0; i < data["items"].length; i++) {
-                        playlists.push(data["items"][i]);
+                        this.playlists.push(data["items"][i]);
                     }
 
                     // Add amount parsed to total / offset
-                    offset = offset + data["items"].length;
+                    this.playlistOffset = this.playlistOffset + data["items"].length;
+
+                    // Recursively call function
+                    this.loadPlaylists();
                 }
             });
+        } else {
+            console.log(this.playlists);
+            console.log("All playlists parsed, total: " + this.playlists.length);
         }
-
-        console.log(playlists);
-        console.log(playlists.length);
     }
 
     this.addSong = function(songURI) {
