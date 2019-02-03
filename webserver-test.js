@@ -549,9 +549,7 @@ function SpotifyPlaylist() {
 
     this.initPlaylistCallback = function() {
         let found = false;
-        console.log(this.playlists.length);
         for (let i = 0; i < this.playlists.length; i++) {
-            console.log(this.playlists[i]["name"]);
             if (this.playlists[i]["name"] == "Catalyst Jukebox Playlist") {
                 console.log("Found playlist");
                 this.playlistURI = this.playlists[i]["uri"];
@@ -559,7 +557,6 @@ function SpotifyPlaylist() {
                 break;
             }
         }
-        console.log(found);
         if (found) {
             // Found playlist, no need to make
             console.log("Found existing Catalyst Jukebox playlist, uri: " + this.playlistURI);
