@@ -525,7 +525,7 @@ function SpotifyPlaylist() {
         let total = 0;
 
         // Get the total number of playlists a user has
-        this.spotifyRequest(apiURL + "me/playlists?limit=0", "GET", {}, {}, function() {
+        this.spotifyRequest(apiURL + "me/playlists?limit=0", "GET", {}, {}, function(data) {
             if (!util.emptyObject(data) && data.hasOwnProperty("total")) {
                 total = data["total"];
             }
