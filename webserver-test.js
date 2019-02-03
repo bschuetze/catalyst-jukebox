@@ -525,27 +525,35 @@ function SpotifyPlaylist() {
 
     this.getPlaylists = function() {
         // Get the total number of playlists a user has
+        // Require to store 'this' as it changes inside the fetch call
+        let self = this;
+
         this.spotifyRequest(apiURL + "me/playlists?limit=0", "GET", {}, {}, function(data) {
             if (!util.emptyObject(data) && data.hasOwnProperty("total")) {
-                total = data["total"];
-                this.loadPlaylists();
+                self.totalPlaylists = data["total"];
+                self.loadPlaylists();
             }
         });
     }
 
     this.loadPlaylists = function() {
+
         if (this.playlistOffset < this.totalPlaylists) {
+
+            // Require to store 'this' as it changes inside the fetch call
+            let self = this;
+
             this.spotifyRequest(apiURL + "me/playlists?limit=" + this.playlistLimit + "&offset=" + this.playlistOffset, "GET", {}, {}, function (data) {
                 if (!util.emptyObject(data) && data.hasOwnProperty("items")) {
                     for (let i = 0; i < data["items"].length; i++) {
-                        this.playlists.push(data["items"][i]);
+                        self.playlists.push(data["items"][i]);
                     }
 
                     // Add amount parsed to total / offset
-                    this.playlistOffset = this.playlistOffset + data["items"].length;
+                    self.playlistOffset = self.playlistOffset + data["items"].length;
 
                     // Recursively call function
-                    this.loadPlaylists();
+                    self.loadPlaylists();
                 }
             });
         } else {
