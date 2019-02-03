@@ -526,7 +526,7 @@ function SpotifyPlaylist() {
 
     this.initPlaylist = function() {
         // Get playlists
-        this.getPlaylists(true).then(this.initPlaylistCallback);
+        this.getPlaylists(true);
     }
 
     this.initPlaylistCallback = function() {
@@ -558,25 +558,16 @@ function SpotifyPlaylist() {
         // Require to store 'this' as it changes inside the fetch call
         let self = this;
 
-        return new Promise(function() {
-
-            self.spotifyRequest(apiURL + "me/playlists?limit=0", "GET", {}, {}, function (data) {
-                if (!util.emptyObject(data) && data.hasOwnProperty("total")) {
-                    self.totalPlaylists = data["total"];
-                    // if (callback != null && callback) {
-                    //     self.loadPlaylists(self.initPlaylistCallback);
-                    // } else {
-                    //     self.loadPlaylists();
-                    // }
-                    self.loadPlaylists();
-                }
-                resolve();
-            });
+        self.spotifyRequest(apiURL + "me/playlists?limit=0", "GET", {}, {}, function (data) {
+            if (!util.emptyObject(data) && data.hasOwnProperty("total")) {
+                self.totalPlaylists = data["total"];
+                self.loadPlaylists(callback);
+            }
         });
         
     }
 
-    this.loadPlaylists = function() {
+    this.loadPlaylists = function (callback) {
 
         if (this.playlistOffset < this.totalPlaylists) {
 
@@ -593,11 +584,15 @@ function SpotifyPlaylist() {
                     self.playlistOffset = self.playlistOffset + data["items"].length;
 
                     // Recursively call function
-                    self.loadPlaylists();
+                    self.loadPlaylists(callback);
                 }
             });
         } else {
             console.log("All playlists parsed, total: " + this.playlists.length);
+            console.log(callback);
+            if (callback != null && callback) {
+                this.initPlaylistCallback();
+            }
         }
     }
 
