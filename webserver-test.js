@@ -27,6 +27,7 @@ const publicPlaylist = true;
 const authorizeURL = "https://accounts.spotify.com/authorize";
 var clientID = ""; // Located at: https://developer.spotify.com/dashboard/applications/
 var clientSecret = "";
+var userID = "";
 const refreshURL = "https://accounts.spotify.com/api/token"
 var clientDataLoaded = false;
 var refreshDataLoaded = false;
@@ -128,11 +129,10 @@ function refreshAuth() {
 
 // Auth check function
 function authCallback(data) {
-    if (data == null || data == {}) {
+    if (util.emptyObject(data)) {
         console.log("No return data provided");
         return;
     }
-    let callAuth = false;
     if (data.hasOwnProperty("error")) {
         console.log("Auth error: " + data["error"]);
         if (data.hasOwnProperty("error_description")) {
@@ -175,13 +175,12 @@ function authCallback(data) {
                 // authTimeOut = setTimeout(refreshAuth, 10000); // Testing purposes only
             }
             authorized = true;
+            // Get user ID
+            spotifyHandler.setup();
         } else {
             console.log("No access token found");
             console.log(data);
         }
-    }
-    if (callAuth) {
-        completeAuth();
     }
 }
 
@@ -501,6 +500,19 @@ function SpotifyPlaylist() {
     
     this.playlistURI = "";
 
+    this.setup = function() {
+        console.log("Setting up playlist handling");
+        this.getUserID();
+    }
+
+    this.getUserID = function() {
+        this.spotifyRequest(apiURL + "me", "GET", {}, {}, function(data) {
+            if (!util.emptyObject(data) && data.hasOwnProperty("id")) {
+                userID = data["id"];
+            }
+        });
+    }
+
     this.currentlyPlaying = function() {
         this.spotifyRequest(apiURL + "me/player/currently-playing", "GET", {}, {}, function(data) {
             if (data["is_playing"]) {
@@ -542,15 +554,33 @@ function SpotifyPlaylist() {
         console.log(found);
         if (found) {
             // Found playlist, no need to make
+            console.log("Found existing Catalyst Jukebox playlist, uri: " + this.playlistURI);
         } else {
+            console.log("Catalyst Jukebox playlist doesn't exist, creating...");
             // Need to make playlist
             let makePlaylistBody = {}
             makePlaylistBody["name"] = "Catalyst Jukebox Playlist";
             makePlaylistBody["description"] = "Playlist for the Catalyst Jukebox application";
             makePlaylistBody["public"] = publicPlaylist;
 
-            this.spotifyRequest(apiURL + "playlists", "POST", {"Content-Type": "application/json"}, makePlaylistBody, function(data) {
-                console.log(data);
+            // Require to store 'this' as it changes inside the fetch call
+            let self = this;
+
+            this.spotifyRequest(apiURL + "users/me/playlists", "POST", {"Content-Type": "application/json"}, makePlaylistBody, function(data) {
+                if (!util.emptyObject(data)) {
+                    if (data.hasOwnProperty("error")) {
+                        console.log("Error when trying to create new playlist:");
+                        console.log(data);
+                    } else {
+                        if (data.hasOwnProperty["uri"]) {
+                            self.playlistURI = data["uri"];
+                            console.log("Catalyst Jukebox playlist created, uri: " + self.playlistURI);
+                        } else {
+                            console.log("No error, but playlist data is not present")
+                            console.log(data)
+                        }
+                    }
+                }
             });
         }
     }
