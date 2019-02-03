@@ -22,6 +22,7 @@ var _favicon = servefav(path.join(__dirname, "public", "favicon.ico"));
 const apiURL = "https://api.spotify.com/v1/"
 var spotifyHandler = new SpotifyPlaylist();
 const publicPlaylist = true;
+const deviceName = "raspotify (catalyst-jukebox)";
 
 // Auth variables
 const authorizeURL = "https://accounts.spotify.com/authorize";
@@ -176,7 +177,10 @@ function authCallback(data) {
             }
             authorized = true;
             // Get user ID
-            spotifyHandler.setup();
+            if (!spotifyHandler.configured) {
+                spotifyHandler.setup();
+            }
+
         } else {
             console.log("No access token found");
             console.log(data);
@@ -494,20 +498,38 @@ function User() {
     
 }
 
+function Song(user, uri) {
+    this.owner = user;
+    this.uri = uri;
+}
+
 function SpotifyPlaylist() {
 
-    // Get playlist vars
+    // General vars
+    this.configured = false;
+    this.playedSongs = [];
+    this.songsBeforeRepeat = 10;
+    this.queuedSongs = [];
+    this.playlistURI = "";
+    this.deviceID = "";
+
+    this.repeat = "off";       // track | context | off.
+    this.shuffle = false; // true | false
+
+    // .getPlaylist() vars
     this.playlists = [];
     this.playlistLimit = 50;
     this.playlistOffset = 0;
     this.parsedPlaylists = 0;
     this.totalPlaylists = 0;
     
-    this.playlistURI = "";
 
     this.setup = function() {
         console.log("Setting up playlist handling");
         this.getUserID();
+        this.getDeviceID();
+        this.initPlaylist();
+        this.configured = true;
     }
 
     this.getUserID = function() {
@@ -515,6 +537,90 @@ function SpotifyPlaylist() {
             if (!util.emptyObject(data) && data.hasOwnProperty("id")) {
                 console.log("Setting user ID: " + data["id"]);
                 userID = data["id"];
+            }
+        });
+    }
+
+    this.getDeviceID = function() {
+        console.log("Locating Catalyst Jukebox device...");
+
+        // Require to store 'this' as it changes inside the fetch call
+        let self = this;
+
+        this.spotifyRequest(apiURL + "me/player/devices", "GET", {}, {}, function(data) {
+            if (!util.emptyObject(data)) {
+                if (data.hasOwnProperty("devices")) {
+                    for (let i = 0; i < data["devices"].length; i++) {
+                        if (data["devices"][i]["name"] == deviceName) {
+                            console.log("Found " + data["devices"][i]["name"] + " with ID: " + data["devices"][i]["id"]);
+                            self.deviceID = data["devices"][i]["id"];
+                        }
+                    }
+                    if (self.deviceID == "") {
+                        console.log("Unable to find device with name: " + deviceName);
+                        // Retry timeout?
+                    }
+                } else {
+                    console.log("No devices appearing");
+                    console.log(data);
+                }
+            }
+        });
+    }    
+    
+    this.setDevice = function() {
+        console.log("Setting playback device to: " + deviceName);
+        this.spotifyRequest(apiURL + "me/player", "PUT", {}, {"device_ids": [this.deviceID]}, function (data) {
+            if (!util.emptyObject(data)) {
+                console.log(data);
+            }
+        });
+    }
+
+    this.songRequest = function() {
+
+    }
+
+    this.setRepeat = function() {
+        console.log("Setting repeat to " + this.repeat);
+        this.spotifyRequest(apiURL + "me/player/shuffle?state=" + this.repeat, "PUT");
+    }
+
+    this.removeShuffle = function() {
+        console.log("Setting shuffle to " + this.shuffle);
+        this.spotifyRequest(apiURL + "me/player/shuffle?state=" + this.shuffle, "PUT");
+    }
+
+    // Takes a list of song URIs
+    // Input: ["xxx:xxx:xxx", ...]
+    this.addSongs = function (songURIs) {
+        this.spotifyRequest(apiURL + "playlists/" + this.playlistURI + "/tracks", "POST",
+                            {"Content-Type": "application/json" }, {"uris": songs}, 
+                            function (data) {
+            if (!util.emptyObject(data)) {
+                if (data.hasOwnProperty("error")) {
+                    console.log("Something went wrong removing: " + songs + " from playlist");
+                    console.log(data);
+                } else {
+                    console.log("Successfully removed: " + songs + " from playlist");
+                }
+            }
+        });
+    }
+
+    // Takes in a list of song objects:
+    // [{"uri": "xxxx:xxx:xxx"}, ...]
+    // This currently deleted all occurences of a song, may need to edit?
+    this.removeSongs = function(songs) {
+        this.spotifyRequest(apiURL + "playlists/" + this.playlistURI + "/tracks", "DELETE", 
+        {"Content-Type": "application/json"}, {"tracks": songs}, function(data) {
+            if (!util.emptyObject(data)) {
+                if (data.hasOwnProperty("error")) {
+                    console.log("Something went wrong adding: " + songs + " to playlist");
+                    console.log(data);
+                } else {
+                    console.log("Successfully added: " + songs + " to playlist");
+                }
             }
         });
     }
@@ -646,10 +752,6 @@ function SpotifyPlaylist() {
         }
     }
 
-    this.addSong = function(songURI) {
-
-    }
-
     this.spotifyRequest = function(dest, reqMethod, reqHeader, reqBody, respFunc) {
         let completeHeader;
         if (!util.emptyObject(reqHeader)) {
@@ -658,7 +760,14 @@ function SpotifyPlaylist() {
             completeHeader = {};
         }
         completeHeader["Authorization"] = "Bearer " + authToken;
-        util.webRequest(dest, reqMethod, completeHeader, reqBody, respFunc);
+        let completeBody;
+        if (!util.emptyObject(reqBody)) {
+            completeHeader = reqBody;
+        } else {
+            completeHeader = {};
+        }
+        completeBody = JSON.stringify(completeBody);
+        util.webRequest(dest, reqMethod, completeHeader, completeBody, respFunc);
     }
 }
 
