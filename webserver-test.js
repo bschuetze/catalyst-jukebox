@@ -523,7 +523,8 @@ function SpotifyPlaylist() {
 
     this.initPlaylist = function() {
         // Get playlists
-        this.getPlaylists(true);
+        return new
+        this.getPlaylists(true).then(this.initPlaylistCallback);
     }
 
     this.initPlaylistCallback = function() {
@@ -554,17 +555,22 @@ function SpotifyPlaylist() {
         // Get the total number of playlists a user has
         // Require to store 'this' as it changes inside the fetch call
         let self = this;
+        
+        return new Promise(function() {
 
-        this.spotifyRequest(apiURL + "me/playlists?limit=0", "GET", {}, {}, function(data) {
-            if (!util.emptyObject(data) && data.hasOwnProperty("total")) {
-                self.totalPlaylists = data["total"];
-                if (callback != null && callback) {
-                    self.loadPlaylists(self.initPlaylistCallback);
-                } else {
+            this.spotifyRequest(apiURL + "me/playlists?limit=0", "GET", {}, {}, function (data) {
+                if (!util.emptyObject(data) && data.hasOwnProperty("total")) {
+                    self.totalPlaylists = data["total"];
+                    // if (callback != null && callback) {
+                    //     self.loadPlaylists(self.initPlaylistCallback);
+                    // } else {
+                    //     self.loadPlaylists();
+                    // }
                     self.loadPlaylists();
                 }
-            }
+            });
         });
+        
     }
 
     this.loadPlaylists = function() {
