@@ -229,8 +229,11 @@ function handler(req, res) { //create server (request, response)
                             case "currently_playing":
                                 spotifyHandler.currentlyPlaying();
                                 break;
-                            case "get_playlists":
+                            case "init_playlist":
                                 spotifyHandler.initPlaylist();
+                                break;
+                            case "get_playlist":
+                                spotifyHandler.getPlaylists();
                                 break;
                         }
                     }
@@ -523,7 +526,6 @@ function SpotifyPlaylist() {
 
     this.initPlaylist = function() {
         // Get playlists
-        return new
         this.getPlaylists(true).then(this.initPlaylistCallback);
     }
 
