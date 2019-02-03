@@ -577,12 +577,12 @@ function SpotifyPlaylist() {
                         console.log("Error when trying to create new playlist:");
                         console.log(data);
                     } else {
-                        if (data.hasOwnProperty["uri"]) {
+                        if (data.hasOwnProperty("uri") {
                             self.playlistURI = data["uri"];
                             console.log("Catalyst Jukebox playlist created, uri: " + self.playlistURI);
                         } else {
                             console.log("No error, but playlist data is not present")
-                            console.log(data)
+                            console.log(data);
                         }
                     }
                 }
