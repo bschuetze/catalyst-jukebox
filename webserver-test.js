@@ -37,7 +37,7 @@ var authCodeLoaded = false;
 var authorized = false;
 var authCode = "";
 var redirectURI = "redirect_uri=http://" + ip.address() + ":" + port + "/login";
-var scope = "scope=user-read-playback-state user-modify-playback-state playlist-read-private user-read-recently-played user-read-currently-playing";
+var scope = "scope=user-read-playback-state user-modify-playback-state playlist-modify-public playlist-modify-private playlist-read-private user-read-recently-played user-read-currently-playing";
 var responseType = "code";
 const state = "state=" + crypto.randomBytes(8).toString("hex"); // Generate random 16 char hex string
 var authTimeOut;
