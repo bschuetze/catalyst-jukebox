@@ -526,14 +526,14 @@ function SpotifyPlaylist() {
 
         // Get the total number of playlists a user has
         this.spotifyRequest(apiURL + "me/playlists?limit=0", "GET", {}, {}, function() {
-            if (!emptyObject(data) && data.hasOwnProperty("total")) {
+            if (!util.emptyObject(data) && data.hasOwnProperty("total")) {
                 total = data["total"];
             }
         });
 
         while (offset < total) {
             this.spotifyRequest(apiURL + "me/playlists?limit=" + limit + "&offset=" + offset, "GET", {}, {}, function (data) {
-                if (!emptyObject(data) && data.hasOwnProperty("items")) {
+                if (!util.emptyObject(data) && data.hasOwnProperty("items")) {
                     for (let i = 0; i < data["items"].length; i++) {
                         playlists.push(data["items"][i]);
                     }
