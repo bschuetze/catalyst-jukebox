@@ -209,8 +209,32 @@ function handler(req, res) { //create server (request, response)
         if (req.method == "POST") {
             console.log("POST Request");
             if (loc.pathname == "/spotifyControl") {
-                spotifyHandler.currentlyPlaying();
                 console.log("Spotify Request");
+                // Code originally from: https://stackoverflow.com/questions/4295782/how-to-process-post-data-in-node-js
+                // BEGIN SNIPPET
+                let body = "";
+                let bodyJSON = {};
+                req.on("data", function (data) {
+                    if (body.length > 1e6) {
+                        // Request is coming with large amounts of data, not a good idea to continue to parse it
+                        request.connection.destroy();
+                    }
+                    body += data;
+                }); // END SNIPPET
+                req.on("end", function () {
+                    bodyJSON = JSON.parse(body);
+                    if (!util.emptyObject(bodyJSON) && bodyJSON.hasOwnProperty("method")) {
+                        switch(bodyJSON["method"]) {
+                            case "currently_playing":
+                                spotifyHandler.currentlyPlaying();
+                                break;
+                            case "get_playlists":
+                                spotifyHandler.getPlaylists();
+                                break;
+                        }
+                    }
+                });
+
                 res.writeHead(200, { 'Content-Type': 'text/html' });
                 return res.end("Request successful");
             } else if (loc.pathname == "/usbUpdate") {
@@ -489,6 +513,11 @@ function SpotifyPlaylist() {
     }
 
     this.initPlaylist = function() {
+        // Get playlists
+        this.getPlaylists();
+    }
+
+    this.getPlaylists = function() {
         // Get playlists
         this.spotifyRequest(apiURL + "me/playlists?limit=50", "GET", {}, {}, function(data) {
             console.log(data);
