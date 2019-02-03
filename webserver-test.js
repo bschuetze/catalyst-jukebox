@@ -597,9 +597,10 @@ function SpotifyPlaylist() {
         // Require to store 'this' as it changes inside the fetch call
         let self = this;
 
-        self.spotifyRequest(apiURL + "me/playlists?limit=0", "GET", {}, {}, function (data) {
+        this.spotifyRequest(apiURL + "me/playlists?limit=0", "GET", {}, {}, function (data) {
             if (!util.emptyObject(data) && data.hasOwnProperty("total")) {
                 self.totalPlaylists = data["total"];
+                self.playlistOffset = data["total"] - self.playlists.length;
                 self.loadPlaylists(callback);
             }
         });
@@ -608,7 +609,10 @@ function SpotifyPlaylist() {
 
     this.loadPlaylists = function (callback) {
 
-        if (this.playlistOffset < this.totalPlaylists) {
+        if (this.playlistOffset > 0) {
+
+            // Set up playlist offset
+            this.playlistOffset = max(this.playlistOffset - this.playlistLimit, 0);
 
             // Require to store 'this' as it changes inside the fetch call
             let self = this;
@@ -619,15 +623,12 @@ function SpotifyPlaylist() {
                         self.playlists.push(data["items"][i]);
                     }
 
-                    // Add amount parsed to total / offset
-                    self.playlistOffset = self.playlistOffset + data["items"].length;
-
                     // Recursively call function
                     self.loadPlaylists(callback);
                 }
             });
         } else {
-            if (this.playlistOffset != this.totalPlaylists || this.playlists.length != this.totalPlaylists) {
+            if (this.playlistOffset != 0 || this.playlists.length != this.totalPlaylists) {
                 // A playlist has been deleted, rebuild list
                 console.log("A playlist has been deleted, rebuilding list...")
                 this.playlists = [];
