@@ -519,9 +519,33 @@ function SpotifyPlaylist() {
 
     this.getPlaylists = function() {
         // Get playlists
-        this.spotifyRequest(apiURL + "me/playlists?limit=50", "GET", {}, {}, function(data) {
-            console.log(data);
+        let playlists = [];
+        let limit = 50;
+        let offset = 0;
+        let total = 0;
+
+        // Get the total number of playlists a user has
+        this.spotifyRequest(apiURL + "me/playlists?limit=0", "GET", {}, {}, function() {
+            if (!emptyObject(data) && data.hasOwnProperty("total")) {
+                total = data["total"];
+            }
         });
+
+        while (offset < total) {
+            this.spotifyRequest(apiURL + "me/playlists?limit=" + limit + "&offset=" + offset, "GET", {}, {}, function (data) {
+                if (!emptyObject(data) && data.hasOwnProperty("items")) {
+                    for (let i = 0; i < data["items"].length; i++) {
+                        playlists.push(data["items"][i]);
+                    }
+
+                    // Add amount parsed to total / offset
+                    offset = offset + data["items"].length;
+                }
+            });
+        }
+
+        console.log(playlists);
+        console.log(playlists.length);
     }
 
     this.addSong = function(songURI) {
