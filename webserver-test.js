@@ -508,6 +508,7 @@ function SpotifyPlaylist() {
     this.getUserID = function() {
         this.spotifyRequest(apiURL + "me", "GET", {}, {}, function(data) {
             if (!util.emptyObject(data) && data.hasOwnProperty("id")) {
+                console.log("Setting user ID: " + data["id"]);
                 userID = data["id"];
             }
         });
@@ -566,7 +567,7 @@ function SpotifyPlaylist() {
             // Require to store 'this' as it changes inside the fetch call
             let self = this;
 
-            this.spotifyRequest(apiURL + "users/me/playlists", "POST", {"Content-Type": "application/json"}, makePlaylistBody, function(data) {
+            this.spotifyRequest(apiURL + "users/" + userID + "/playlists", "POST", {"Content-Type": "application/json"}, makePlaylistBody, function(data) {
                 if (!util.emptyObject(data)) {
                     if (data.hasOwnProperty("error")) {
                         console.log("Error when trying to create new playlist:");
