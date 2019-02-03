@@ -575,7 +575,12 @@ function SpotifyPlaylist() {
     
     this.setDevice = function() {
         console.log("Setting playback device to: " + deviceName);
-        this.spotifyRequest(apiURL + "me/player", "PUT", {}, {"device_ids": [this.deviceID]});
+        // Require to store 'this' as it changes inside the fetch call
+        let self = this;
+        this.spotifyRequest(apiURL + "me/player", "PUT", {}, {"device_ids": [this.deviceID]}, function() {
+            self.setRepeat();
+            self.setShuffle();
+        });
     }
 
     this.songRequest = function() {
@@ -587,7 +592,7 @@ function SpotifyPlaylist() {
         this.spotifyRequest(apiURL + "me/player/shuffle?state=" + this.repeat, "PUT");
     }
 
-    this.removeShuffle = function() {
+    this.setShuffle = function() {
         console.log("Setting shuffle to " + this.shuffle);
         this.spotifyRequest(apiURL + "me/player/shuffle?state=" + this.shuffle, "PUT");
     }
