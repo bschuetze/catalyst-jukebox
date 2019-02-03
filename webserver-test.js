@@ -612,7 +612,7 @@ function SpotifyPlaylist() {
         if (this.playlistOffset > 0) {
 
             // Set up playlist offset
-            this.playlistOffset = max(this.playlistOffset - this.playlistLimit, 0);
+            this.playlistOffset = Math.max(this.playlistOffset - this.playlistLimit, 0);
 
             // Require to store 'this' as it changes inside the fetch call
             let self = this;
