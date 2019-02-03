@@ -763,13 +763,14 @@ function SpotifyPlaylist() {
             completeHeader = {};
         }
         completeHeader["Authorization"] = "Bearer " + authToken;
+
         let completeBody;
+
         if (!util.emptyObject(reqBody)) {
             completeBody = reqBody;
-        } else {
-            completeBody = {};
-        }
-        completeBody = JSON.stringify(completeBody);
+            completeBody = JSON.stringify(completeBody);
+        } 
+    
         util.webRequest(dest, reqMethod, completeHeader, completeBody, respFunc);
     }
 }
