@@ -513,6 +513,8 @@ function SpotifyPlaylist() {
     this.playlistURI = "";
     this.deviceID = "";
 
+    this.getDeviceTimeout;
+
     this.repeat = "off";       // track | context | off.
     this.shuffle = false; // true | false
 
@@ -559,7 +561,7 @@ function SpotifyPlaylist() {
                     }
                     if (self.deviceID == "") {
                         console.log("Unable to find device with name: " + deviceName);
-                        // Retry timeout?
+                        self.getDeviceTimeout = setTimeout(self.getDeviceID, 5000);
                     } else {
                         self.setDevice();
                     }
@@ -573,11 +575,7 @@ function SpotifyPlaylist() {
     
     this.setDevice = function() {
         console.log("Setting playback device to: " + deviceName);
-        this.spotifyRequest(apiURL + "me/player", "PUT", {}, {"device_ids": [this.deviceID]}, function (data) {
-            if (!util.emptyObject(data)) {
-                console.log(data);
-            }
-        });
+        this.spotifyRequest(apiURL + "me/player", "PUT", {}, {"device_ids": [this.deviceID]});
     }
 
     this.songRequest = function() {
@@ -767,8 +765,7 @@ function SpotifyPlaylist() {
         let completeBody;
 
         if (!util.emptyObject(reqBody)) {
-            completeBody = reqBody;
-            completeBody = JSON.stringify(completeBody);
+            completeBody = JSON.stringify(reqBody);
         } 
     
         util.webRequest(dest, reqMethod, completeHeader, completeBody, respFunc);
