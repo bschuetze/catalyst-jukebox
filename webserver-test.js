@@ -530,7 +530,6 @@ function SpotifyPlaylist() {
     }
 
     this.initPlaylistCallback = function() {
-        console.log("callback"); //DEBUGGING, REMOVE
         let found = false;
         for (let i = 0; i < this.playlists.length; i++) {
             if (this.playlists[i]["name"] == "Catalyst Jukebox Playlist") {
@@ -540,6 +539,7 @@ function SpotifyPlaylist() {
                 break;
             }
         }
+        console.log(found);
         if (found) {
             // Found playlist, no need to make
         } else {
@@ -549,7 +549,9 @@ function SpotifyPlaylist() {
             makePlaylistBody["description"] = "Playlist for the Catalyst Jukebox application";
             makePlaylistBody["public"] = publicPlaylist;
 
-            this.spotifyRequest(apiURL + "playlists", "POST", {"Content-Type": "application/json"}, makePlaylistBody);
+            this.spotifyRequest(apiURL + "playlists", "POST", {"Content-Type": "application/json"}, makePlaylistBody, function(data) {
+                console.log(data);
+            });
         }
     }
 
@@ -589,7 +591,6 @@ function SpotifyPlaylist() {
             });
         } else {
             console.log("All playlists parsed, total: " + this.playlists.length);
-            console.log(callback);
             if (callback != null && callback) {
                 this.initPlaylistCallback();
             }
