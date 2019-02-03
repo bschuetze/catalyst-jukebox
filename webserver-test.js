@@ -627,6 +627,7 @@ function SpotifyPlaylist() {
         } else {
             if (this.playlistOffset != this.totalPlaylists || this.playlists.length != this.totalPlaylists) {
                 // A playlist has been deleted, rebuild list
+                console.log("A playlist has been deleted, rebuilding list...")
                 this.playlists = [];
                 this.playlistOffset = 0;
                 this.getPlaylists(callback);
