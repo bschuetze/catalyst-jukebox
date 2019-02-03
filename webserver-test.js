@@ -489,7 +489,10 @@ function SpotifyPlaylist() {
     }
 
     this.initPlaylist = function() {
-
+        // Get playlists
+        this.spotifyRequest(apiURL + "me/playlists?limit=50", "GET", {}, {}, function(data) {
+            console.log(data);
+        });
     }
 
     this.addSong = function(songURI) {
