@@ -596,7 +596,6 @@ function SpotifyPlaylist() {
                 }
             });
         } else {
-            console.log(this.playlists);
             console.log("All playlists parsed, total: " + this.playlists.length);
         }
     }
