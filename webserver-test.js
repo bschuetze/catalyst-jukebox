@@ -552,7 +552,7 @@ function SpotifyPlaylist() {
             console.log(this.playlists[i]["name"]);
             if (this.playlists[i]["name"] == "Catalyst Jukebox Playlist") {
                 console.log("Found playlist");
-                this.playlistURI = playlists[i]["uri"];
+                this.playlistURI = this.playlists[i]["uri"];
                 found = true;
                 break;
             }
