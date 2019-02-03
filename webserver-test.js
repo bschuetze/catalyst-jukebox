@@ -570,6 +570,7 @@ function SpotifyPlaylist() {
                     // }
                     self.loadPlaylists();
                 }
+                resolve();
             });
         });
         
