@@ -589,7 +589,7 @@ function SpotifyPlaylist() {
 
     this.setRepeat = function() {
         console.log("Setting repeat to " + this.repeat);
-        this.spotifyRequest(apiURL + "me/player/shuffle?state=" + this.repeat, "PUT");
+        this.spotifyRequest(apiURL + "me/player/repeat?state=" + this.repeat, "PUT");
     }
 
     this.setShuffle = function() {
