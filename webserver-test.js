@@ -565,8 +565,9 @@ function SpotifyPlaylist() {
                     }
                     if (self.deviceID == "") {
                         console.log("Unable to find device with name: " + deviceName);
-                        self.getDeviceTimeout = setTimeout(self.getDeviceID, 5000);
+                        self.deviceTimeout(5000);
                     } else {
+                        clearTimeout(self.getDeviceTimeout);
                         self.setDevice();
                     }
                 } else {
@@ -576,6 +577,10 @@ function SpotifyPlaylist() {
             }
         });
     }    
+
+    this.deviceTimeout = function(duration) {
+        this.getDeviceTimeout = setTimeout(this.getDeviceID, duration);
+    };
     
     this.setDevice = function() {
         console.log("Setting playback device to: " + deviceName);
