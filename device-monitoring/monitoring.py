@@ -117,8 +117,8 @@ def usb_event(action, device):
                     if (action == "add"):
                         tempPager = Pager(usbPort, device.get("ID_MODEL"))
                         pagers.append(tempPager)
-                            print("Pager " + tempPager.modelID +
-                                  " connected at usb port " + tempPager.port)
+                        print("Pager " + tempPager.modelID +
+                                " connected at usb port " + tempPager.port)
                 else:
                     if (action == "add"):
                         if (usbPort not in connectedDevices):
