@@ -508,6 +508,8 @@ function Song(user, uri) {
     this.uri = uri;
 }
 
+// Yes these next 2 functions are weird but due to scoping it needs to be outside of the 
+// spotify object to work
 function setSpotifyTimeout(duration) {
     getDeviceTimeout = setTimeout(callSpotifyDevice, duration);
 }
@@ -574,7 +576,7 @@ function SpotifyPlaylist() {
                     }
                     if (self.deviceID == "") {
                         console.log("Unable to find device with name: " + deviceName);
-                        setSpotifyTimeout(5000);
+                        setSpotifyTimeout(250);
                     } else {
                         clearTimeout(getDeviceTimeout);
                         self.setDevice();
