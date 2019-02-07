@@ -681,7 +681,7 @@ function SpotifyPlaylist() {
     }
 
     this.playlistLength = function() {
-        this.spotifyRequest(apiURL + "playlists/" + this.playlistID + "/tracks?fields=total&limit=0", "GET", {}, {}, function(data) {
+        this.spotifyRequest(apiURL + "playlists/" + this.playlistID + "/tracks?fields=total&limit=1", "GET", {}, {}, function(data) {
             console.log(data);
         });
     }
