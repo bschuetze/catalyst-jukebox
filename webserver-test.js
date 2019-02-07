@@ -636,7 +636,7 @@ function SpotifyPlaylist() {
     // Takes in a list of song objects:
     // [{"uri": "xxxx:xxx:xxx"}, ...]
     // This currently deleted all occurences of a song, may need to edit?
-    this.removeSongs = function(songs) {
+    this.removeSongs = function(songs, callback) {
         this.spotifyRequest(apiURL + "playlists/" + this.playlistID + "/tracks", "DELETE", 
         {"Content-Type": "application/json"}, {"tracks": songs}, function(data) {
             if (!util.emptyObject(data)) {
@@ -645,6 +645,9 @@ function SpotifyPlaylist() {
                     console.log(data);
                 } else {
                     console.log("Successfully removed: " + songs + " from playlist");
+                    if (callback != null && callback) {
+                        self.setupPlaylist();
+                    }
                 }
             }
         });
@@ -675,18 +678,30 @@ function SpotifyPlaylist() {
 
     this.setupPlaylist = function() {
         // Check if playlist is empty
+        if (this.playlistLength() > 0) {
+            // Playlist not empty
+            this.emptyPlaylist(true);
+            return;
+        }
         // if not, empty it
         // add default song
         // play it
     }
 
     this.playlistLength = function() {
-        this.spotifyRequest(apiURL + "playlists/" + this.playlistID + "/tracks?fields=total&limit=1", "GET", {}, {}, function(data) {
-            console.log(data);
+        this.spotifyRequest(apiURL + "playlists/" + this.playlistID + "/tracks?fields=total", "GET", {}, {}, function(data) {
+            if (!util.emptyObject(data) && data.hasOwnProperty("total")) {
+                console.log("Playlist has " + data["total"] + " songs total");
+                return data["total"];
+            } else {
+                console.log("Total value not present in playlist length response");
+                console.log(data);
+                return -1;
+            }
         });
     }
 
-    this.emptyPlaylist = function() {
+    this.emptyPlaylist = function(callback) {
         if (!this.configured) {
             console.log("Spotify playlist has not yet been configured, aborting clear");
             return;
@@ -696,7 +711,13 @@ function SpotifyPlaylist() {
         let self = this;
 
         this.spotifyRequest(apiURL + "playlists/" + this.playlistURI + "/tracks", "GET", {}, {}, function(data) {
-
+            if (!util.emptyObject(data) && data.hasOwnProperty("items")) {
+                let playlistTracks = [];
+                for (let i = 0; i < data["items"].length; i++) {
+                    playlistTracks.push({"uri": data["items"][i]["track"]["uri"]});
+                }
+                self.removeSongs(playlistTracks, callback);
+            }
         });
     }
 
@@ -719,6 +740,8 @@ function SpotifyPlaylist() {
         if (found) {
             // Found playlist, no need to make
             console.log("Found existing Catalyst Jukebox playlist, uri: " + this.playlistURI + ", id: " + this.playlistID);
+            // Set up playlist for use
+            this.setupPlaylist();
         } else {
             console.log("Catalyst Jukebox playlist doesn't exist, creating...");
             // Need to make playlist
@@ -741,6 +764,9 @@ function SpotifyPlaylist() {
                             self.playlistID = data["id"];
                             console.log("Catalyst Jukebox playlist created, uri: " + self.playlistURI + 
                                         ", id: " + self.playlistID);
+
+                            // Set up playlist for use
+                            self.setupPlaylist();
                         } else {
                             console.log("No error, but playlist data is not present")
                             console.log(data);
