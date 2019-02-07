@@ -243,6 +243,9 @@ function handler(req, res) { //create server (request, response)
                             case "playlist_length":
                                 spotifyHandler.getPlaylistLength();
                                 break;
+                            case "setup_playlist":
+                                spotifyHandler.setupPlaylist();
+                                break;
                         }
                     }
                 });
@@ -680,6 +683,7 @@ function SpotifyPlaylist() {
 
     this.setupPlaylist = function() {
         // Check if playlist is empty
+        console.log(this.playlistLength);
         if (this.playlistLength == -2) {
             this.getPlaylistLength(true);
             return;
