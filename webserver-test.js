@@ -241,7 +241,7 @@ function handler(req, res) { //create server (request, response)
                                 spotifyHandler.getPlaylists();
                                 break;
                             case "playlist_length":
-                                spotifyHandler.playlistLength();
+                                spotifyHandler.getPlaylistLength();
                                 break;
                         }
                     }
@@ -528,6 +528,7 @@ function SpotifyPlaylist() {
     this.playlistURI = "";
     this.playlistID = "";
     this.deviceID = "";
+    this.playlistLength = -2;
 
     // this.getDeviceTimeout;
 
@@ -637,6 +638,9 @@ function SpotifyPlaylist() {
     // [{"uri": "xxxx:xxx:xxx"}, ...]
     // This currently deleted all occurences of a song, may need to edit?
     this.removeSongs = function(songs, callback) {
+        // Require to store 'this' as it changes inside the fetch call
+        let self = this;
+
         this.spotifyRequest(apiURL + "playlists/" + this.playlistID + "/tracks", "DELETE", 
         {"Content-Type": "application/json"}, {"tracks": songs}, function(data) {
             if (!util.emptyObject(data)) {
@@ -645,9 +649,7 @@ function SpotifyPlaylist() {
                     console.log(data);
                 } else {
                     console.log("Successfully removed: " + songs + " from playlist");
-                    if (callback != null && callback) {
-                        self.setupPlaylist();
-                    }
+                    self.getPlaylistLength(callback);
                 }
             }
         });
@@ -678,28 +680,33 @@ function SpotifyPlaylist() {
 
     this.setupPlaylist = function() {
         // Check if playlist is empty
-        console.log(this.playlistLength() > 0);
-        console.log(this.playlistLength());
-
-        if (this.playlistLength() > 0) {
+        if (this.playlistLength == -2) {
+            this.getPlaylistLength(true);
+            return;
+        } else if (this.playlistLength > 0) {
             // Playlist not empty
             this.emptyPlaylist(true);
             return;
         }
-        // if not, empty it
         // add default song
         // play it
     }
 
-    this.playlistLength = function() {
+    this.getPlaylistLength = function(callback) {
+        // Require to store 'this' as it changes inside the fetch call
+        let self = this;
+
         this.spotifyRequest(apiURL + "playlists/" + this.playlistID + "/tracks?fields=total", "GET", {}, {}, function(data) {
             if (!util.emptyObject(data) && data.hasOwnProperty("total")) {
                 console.log("Playlist has " + data["total"] + " songs total");
-                return data["total"];
+                self.playlistLength = data["total"];
             } else {
                 console.log("Total value not present in playlist length response");
                 console.log(data);
-                return -1;
+                self.playlistLength = -1
+            }
+            if (callback != null && callback) {
+                self.setupPlaylist();
             }
         });
     }
