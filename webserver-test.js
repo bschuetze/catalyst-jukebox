@@ -507,6 +507,10 @@ function Song(user, uri) {
     this.uri = uri;
 }
 
+function setSpotifyTimeout(duration) {
+    spotifyHandler.getDeviceTimeout = setTimeout(spotifyHandler.getDeviceID, duration);
+}
+
 function SpotifyPlaylist() {
 
     // General vars
@@ -565,7 +569,7 @@ function SpotifyPlaylist() {
                     }
                     if (self.deviceID == "") {
                         console.log("Unable to find device with name: " + deviceName);
-                        self.deviceTimeout(5000);
+                        setSpotifyTimeout(5000);
                     } else {
                         clearTimeout(self.getDeviceTimeout);
                         self.setDevice();
@@ -578,9 +582,7 @@ function SpotifyPlaylist() {
         });
     }    
 
-    this.deviceTimeout = function(duration) {
-        this.getDeviceTimeout = setTimeout(this.getDeviceID, duration);
-    };
+    
     
     this.setDevice = function() {
         console.log("Setting playback device to: " + deviceName);
