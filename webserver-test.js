@@ -678,6 +678,9 @@ function SpotifyPlaylist() {
 
     this.setupPlaylist = function() {
         // Check if playlist is empty
+        console.log(this.playlistLength() > 0);
+        console.log(this.playlistLength());
+
         if (this.playlistLength() > 0) {
             // Playlist not empty
             this.emptyPlaylist(true);
