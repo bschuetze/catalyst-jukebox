@@ -502,14 +502,25 @@ function UsbDevice() {
 
 function User() {
     this.id = crypto.randomBytes(8).toString("hex"); // Generate random 16 char hex string for user ID
-    this.requests = [];
-    this.usb = new UsbDevice();
     
+    this.getID = function() {
+        return this.id;
+    }
 }
 
-function Song(user, uri) {
+function Song(user, uri, usb) {
     this.owner = user;
     this.uri = uri;
+    this.usb = usb;
+}
+
+function addToQueue(songs) {
+    //
+    let usr = new User();
+
+    for (let i = 0; i < songs.length; i++) {
+        
+    }
 }
 
 // Yes these next 2 functions are weird but due to scoping it needs to be outside of the 

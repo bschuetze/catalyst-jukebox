@@ -85,9 +85,9 @@ function buttonPress() {
         trackJSON["tracks"] = correctTracks;
         webRequest(destinationURL, "POST", { "Content-Type": "application/json" }, trackJSON, function(data) {
             if (data == "Tracks added to queue") {
-
+                state = 1;
             } else {
-
+                state = 2;
             }
         });
     }
