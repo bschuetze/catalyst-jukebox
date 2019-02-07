@@ -239,6 +239,9 @@ function handler(req, res) { //create server (request, response)
                             case "get_playlist":
                                 spotifyHandler.getPlaylists();
                                 break;
+                            case "playlist_length":
+                                spotifyHandler.playlistLength();
+                                break;
                         }
                     }
                 });
@@ -660,6 +663,12 @@ function SpotifyPlaylist() {
         // if not, empty it
         // add default song
         // play it
+    }
+
+    this.playlistLength = function() {
+        this.spotifyRequest(apiURL + "playlists/" + this.playlistURI + "/tracks?fields=total&limit=0", "GET", {}, {}, function(data) {
+            console.log(data);
+        });
     }
 
     this.emptyPlaylist = function() {
