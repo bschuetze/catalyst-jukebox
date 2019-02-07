@@ -526,6 +526,7 @@ function SpotifyPlaylist() {
     this.songsBeforeRepeat = 10;
     this.queuedSongs = [];
     this.playlistURI = "";
+    this.playlistID = "";
     this.deviceID = "";
 
     // this.getDeviceTimeout;
@@ -618,7 +619,7 @@ function SpotifyPlaylist() {
     // Takes a list of song URIs
     // Input: ["xxx:xxx:xxx", ...]
     this.addSongs = function (songURIs) {
-        this.spotifyRequest(apiURL + "playlists/" + this.playlistURI + "/tracks", "POST",
+        this.spotifyRequest(apiURL + "playlists/" + this.playlistID + "/tracks", "POST",
                             {"Content-Type": "application/json" }, {"uris": songs}, 
                             function (data) {
             if (!util.emptyObject(data)) {
@@ -636,7 +637,7 @@ function SpotifyPlaylist() {
     // [{"uri": "xxxx:xxx:xxx"}, ...]
     // This currently deleted all occurences of a song, may need to edit?
     this.removeSongs = function(songs) {
-        this.spotifyRequest(apiURL + "playlists/" + this.playlistURI + "/tracks", "DELETE", 
+        this.spotifyRequest(apiURL + "playlists/" + this.playlistID + "/tracks", "DELETE", 
         {"Content-Type": "application/json"}, {"tracks": songs}, function(data) {
             if (!util.emptyObject(data)) {
                 if (data.hasOwnProperty("error")) {
@@ -680,7 +681,7 @@ function SpotifyPlaylist() {
     }
 
     this.playlistLength = function() {
-        this.spotifyRequest(apiURL + "playlists/" + this.playlistURI + "/tracks?fields=total&limit=0", "GET", {}, {}, function(data) {
+        this.spotifyRequest(apiURL + "playlists/" + this.playlistID + "/tracks?fields=total&limit=0", "GET", {}, {}, function(data) {
             console.log(data);
         });
     }
@@ -710,13 +711,14 @@ function SpotifyPlaylist() {
             if (this.playlists[i]["name"] == "Catalyst Jukebox Playlist") {
                 console.log("Found playlist");
                 this.playlistURI = this.playlists[i]["uri"];
+                this.playlistID = this.playlists[i]["id"];
                 found = true;
                 break;
             }
         }
         if (found) {
             // Found playlist, no need to make
-            console.log("Found existing Catalyst Jukebox playlist, uri: " + this.playlistURI);
+            console.log("Found existing Catalyst Jukebox playlist, uri: " + this.playlistURI + ", id: " + this.playlistID);
         } else {
             console.log("Catalyst Jukebox playlist doesn't exist, creating...");
             // Need to make playlist
@@ -736,7 +738,9 @@ function SpotifyPlaylist() {
                     } else {
                         if (data.hasOwnProperty("uri")) {
                             self.playlistURI = data["uri"];
-                            console.log("Catalyst Jukebox playlist created, uri: " + self.playlistURI);
+                            self.playlistID = data["id"];
+                            console.log("Catalyst Jukebox playlist created, uri: " + self.playlistURI + 
+                                        ", id: " + self.playlistID);
                         } else {
                             console.log("No error, but playlist data is not present")
                             console.log(data);
