@@ -27,16 +27,28 @@ def get_ip():
         s.close()
     return IP
 
+class Pager:
+    def __init__(self, port, id):
+        self.port = port
+        self.modelID = id
+        self.inUse = False
+        self.connected = True
+
 
 # Port that node is listening on
 NODE_PORT = 6474
 # Adding a blacklist for usb device models (device.get('ID_MODEL'))))
 # Add your USB hub here if using one or any other devices you want to ignore
 USB_BLACKLIST = ["USB_2.0_Hub__Safe_"]
+# Add pagers to distinguish between them and phones
+# Add other names here if they differ
+USB_PAGERS = ["FT231X_USB_UART"]
 # Pluggable ports start at 1.2
 USB_PORT_START = 12
 # List of connected devices
 connectedDevices = {}
+# List of all Pagers
+pagers = []
 
 # Pyudev vars
 context = pyudev.Context()
@@ -91,44 +103,95 @@ def usb_event(action, device):
     print(device.device_path)
     print(device.get("ID_PATH"))
     print(device.get("ID_MODEL"))
-    if (device.get("ID_PATH") is not None):
-        devicePathFull = device.get("ID_PATH")
-        pathSplit = devicePathFull.split(":")
-        # print(pathSplit[len(pathSplit) - 1])
+
+    if (device.device_path is not None and device.get("ID_MODEL") is not none):
+        devicePathFull = device.device_path
+        pathSplit = devicePathFull.split("-")
+
         try:
             usbPort = pathSplit[len(pathSplit) - 1]
             usbPort = usbPort.replace(".", "")
 
             if ((int(usbPort) >= USB_PORT_START) and (device.get('ID_MODEL') not in USB_BLACKLIST)):
-
-                if (action == "add"):
-                    if (usbPort not in connectedDevices):
-                        connectedDevices[usbPort] = device.get("ID_MODEL")
-                        print("Monitoring " + device.get('ID_MODEL') +
-                              " at usb port " + usbPort)
-                        # Send info to server
-                        send_usb(action, usbPort, device.get("ID_MODEL"))
-                    else:
-                        print(device.get('ID_MODEL') + " connected at usb port " + usbPort +
-                              " but port already contains " + connectedDevices[usbPort])
-                        ## NEED TO HANDLE THIS WITH A MANUAL CHECK
-                elif (action == "remove"):
-                    if (usbPort in connectedDevices):
-                        connectedDevices.pop(usbPort)
-                        print("Disconnecting " + device.get('ID_MODEL') +
-                              " from usb port " + usbPort)
-                        send_usb(action, usbPort, device.get("ID_MODEL"))
-                    else:
-                        print(device.get('ID_MODEL') + " disconnecting from usb port " + usbPort +
-                              " but port is already empty")
-                        ## NEED TO HANDLE THIS WITH A MANUAL CHECK
-
+                if (device.get("ID_MODEL") in USB_PAGERS):
+                    if (action == "add"):
+                        tempPager = Pager(usbPort, device.get("ID_MODEL")
+                        pagers.append(tempPager)
+                            print("Pager " + tempPager.modelID +
+                                  " connected at usb port " + tempPager.port)
                 else:
-                    print("Non add/remove action detected")
-                    print("Action: '" + action + "' applied to " +
-                          device.get('ID_MODEL') + " from usb port " + usbPort)
+                    if (action == "add"):
+                        if (usbPort not in connectedDevices):
+                            connectedDevices[usbPort] = device.get("ID_MODEL")
+                            print("Monitoring " + device.get("ID_MODEL") +
+                                " at usb port " + usbPort)
+                            # Send info to server
+                            send_usb(action, usbPort, device.get("ID_MODEL"))
+                        else:
+                            print(device.get('ID_MODEL') + " connected at usb port " + usbPort +
+                                " but port already contains " + connectedDevices[usbPort])
+                            ## NEED TO HANDLE THIS WITH A MANUAL CHECK
+                    elif (action == "remove"):
+                        if (usbPort in connectedDevices):
+                            connectedDevices.pop(usbPort)
+                            print("Disconnecting " + device.get('ID_MODEL') +
+                                " from usb port " + usbPort)
+                            send_usb(action, usbPort, device.get("ID_MODEL"))
+                        else:
+                            print(device.get('ID_MODEL') + " disconnecting from usb port " + usbPort +
+                                " but port is already empty")
+                            ## NEED TO HANDLE THIS WITH A MANUAL CHECK
 
-                print("Connected devices: " + str(connectedDevices))
+                    else:
+                        print("Non add/remove action detected")
+                        print("Action: '" + action + "' applied to " +
+                            device.get('ID_MODEL') + " from usb port " + usbPort)
+
+                    print("Connected devices: " + str(connectedDevices))
+
+        except:
+            print(pathSplit[len(pathSplit) - 1] +
+                " is not a number of the form X.Y or X.Y.Z")
+
+
+    # if (device.get("ID_PATH") is not None):
+    #     devicePathFull = device.get("ID_PATH")
+    #     pathSplit = devicePathFull.split(":")
+    #     # print(pathSplit[len(pathSplit) - 1])
+    #     try:
+    #         usbPort = pathSplit[len(pathSplit) - 1]
+    #         usbPort = usbPort.replace(".", "")
+
+    #         if ((int(usbPort) >= USB_PORT_START) and (device.get('ID_MODEL') not in USB_BLACKLIST)):
+
+    #             if (action == "add"):
+    #                 if (usbPort not in connectedDevices):
+    #                     connectedDevices[usbPort] = device.get("ID_MODEL")
+    #                     print("Monitoring " + device.get('ID_MODEL') +
+    #                           " at usb port " + usbPort)
+    #                     # Send info to server
+    #                     send_usb(action, usbPort, device.get("ID_MODEL"))
+    #                 else:
+    #                     print(device.get('ID_MODEL') + " connected at usb port " + usbPort +
+    #                           " but port already contains " + connectedDevices[usbPort])
+    #                     ## NEED TO HANDLE THIS WITH A MANUAL CHECK
+    #             elif (action == "remove"):
+    #                 if (usbPort in connectedDevices):
+    #                     connectedDevices.pop(usbPort)
+    #                     print("Disconnecting " + device.get('ID_MODEL') +
+    #                           " from usb port " + usbPort)
+    #                     send_usb(action, usbPort, device.get("ID_MODEL"))
+    #                 else:
+    #                     print(device.get('ID_MODEL') + " disconnecting from usb port " + usbPort +
+    #                           " but port is already empty")
+    #                     ## NEED TO HANDLE THIS WITH A MANUAL CHECK
+
+    #             else:
+    #                 print("Non add/remove action detected")
+    #                 print("Action: '" + action + "' applied to " +
+    #                       device.get('ID_MODEL') + " from usb port " + usbPort)
+
+    #             print("Connected devices: " + str(connectedDevices))
 
                 # if (usbPort in occupiedPorts):
                 #     occupiedPorts.remove(usbPort)
@@ -139,9 +202,9 @@ def usb_event(action, device):
                 #     connectedDevices.append({"port": usbPort, "model": device.get("ID_MODEL")})
                 #     print("Monitoring " + device.get('ID_MODEL') + " at usb port " + usbPort)
 
-        except:
-            print(pathSplit[len(pathSplit) - 1] +
-                  " is not a number of the form X.Y or X.Y.Z")
+        # except:
+        #     print(pathSplit[len(pathSplit) - 1] +
+        #           " is not a number of the form X.Y or X.Y.Z")
     # else:
     #     print("USB device path is None type, " + str(device) + " " + action)
 
