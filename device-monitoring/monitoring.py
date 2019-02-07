@@ -88,7 +88,7 @@ def send_usb(act, loc, mod, respFunc=None):
 
 def usb_event(action, device):
     print(action)
-    print(device.get("ID_PATH"))
+    print(device.device_path)
     if (device.get("ID_PATH") is not None):
         devicePathFull = device.get("ID_PATH")
         pathSplit = devicePathFull.split(":")
