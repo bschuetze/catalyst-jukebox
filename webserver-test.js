@@ -646,7 +646,7 @@ function SpotifyPlaylist() {
     this.play = function(context, ix) {
         this.spotifyRequest(apiURL + "me/player/play", "PUT", {}, 
                             {"context_uri": this.playlistURI, "offset": {"position": ix}}, 
-                            function() {
+                            function(data) {
             if (!util.emptyObject(data)) {
                 if (data.hasOwnProperty("error")) {
                     console.log("Something went wrong setting playback");
