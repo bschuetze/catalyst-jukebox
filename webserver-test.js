@@ -724,13 +724,16 @@ function SpotifyPlaylist() {
         // Require to store 'this' as it changes inside the fetch call
         let self = this;
 
-        this.spotifyRequest(apiURL + "playlists/" + this.playlistURI + "/tracks", "GET", {}, {}, function(data) {
+        this.spotifyRequest(apiURL + "playlists/" + this.playlistID + "/tracks", "GET", {}, {}, function(data) {
             if (!util.emptyObject(data) && data.hasOwnProperty("items")) {
                 let playlistTracks = [];
                 for (let i = 0; i < data["items"].length; i++) {
                     playlistTracks.push({"uri": data["items"][i]["track"]["uri"]});
                 }
                 self.removeSongs(playlistTracks, callback);
+            } else {
+                console.log("Error emptying playlist");
+                console.log(data);
             }
         });
     }
