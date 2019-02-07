@@ -104,7 +104,7 @@ def usb_event(action, device):
     print(device.get("ID_PATH"))
     print(device.get("ID_MODEL"))
 
-    if (device.device_path is not None and device.get("ID_MODEL") is not none):
+    if (device.device_path is not None and device.get("ID_MODEL") is not None):
         devicePathFull = device.device_path
         pathSplit = devicePathFull.split("-")
 
