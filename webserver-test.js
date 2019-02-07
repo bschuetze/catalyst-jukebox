@@ -24,6 +24,7 @@ var spotifyHandler = new SpotifyPlaylist();
 const publicPlaylist = true;
 const deviceName = "raspotify (catalyst-jukebox)";
 const defaultSong = "spotify:track:2Z8WuEywRWYTKe1NybPQEW";
+var getDeviceTimeout;
 
 // Auth variables
 const authorizeURL = "https://accounts.spotify.com/authorize";
@@ -508,7 +509,11 @@ function Song(user, uri) {
 }
 
 function setSpotifyTimeout(duration) {
-    spotifyHandler.getDeviceTimeout = setTimeout(spotifyHandler.getDeviceID, duration);
+    getDeviceTimeout = setTimeout(callSpotifyDevice, duration);
+}
+
+function callSpotifyDevice() {
+    spotifyHandler.getDeviceID();
 }
 
 function SpotifyPlaylist() {
@@ -521,7 +526,7 @@ function SpotifyPlaylist() {
     this.playlistURI = "";
     this.deviceID = "";
 
-    this.getDeviceTimeout;
+    // this.getDeviceTimeout;
 
     this.repeat = "off";       // track | context | off.
     this.shuffle = false; // true | false
@@ -571,7 +576,7 @@ function SpotifyPlaylist() {
                         console.log("Unable to find device with name: " + deviceName);
                         setSpotifyTimeout(5000);
                     } else {
-                        clearTimeout(self.getDeviceTimeout);
+                        clearTimeout(getDeviceTimeout);
                         self.setDevice();
                     }
                 } else {
