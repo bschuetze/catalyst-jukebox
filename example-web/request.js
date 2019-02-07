@@ -1,6 +1,7 @@
 var trackURI;
 var button;
 const trackLimit = 3;
+var state = 0;
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
@@ -33,6 +34,16 @@ function setup() {
 
 function draw() {
     noLoop();
+}
+
+function updateState(newState) {
+    state = newState;
+
+    if (state == 1) {
+        // successfully added songs
+    } else if (state == 2) {
+        // unsuccessful at adding songs
+    }
 }
 
 function buttonHover() {
@@ -72,7 +83,13 @@ function buttonPress() {
     if (correctTracks.length > 0) {
         // make request if track data exists and is valid
         trackJSON["tracks"] = correctTracks;
-        webRequest(destinationURL, "POST", { "Content-Type": "application/json" }, trackJSON);
+        webRequest(destinationURL, "POST", { "Content-Type": "application/json" }, trackJSON, function(data) {
+            if (data == "Tracks added to queue") {
+
+            } else {
+
+            }
+        });
     }
 }
 

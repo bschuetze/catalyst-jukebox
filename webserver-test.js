@@ -654,7 +654,6 @@ function SpotifyPlaylist() {
                     console.log(data);
                 } else {
                     console.log("Successfully set playback to context: " + context);
-                    self.getPlaylistLength(callback);
                 }
             }
         });
