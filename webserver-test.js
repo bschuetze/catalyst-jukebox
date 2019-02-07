@@ -304,6 +304,7 @@ function handler(req, res) { //create server (request, response)
 
                     if (bodyJSON.hasOwnProperty("tracks") && bodyJSON["tracks"].length > 0) {
                         console.log("Tracks present in POST");
+                        spotifyHandler.addSongs(bodyJSON["tracks"]);
                         res.writeHead(200, { 'Content-Type': 'text/html' });
                         return res.end("Tracks added to queue");
                     } else {
