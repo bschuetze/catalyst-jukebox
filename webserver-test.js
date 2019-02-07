@@ -622,16 +622,38 @@ function SpotifyPlaylist() {
 
     // Takes a list of song URIs
     // Input: ["xxx:xxx:xxx", ...]
-    this.addSongs = function (songURIs) {
+    this.addSongs = function (songURIs, playSong) {
+        // Require to store 'this' as it changes inside the fetch call
+        let self = this;
+
         this.spotifyRequest(apiURL + "playlists/" + this.playlistID + "/tracks", "POST",
-                            {"Content-Type": "application/json" }, {"uris": songs}, 
+                            {"Content-Type": "application/json" }, {"uris": songURIs}, 
                             function (data) {
             if (!util.emptyObject(data)) {
                 if (data.hasOwnProperty("error")) {
-                    console.log("Something went wrong adding: " + songs + " to playlist");
+                    console.log("Something went wrong adding: " + songURIs + " to playlist");
                     console.log(data);
                 } else {
-                    console.log("Successfully added: " + songs + " to playlist");
+                    console.log("Successfully added: " + songURIs + " to playlist");
+                    if (playSong != null && playSong) {
+                        self.play(self.playlistURI, 0);
+                    }
+                }
+            }
+        });
+    }
+
+    this.play = function(context, ix) {
+        this.spotifyRequest(apiURL + "me/player/play", "PUT", {}, 
+                            {"context_uri": this.playlistURI, "offset": {"position": ix}}, 
+                            function() {
+            if (!util.emptyObject(data)) {
+                if (data.hasOwnProperty("error")) {
+                    console.log("Something went wrong setting playback");
+                    console.log(data);
+                } else {
+                    console.log("Successfully set playback to context: " + context);
+                    self.getPlaylistLength(callback);
                 }
             }
         });
@@ -692,6 +714,7 @@ function SpotifyPlaylist() {
             this.emptyPlaylist(true);
             return;
         }
+        this.addSongs([defaultSong], true);
         // add default song
         // play it
     }
