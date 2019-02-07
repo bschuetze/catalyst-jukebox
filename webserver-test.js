@@ -606,10 +606,10 @@ function SpotifyPlaylist() {
                             function (data) {
             if (!util.emptyObject(data)) {
                 if (data.hasOwnProperty("error")) {
-                    console.log("Something went wrong removing: " + songs + " from playlist");
+                    console.log("Something went wrong adding: " + songs + " to playlist");
                     console.log(data);
                 } else {
-                    console.log("Successfully removed: " + songs + " from playlist");
+                    console.log("Successfully added: " + songs + " to playlist");
                 }
             }
         });
@@ -623,10 +623,10 @@ function SpotifyPlaylist() {
         {"Content-Type": "application/json"}, {"tracks": songs}, function(data) {
             if (!util.emptyObject(data)) {
                 if (data.hasOwnProperty("error")) {
-                    console.log("Something went wrong adding: " + songs + " to playlist");
+                    console.log("Something went wrong removing: " + songs + " from playlist");
                     console.log(data);
                 } else {
-                    console.log("Successfully added: " + songs + " to playlist");
+                    console.log("Successfully removed: " + songs + " from playlist");
                 }
             }
         });
@@ -660,6 +660,20 @@ function SpotifyPlaylist() {
         // if not, empty it
         // add default song
         // play it
+    }
+
+    this.emptyPlaylist = function() {
+        if (!this.configured) {
+            console.log("Spotify playlist has not yet been configured, aborting clear");
+            return;
+        }
+
+        // Require to store 'this' as it changes inside the fetch call
+        let self = this;
+
+        this.spotifyRequest(apiURL + "playlists/" + this.playlistURI + "/tracks", "GET", {}, {}, function(data) {
+
+        });
     }
 
     this.initPlaylist = function() {
@@ -722,7 +736,6 @@ function SpotifyPlaylist() {
                 self.loadPlaylists(callback);
             }
         });
-        
     }
 
     this.loadPlaylists = function (callback) {
