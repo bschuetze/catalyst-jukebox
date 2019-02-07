@@ -648,10 +648,10 @@ function SpotifyPlaylist() {
         {"Content-Type": "application/json"}, {"tracks": songs}, function(data) {
             if (!util.emptyObject(data)) {
                 if (data.hasOwnProperty("error")) {
-                    console.log("Something went wrong removing: " + songs + " from playlist");
+                    console.log("Something went wrong removing " + songs.length + " songs from playlist");
                     console.log(data);
                 } else {
-                    console.log("Successfully removed: " + songs + " from playlist");
+                    console.log("Successfully removed " + songs.length + " songs from playlist");
                     self.getPlaylistLength(callback);
                 }
             }
