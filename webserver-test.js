@@ -576,7 +576,7 @@ function SpotifyPlaylist() {
                     }
                     if (self.deviceID == "") {
                         console.log("Unable to find device with name: " + deviceName);
-                        setSpotifyTimeout(250);
+                        setSpotifyTimeout(5000);
                     } else {
                         clearTimeout(getDeviceTimeout);
                         self.setDevice();
