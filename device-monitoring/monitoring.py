@@ -56,7 +56,7 @@ def onMessage(client, data, message):
 client = mqtt.Client(client_id=CLIENT_ID, clean_session=True)
 client.on_connect = onConnect
 client.on_message = onMessage
-client.connect('localhost', 1883, 60)
+client.connect(get_ip(), 1883, 60)
 
 # Port that node is listening on
 NODE_PORT = 6474
