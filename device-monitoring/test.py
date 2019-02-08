@@ -25,4 +25,8 @@ client.connect_async("192.168.0.5", 1883, 60)
 # handles reconnecting.
 # Other loop*() functions are available that give a threaded interface and a
 # manual interface.
-client.loop_forever()
+client.loop_start()
+
+count = 0
+while True:
+    count = count + 1
