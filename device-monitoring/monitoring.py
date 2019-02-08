@@ -47,6 +47,11 @@ def onConnect(client, userdata, flags, rc):
     client.subscribe(GLOBAL_TOPIC)
 
 
+def onDisconnect(client, userdata, rc):
+    print("ERROR CONNECTING")
+    print(rc)
+
+
 def onMessage(client, userdata, msg):
     print("New Message:")
     print("  - client: " + client)
@@ -230,6 +235,7 @@ def usb_event(action, device):
 client = mqtt.Client(client_id=CLIENT_ID, clean_session=True,
                      userdata=None, protocol=mqtt.MQTTv31)
 client.on_connect = onConnect
+client.on_disconnect = onDisconnect
 client.on_message = onMessage
 client.connect("localhost", 1883, keepalive=60, bind_address="")
 client.connect("localhost", 1883, keepalive=60, bind_address="")
