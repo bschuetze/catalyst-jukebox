@@ -13,6 +13,7 @@ import pyudev
 import time
 import requests
 import socket
+import bluetooth
 
 # get_ip() original code from: 
 # https://stackoverflow.com/questions/166506/finding-local-ip-addresses-using-pythons-stdlib
