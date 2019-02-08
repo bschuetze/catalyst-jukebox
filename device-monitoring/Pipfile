@@ -7,6 +7,8 @@ verify_ssl = true
 
 [packages]
 pyudev = "*"
+requests = "*"
+pybluez = "*"
 
 [requires]
 python_version = "3.5"
