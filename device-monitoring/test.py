@@ -31,7 +31,6 @@ client.connect("192.168.0.5", 1883, 60)
 # handles reconnecting.
 # Other loop*() functions are available that give a threaded interface and a
 # manual interface.
-client.subscribe(GLOBAL_TOPIC)
 client.loop_forever()
 
 count = 0
