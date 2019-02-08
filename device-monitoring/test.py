@@ -13,7 +13,7 @@ def on_subscribe(client, userdata, mid, granted_qos):
     print("Test")
 
 def on_disconnect(client, userdata, rc):
-    print("Disconnection returned result: " + rc)
+    print("Disconnection returned result: " + str(rc))
 
 def on_message(client, userdata, msg):
     print(msg.topic+" "+str(msg.payload))
