@@ -39,6 +39,7 @@ class Pager:
 
 GLOBAL_TOPIC = "catalyst-jukebox_global"
 PAGER_TOPICS = []
+CLIENT_ID = "catalyst-jukebox-MAIN"
 
 def onConnect(client, data, flags, result):
     print("MQTT connected with code: " + result)
@@ -52,7 +53,7 @@ def onMessage(client, data, message):
     print("  - message: " + message)
 
 
-client = mqtt.Client()
+client = mqtt.Client(client_id=CLIENT_ID, clean_session=True)
 client.on_connect = onConnect
 client.on_message = onMessage
 client.connect('localhost', 1883, 60)
