@@ -242,7 +242,9 @@ client.connect("localhost", 1883, keepalive=60, bind_address="")
 client.connect("localhost", 1883, keepalive=60, bind_address="")
 client.connect("localhost", 1883, keepalive=60, bind_address="")
 client.connect("localhost", 1883, keepalive=60, bind_address="")
-client.loop_start()
+# client.loop_start()
+client.loop_forever()
+
 
 # USB STUFF
 usbObserver = pyudev.MonitorObserver(monitor, usb_event)
