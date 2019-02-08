@@ -15,8 +15,7 @@ def on_message(client, userdata, msg):
     print(msg.topic+" "+str(msg.payload))
 
 
-client = mqtt.Client(client_id=CLIENT_ID, clean_session=True,
-                     userdata=None, protocol=mqtt.MQTTv31, transport="websockets")
+client = mqtt.Client(client_id=CLIENT_ID)
 client.on_connect = on_connect
 client.on_message = on_message
 
