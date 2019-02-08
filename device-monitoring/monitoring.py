@@ -219,8 +219,8 @@ devices = bluetooth.discover_devices(lookup_names=True)\
 
 print("Devices found: %s" % len(devices))
 
-for item in devices:
-    print(item.name + " at " + item.addr)
+for addr, name in devices:
+    print(name + " at " + addr)
 
 print("sleeping 120s")
 time.sleep(120)
