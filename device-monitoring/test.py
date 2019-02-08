@@ -4,7 +4,7 @@ GLOBAL_TOPIC = "catalyst-jukebox_global"
 PAGER_TOPICS = []
 CLIENT_ID = "catalyst-jukebox_MAIN"
 
-def on_connect(client, userdata, flags, rc):
+def on_connect(client, userdata, rc):
     print("MQTT connected with code: " + rc)
     client.subscribe(GLOBAL_TOPIC)
     client.subscribe("$SYS/#")
