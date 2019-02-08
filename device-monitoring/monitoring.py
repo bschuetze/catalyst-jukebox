@@ -42,6 +42,7 @@ PAGER_TOPICS = []
 
 def onConnect(client, data, flags, result):
     print("MQTT connected with code: " + result)
+    client.subscribe(GLOBAL_TOPIC)
 
 
 def onMessage(client, data, message):
