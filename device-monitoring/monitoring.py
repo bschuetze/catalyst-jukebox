@@ -13,7 +13,7 @@ import pyudev
 import time
 import requests
 import socket
-import bluetooth
+import bluetooth as bt
 
 # get_ip() original code from: 
 # https://stackoverflow.com/questions/166506/finding-local-ip-addresses-using-pythons-stdlib
@@ -215,12 +215,18 @@ usbObserver = pyudev.MonitorObserver(monitor, usb_event)
 usbObserver.start()
 
 
-devices = bluetooth.discover_devices(lookup_names=True)\
+devices = bt.discover_devices(lookup_names=True)\
+
+btpagers = []
 
 print("Devices found: %s" % len(devices))
 
 for addr, name in devices:
     print(name + " at " + addr)
+    if (name == "this name"):
+        btpagers.append((name, addr))
+        print(btpagers)
+
 
 print("sleeping 120s")
 time.sleep(120)
