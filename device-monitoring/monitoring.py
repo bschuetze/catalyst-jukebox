@@ -237,7 +237,7 @@ client = mqtt.Client()
 client.on_connect = onConnect
 client.on_disconnect = onDisconnect
 client.on_message = onMessage
-client.connect("192.168.0.5", 1883, 60)
+client.connect("iot.eclipse.org", 1883, 60)
 # client.loop_start()
 client.loop_forever()
 
