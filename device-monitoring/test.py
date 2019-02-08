@@ -4,12 +4,16 @@ GLOBAL_TOPIC = "catalyst-jukebox_global"
 PAGER_TOPICS = []
 CLIENT_ID = "catalyst-jukebox_MAIN"
 
-def on_connect(client, userdata, rc):
-    print("MQTT connected with code: " + rc)
+
+def on_connect(client, userdata, flags, rc):
+    print("Connection returned result: " + mqtt.connack_string(rc))
     client.subscribe(GLOBAL_TOPIC)
-    client.subscribe("$SYS/#")
 
+def on_subscribe(client, userdata, mid, granted_qos):
+    print("Test")
 
+def on_disconnect(client, userdata, rc):
+    print("Disconnection returned result: " + rc)
 
 def on_message(client, userdata, msg):
     print(msg.topic+" "+str(msg.payload))
@@ -17,6 +21,8 @@ def on_message(client, userdata, msg):
 
 client = mqtt.Client(client_id=CLIENT_ID)
 client.on_connect = on_connect
+client.on_disconnect = on_disconnect
+client.on_subscribe = on_subscribe
 client.on_message = on_message
 
 client.connect("192.168.0.5", 1883, 60)
