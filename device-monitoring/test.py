@@ -10,7 +10,7 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe(GLOBAL_TOPIC)
 
 def on_subscribe(client, userdata, mid, granted_qos):
-    print("Test")
+    print("Subscribed to a topic")
 
 def on_disconnect(client, userdata, rc):
     print("Disconnection returned result: " + str(rc))
