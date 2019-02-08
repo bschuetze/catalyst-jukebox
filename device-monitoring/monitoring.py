@@ -214,7 +214,17 @@ def usb_event(action, device):
 usbObserver = pyudev.MonitorObserver(monitor, usb_event)
 usbObserver.start()
 
-time.sleep(60)
+
+devices = bluetooth.discover_devices(lookup_names=True)
+print(type(devices))
+
+print("Devices found: %s" % len(devices))
+
+for item in devices:
+    print(item)
+
+print("sleeping 120s")
+time.sleep(120)
 
 # for device in context.list_devices(subsystem='usb'):
 #     print(device)
