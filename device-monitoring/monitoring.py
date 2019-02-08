@@ -223,7 +223,7 @@ print("Devices found: %s" % len(devices))
 
 for addr, name in devices:
     print(name + " at " + addr)
-    if (name == "this name"):
+    if (name == "Pixel XL"):
         btpagers.append((name, addr))
         print(btpagers)
 
