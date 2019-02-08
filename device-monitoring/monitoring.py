@@ -215,17 +215,17 @@ usbObserver = pyudev.MonitorObserver(monitor, usb_event)
 usbObserver.start()
 
 
-devices = bt.discover_devices(lookup_names=True)\
+# devices = bt.discover_devices(lookup_names=True)\
 
-btpagers = []
+# btpagers = []
 
-print("Devices found: %s" % len(devices))
+# print("Devices found: %s" % len(devices))
 
-for addr, name in devices:
-    print(name + " at " + addr)
-    if (name == "Pixel XL"):
-        btpagers.append((name, addr))
-        print(btpagers)
+# for addr, name in devices:
+#     print(name + " at " + addr)
+#     if (name == "Pixel XL"):
+#         btpagers.append((name, addr))
+#         print(btpagers)
 
 
 print("sleeping 120s")
