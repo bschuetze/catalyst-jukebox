@@ -53,13 +53,6 @@ def onMessage(client, userdata, msg):
     print("  - topic: " + msg.topic)
     print("  - message: " + str(msg.payload))
 
-
-client = mqtt.Client(client_id=CLIENT_ID, clean_session=True, userdata=None)
-client.on_connect = onConnect
-client.on_message = onMessage
-client.connect(get_ip(), 1883, keepalive=60, bind_address="")
-client.loop_start()
-
 # Port that node is listening on
 NODE_PORT = 6474
 # Adding a blacklist for usb device models (device.get('ID_MODEL'))))
@@ -233,8 +226,14 @@ def usb_event(action, device):
     # else:
     #     print("USB device path is None type, " + str(device) + " " + action)
 
+# MQTT STUFF
+client = mqtt.Client(client_id=CLIENT_ID, clean_session=True, userdata=None, mqtt.MQTTv31)
+client.on_connect = onConnect
+client.on_message = onMessage
+client.connect(get_ip(), 1883, keepalive=60, bind_address="")
+client.loop_start()
 
-
+# USB STUFF
 usbObserver = pyudev.MonitorObserver(monitor, usb_event)
 usbObserver.start()
 
