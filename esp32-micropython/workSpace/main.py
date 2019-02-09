@@ -143,7 +143,7 @@ while True:
         print(str(ID))
         client.publish(bytes(str(TOPIC_BASE + "/global/init"), "utf-8"), (str(ID)))
         client.set_callback(messageReceived)
-        # client.publish(GLOBAL_TOPIC, bytes(NAME, "utf-8"))
+        client.subscribe(bytes(str(TOPIC_BASE + "/" + str(ID) + "/control"), "utf-8"))
 
     if (publishedName and station.isconnected()):
         client.check_msg()
