@@ -30,9 +30,8 @@ def get_ip():
     return IP
 
 class Pager:
-    def __init__(self, id, topic):
+    def __init__(self, id):
         self.ID = id
-        self.topic = topic
         self.inUse = False
         self.connected = False
         self.initialized = False
@@ -41,8 +40,7 @@ class Pager:
         return str("PAGER - ID: " + str(self.ID) + ", in-use: " + str(self.inUse) + ", connected: " +
                 str(self.connected) + ", initialized: " + str(self.initialized))
 
-
-GLOBAL_TOPIC = "catalyst-jukebox_global"
+TOPIC_BASE = "catalyst-jukebox"
 PAGER_IDS = []
 MQTT_PAGERS = []
 CLIENT_ID = "catalyst-jukebox_MAIN"
@@ -50,7 +48,8 @@ CLIENT_ID = "catalyst-jukebox_MAIN"
 
 def onConnect(client, userdata, flags, rc):
     print("MQTT connected with code: " + mqtt.connack_string(rc))
-    client.subscribe(GLOBAL_TOPIC)
+    client.subscribe(TOPIC_BASE + "/global/init")
+    client.subscribe(TOPIC_BASE + "/+/status")
 
 
 def onSubscribe(client, userdata, mid, granted_qos):
@@ -63,19 +62,21 @@ def onDisconnect(client, userdata, rc):
 
 def onMessage(client, userdata, msg):
     print("New Message:")
-    print("  - client: " + str(client))
+    # print("  - client: " + str(client))
     print("  - topic: " + msg.topic)
     print("  - message: " + str(msg.payload))
-    if (msg.topic == GLOBAL_TOPIC):
-        print("Message from global topic, parsing")
-        msgSplit = str(msg.payload.decode("ASCII")).split("_")
-        print(msgSplit)
+    if (msg.topic == TOPIC_BASE + "/global/init"):
+        print("Message from global init topic, parsing")
+        msgDec = str(msg.payload.decode("ASCII"))
+        print(msgDec)
         # Check if new pager calling in
-        if (msgSplit[0] == "catalyst-pager"):
-            if (msgSplit[1] not in PAGER_IDS):
-                PAGER_IDS.append(msgSplit[1])
-                MQTT_PAGERS.append(Pager(msgSplit[1], str(msg.payload.decode("ASCII"))))
-                print(MQTT_PAGERS[-1])
+        if (msgDec not in PAGER_IDS):
+            # Create the new pager, and subscribe to that topic
+            PAGER_IDS.append(msgDec)
+            MQTT_PAGERS.append(Pager(msgDec))
+            print(MQTT_PAGERS[-1])
+            # Publish setup message
+            client.publish((TOPIC_BASE + "/" + msg.payload.decode("ASCII") + "/control"), payload="initialize-pager", qos=1, retain=False)
 
 
 

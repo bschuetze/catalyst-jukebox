@@ -65,6 +65,7 @@ def deassign():
 
 def detectConnection():
     # Read pins, assign CONNECTED Accordingly
+    print("Reading Pins")
 
 def buzz(start):
     if (start):
@@ -119,8 +120,8 @@ print("Name: " + NAME)
 
 # MQTT
 # b"string" and bytes("string", "utf-8") are equivalent
-GLOBAL_TOPIC = b"catalyst-jukebox_global"
-PRIVATE_TOPIC = bytes(NAME, "utf-8")
+TOPIC_BASE = b"catalyst-jukebox"
+PRIVATE_TOPIC = bytes(str(TOPIC_BASE + "/" + str(ID)), "utf-8")
 client = MQTTClient(NAME, JUKEBOX_IP)
 publishedName = False
 mqttConnected = False
@@ -137,8 +138,9 @@ while True:
     if (not publishedName and station.isconnected()):
         print("Logging name with MQTT server")
         publishedName = True
-        client.publish(GLOBAL_TOPIC, NAME)
+        client.publish(TOPIC_BASE + "/gobal/init", str(ID))
         # client.publish(GLOBAL_TOPIC, bytes(NAME, "utf-8"))
 
     time.sleep(1)
+
 
