@@ -256,7 +256,7 @@ client = mqtt.Client(client_id=CLIENT_ID, clean_session=True)
 # client = mqtt.Client()
 client.on_connect = onConnect
 client.on_disconnect = onDisconnect
-client.on_disconnect = onSubscribe
+client.on_subscribe = onSubscribe
 client.on_message = onMessage
 client.connect(get_ip(), 1883, 60)
 client.loop_start()
