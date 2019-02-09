@@ -61,13 +61,13 @@ def onDisconnect(client, userdata, rc):
 
 
 def onMessage(client, userdata, msg):
+    msgDec = str(msg.payload.decode("ASCII"))
     print("New Message:")
     # print("  - client: " + str(client))
     print("  - topic: " + msg.topic)
-    print("  - message: " + str(msg.payload))
+    print("  - message: " + msgDec)
     if (msg.topic == TOPIC_BASE + "/global/init"):
         print("Message from global init topic, parsing")
-        msgDec = str(msg.payload.decode("ASCII"))
         # Check if new pager calling in
         if (msgDec not in PAGER_IDS):
             # Create the new pager, and subscribe to that topic

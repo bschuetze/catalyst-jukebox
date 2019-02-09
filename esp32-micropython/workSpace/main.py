@@ -76,8 +76,7 @@ def buzz(start):
         # Clear buzzer stuff
 
 
-def messageReceived(topic, msg):
-    print(str(topic) + " " + str(msg))
+
 
 # Devices
 ONBOARD_LED = Pin(5, Pin.OUT)
@@ -122,11 +121,25 @@ print("Name: " + NAME)
 
 # MQTT
 # b"string" and bytes("string", "utf-8") are equivalent
+INIT_MSG = "initialize-pager"
 TOPIC_BASE = "catalyst-jukebox"
 PRIVATE_TOPIC = bytes(str(TOPIC_BASE + "/" + str(ID)), "utf-8")
 client = MQTTClient(NAME, JUKEBOX_IP)
 publishedName = False
 mqttConnected = False
+
+
+def messageReceived(topic, msg):
+    decTopic = topic.decode("ASCII")
+    decMsg = msg.decode("ASCII")
+    print("Topic: " + decTopic + ", Msg: " + decMsg)
+    splitTopic = decTopic.split("/")
+    if (splitTopic[-1] == "control"):
+      if (decMsg == INIT_MSG):
+        resetPager()
+        detectConnection()
+        client.publish(bytes(str(TOPIC_BASE + "/" + str(ID) +
+                                 "/status"), "utf-8"), str(CONNECTED))
 
 while True:
     # ONBOARD_LED.value(not ONBOARD_LED.value())
