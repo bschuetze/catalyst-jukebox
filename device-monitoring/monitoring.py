@@ -71,7 +71,7 @@ def onMessage(client, userdata, msg):
             if (msgSplit[1] not in PAGER_IDS):
                 PAGER_IDS.append(msgSplit[1])
                 MQTT_PAGERS.append(Pager(msgSplit[1], str(msg.payload.decode("ASCII"))))
-                print(MQTT_PAGERS)
+                print(MQTT_PAGERS[-1])
 
 
 
