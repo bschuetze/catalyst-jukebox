@@ -43,6 +43,39 @@ def onboardLEDPulse(timer):
 
 connectToWiFi(utils.WIFI_PWD)
 
+# CATALYST STUFF
+IN_USE = False
+BUZZING = False
+OWNER = ""
+CONNECTED = False
+
+def resetPager():
+    IN_USE = False
+    BUZZING = False
+    OWNER = ""
+    CONNECTED = False
+
+def assign(user):
+    IN_USE = True
+    OWNER = user
+
+def deassign():
+    IN_USE = False
+    OWNER = ""
+
+def detectConnection():
+    # Read pins, assign CONNECTED Accordingly
+
+def buzz(start):
+    if (start):
+        BUZZING = True
+        # Make buzzer calls
+    else:
+        BUZZING = False
+        # Clear buzzer stuff
+
+
+
 # Devices
 ONBOARD_LED = Pin(5, Pin.OUT)
 ONBOARD_LED.value(0)
@@ -104,7 +137,8 @@ while True:
     if (not publishedName and station.isconnected()):
         print("Logging name with MQTT server")
         publishedName = True
-        client.publish(GLOBAL_TOPIC, bytes(NAME, "utf-8"))
+        client.publish(GLOBAL_TOPIC, NAME)
+        # client.publish(GLOBAL_TOPIC, bytes(NAME, "utf-8"))
 
     time.sleep(1)
 

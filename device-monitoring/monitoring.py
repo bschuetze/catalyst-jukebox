@@ -30,15 +30,17 @@ def get_ip():
     return IP
 
 class Pager:
-    def __init__(self, port, id):
-        self.port = port
-        self.modelID = id
+    def __init__(self, id, topic):
+        self.ID = id
+        self.topic = topic
         self.inUse = False
-        self.connected = True
+        self.connected = False
+        self.initialized = False
 
 
 GLOBAL_TOPIC = "catalyst-jukebox_global"
-PAGER_TOPICS = []
+PAGER_IDS = []
+MQTT_PAGERS = []
 CLIENT_ID = "catalyst-jukebox_MAIN"
 
 
@@ -60,6 +62,19 @@ def onMessage(client, userdata, msg):
     print("  - client: " + str(client))
     print("  - topic: " + msg.topic)
     print("  - message: " + str(msg.payload))
+    if (msg.topic == GLOBAL_TOPIC):
+        print("Message from global topic, parsing")
+        msgSplit = str(msg.payload).split("_")
+        print(msgSplit)
+        # Check if new pager calling in
+        if (msgSplit[0] == "catalyst-pager"):
+            if (msgSplit[1] not in PAGER_IDS):
+                PAGER_IDS.append(msgSplit[1])
+                MQTT_PAGERS.append(Pager(msgSplit[1], str(msg.payload)))
+                print(MQTT_PAGERS)
+
+
+
 
 
 # def on_connect(client, userdata, flags, rc):
@@ -158,10 +173,13 @@ def usb_event(action, device):
             if ((int(usbPort) >= USB_PORT_START) and (device.get('ID_MODEL') not in USB_BLACKLIST)):
                 if (device.get("ID_MODEL") in USB_PAGERS):
                     if (action == "add"):
-                        tempPager = Pager(usbPort, device.get("ID_MODEL"))
-                        pagers.append(tempPager)
+                        # tempPager = Pager(usbPort, device.get("ID_MODEL"))
+                        # pagers.append(tempPager)
                         print("Pager " + tempPager.modelID +
-                                " connected at usb port " + tempPager.port)
+                              " connected at usb port " + usbPort)
+                    if (action == "remove"):
+                        print("Pager " + tempPager.modelID +
+                              " removed from usb port " + usbPort)
                 else:
                     if (action == "add"):
                         if (usbPort not in connectedDevices):
@@ -283,8 +301,8 @@ usbObserver.start()
 #         print(btpagers)
 
 
-print("sleeping 120s")
-time.sleep(120)
+print("sleeping 300s")
+time.sleep(300)
 
 # for device in context.list_devices(subsystem='usb'):
 #     print(device)
