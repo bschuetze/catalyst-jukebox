@@ -57,7 +57,7 @@ def onDisconnect(client, userdata, rc):
 
 def onMessage(client, userdata, msg):
     print("New Message:")
-    print("  - client: " + client)
+    print("  - client: " + str(client))
     print("  - topic: " + msg.topic)
     print("  - message: " + str(msg.payload))
 
