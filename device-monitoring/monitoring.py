@@ -43,13 +43,16 @@ CLIENT_ID = "catalyst-jukebox_MAIN"
 
 
 def onConnect(client, userdata, flags, rc):
-    print("MQTT connected with code: " + rc)
+    print("MQTT connected with code: " + mqtt.connack_string(rc))
     client.subscribe(GLOBAL_TOPIC)
 
 
+def onSubscribe(client, userdata, mid, granted_qos):
+    print("Subscribed to a topic")
+
+
 def onDisconnect(client, userdata, rc):
-    print("ERROR CONNECTING")
-    print(rc)
+    print("Disconnection returned result: " + str(rc))
 
 
 def onMessage(client, userdata, msg):
@@ -57,6 +60,23 @@ def onMessage(client, userdata, msg):
     print("  - client: " + client)
     print("  - topic: " + msg.topic)
     print("  - message: " + str(msg.payload))
+
+
+# def on_connect(client, userdata, flags, rc):
+#     print("Connection returned result: " + mqtt.connack_string(rc))
+#     client.subscribe(GLOBAL_TOPIC)
+
+
+# def on_subscribe(client, userdata, mid, granted_qos):
+#     print("Subscribed to a topic")
+
+
+# def on_disconnect(client, userdata, rc):
+#     print("Disconnection returned result: " + str(rc))
+
+
+# def on_message(client, userdata, msg):
+#     print(msg.topic+" "+str(msg.payload))
 
 # Port that node is listening on
 NODE_PORT = 6474
@@ -232,16 +252,17 @@ def usb_event(action, device):
     #     print("USB device path is None type, " + str(device) + " " + action)
 
 # MQTT STUFF
-# client = mqtt.Client(client_id=CLIENT_ID, clean_session=True, userdata=None, protocol=mqtt.MQTTv31)
-client = mqtt.Client()
+client = mqtt.Client(client_id=CLIENT_ID, clean_session=True)
+# client = mqtt.Client()
 client.on_connect = onConnect
 client.on_disconnect = onDisconnect
+client.on_disconnect = onSubscribe
 client.on_message = onMessage
 client.connect(get_ip(), 1883, 60)
-# client.loop_start()
+client.loop_start()
 time.sleep(5)
-print("LOOPING")
-client.loop_forever()
+# print("LOOPING")
+# client.loop_forever()
 
 
 # USB STUFF
