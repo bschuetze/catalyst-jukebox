@@ -38,8 +38,7 @@ class Pager:
         self.initialized = False
 
     def __str__(self):
-        return ("ID: " + str(self.ID) + ", in-use: " + self.inUse + 
-                ", connected: " + self.connected + ", initialized: " + self.initialized)
+        return f"ID: {self.ID}, in-use: {self.inUse}, connected: {self.connected}, initialized: {self.initialized}"
 
 
 GLOBAL_TOPIC = "catalyst-jukebox_global"
