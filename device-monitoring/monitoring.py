@@ -64,13 +64,13 @@ def onMessage(client, userdata, msg):
     print("  - message: " + str(msg.payload))
     if (msg.topic == GLOBAL_TOPIC):
         print("Message from global topic, parsing")
-        msgSplit = str(msg.payload).split("_")
+        msgSplit = str(msg.payload.decode("ASCII")).split("_")
         print(msgSplit)
         # Check if new pager calling in
         if (msgSplit[0] == "catalyst-pager"):
             if (msgSplit[1] not in PAGER_IDS):
                 PAGER_IDS.append(msgSplit[1])
-                MQTT_PAGERS.append(Pager(msgSplit[1], str(msg.payload)))
+                MQTT_PAGERS.append(Pager(msgSplit[1], str(msg.payload.decode("ASCII"))))
                 print(MQTT_PAGERS)
 
 
