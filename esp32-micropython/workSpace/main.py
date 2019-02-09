@@ -139,7 +139,7 @@ def messageReceived(topic, msg):
         resetPager()
         detectConnection()
         client.publish(bytes(str(TOPIC_BASE + "/" + str(ID) +
-                                 "/status"), "utf-8"), str(CONNECTED))
+                                 "/status/connected"), "utf-8"), str(CONNECTED))
 
 while True:
     # ONBOARD_LED.value(not ONBOARD_LED.value())

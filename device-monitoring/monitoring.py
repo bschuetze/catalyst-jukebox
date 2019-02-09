@@ -40,16 +40,22 @@ class Pager:
         return str("PAGER - ID: " + str(self.ID) + ", in-use: " + str(self.inUse) + ", connected: " +
                 str(self.connected) + ", initialized: " + str(self.initialized))
 
+    def updateConnection(con):
+        self.connected = con
+
+    def init():
+        self.initialized = True
+
 TOPIC_BASE = "catalyst-jukebox"
 PAGER_IDS = []
-MQTT_PAGERS = []
+MQTT_PAGERS = {}
 CLIENT_ID = "catalyst-jukebox_MAIN"
 
 
 def onConnect(client, userdata, flags, rc):
     print("MQTT connected with code: " + mqtt.connack_string(rc))
     client.subscribe(TOPIC_BASE + "/global/init")
-    client.subscribe(TOPIC_BASE + "/+/status")
+    client.subscribe(TOPIC_BASE + "/+/status/#")
 
 
 def onSubscribe(client, userdata, mid, granted_qos):
@@ -66,16 +72,23 @@ def onMessage(client, userdata, msg):
     # print("  - client: " + str(client))
     print("  - topic: " + msg.topic)
     print("  - message: " + msgDec)
+    topicSplit = msg.topic.split("/")
     if (msg.topic == TOPIC_BASE + "/global/init"):
         print("Message from global init topic, parsing")
         # Check if new pager calling in
         if (msgDec not in PAGER_IDS):
             # Create the new pager, and subscribe to that topic
             PAGER_IDS.append(msgDec)
-            MQTT_PAGERS.append(Pager(msgDec))
-            print(MQTT_PAGERS[-1])
+            MQTT_PAGERS[msgDec] = Pager(msgDec)
+            print(MQTT_PAGERS[msgDec])
             # Publish setup message
             client.publish((TOPIC_BASE + "/" + msg.payload.decode("ASCII") + "/control"), payload="initialize-pager", qos=1, retain=False)
+    if (topicSplit[-2] == "status"):
+        if (topicSplit[-1] == "connected"):
+            print("Updating Pager " + topicSplit[1] + " connection state to " + msgDec)
+            MQTT_PAGERS[topicSplit[1]].updateConnection(msgDec)
+            MQTT_PAGERS[topicSplit[1]].init()
+
 
 
 
