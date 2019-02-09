@@ -76,6 +76,8 @@ def buzz(start):
         # Clear buzzer stuff
 
 
+def messageReceived(topic, msg):
+    print(str(topic) + " " + str(msg))
 
 # Devices
 ONBOARD_LED = Pin(5, Pin.OUT)
@@ -120,12 +122,11 @@ print("Name: " + NAME)
 
 # MQTT
 # b"string" and bytes("string", "utf-8") are equivalent
-TOPIC_BASE = b"catalyst-jukebox"
+TOPIC_BASE = "catalyst-jukebox"
 PRIVATE_TOPIC = bytes(str(TOPIC_BASE + "/" + str(ID)), "utf-8")
 client = MQTTClient(NAME, JUKEBOX_IP)
 publishedName = False
 mqttConnected = False
-
 
 while True:
     # ONBOARD_LED.value(not ONBOARD_LED.value())
@@ -138,9 +139,16 @@ while True:
     if (not publishedName and station.isconnected()):
         print("Logging name with MQTT server")
         publishedName = True
-        client.publish(TOPIC_BASE + "/gobal/init", str(ID))
+        print(bytes(str(TOPIC_BASE + "/global/init"), "utf-8"))
+        print(str(ID))
+        client.publish(bytes(str(TOPIC_BASE + "/global/init"), "utf-8"), (str(ID)))
+        client.set_callback(messageReceived)
         # client.publish(GLOBAL_TOPIC, bytes(NAME, "utf-8"))
 
-    time.sleep(1)
+    if (publishedName and station.isconnected()):
+        client.check_msg()
+    
+    time.sleep(5)
+
 
 

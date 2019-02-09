@@ -68,7 +68,6 @@ def onMessage(client, userdata, msg):
     if (msg.topic == TOPIC_BASE + "/global/init"):
         print("Message from global init topic, parsing")
         msgDec = str(msg.payload.decode("ASCII"))
-        print(msgDec)
         # Check if new pager calling in
         if (msgDec not in PAGER_IDS):
             # Create the new pager, and subscribe to that topic
