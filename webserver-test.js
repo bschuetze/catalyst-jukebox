@@ -25,6 +25,8 @@ const publicPlaylist = true;
 const deviceName = "raspotify (catalyst-jukebox)";
 const defaultSong = "spotify:track:2Z8WuEywRWYTKe1NybPQEW";
 var getDeviceTimeout;
+const defaultID = 123456789;
+var pendingRequests = [];
 
 // Auth variables
 const authorizeURL = "https://accounts.spotify.com/authorize";
@@ -271,6 +273,7 @@ function handler(req, res) { //create server (request, response)
                             console.log("USB update: " + bodyJSON["model"] + " " + bodyJSON["action"] + " " + 
                                         bodyJSON["location"]);
                             res.writeHead(200, { 'Content-Type': 'text/html' });
+                            requestCheck(bodyJSON);
                             return res.end("USB data updated");
                         } else {
                             console.log("USB update does not match expected format");
@@ -303,10 +306,12 @@ function handler(req, res) { //create server (request, response)
                     // console.log(bodyJSON.hasOwnProperty("tracks"));
 
                     if (bodyJSON.hasOwnProperty("tracks") && bodyJSON["tracks"].length > 0) {
-                        console.log("Tracks present in POST");
-                        spotifyHandler.addSongs(bodyJSON["tracks"]);
+                        console.log("Tracks present in POST, adding to pending requests");
+                        let tempUser = new User();
+                        pendingRequests.push({"id": tempUser.getID(), "tracks": bodyJSON["tracks"]});
+                        // spotifyHandler.addSongs(bodyJSON["tracks"]);
                         res.writeHead(200, { 'Content-Type': 'text/html' });
-                        return res.end("Tracks added to queue");
+                        return res.end("Tracks added to pending, please connect phone to USB");
                     } else {
                         console.log("Tracks field must exist and not be empty");
                         res.writeHead(400, { 'Content-Type': 'text/html' });
@@ -488,7 +493,48 @@ function handler(req, res) { //create server (request, response)
     });
 }
 
-function UsbDevice() {
+function requestCheck(body) {
+    if (pendingRequests.length > 0) {
+        // Currently only gets the most recent request, will break if phones connected out of sequence
+        let request = pendingRequests.shift();
+        spotifyHandler.addRequest(request);
+    } else {
+        console.log("No currently pending requests, please disconnect phone and make request");
+    }
+}
+
+function PlaylistHandler() {
+    this.playlist = [];
+    this.position = -1;
+
+    this.addSong = function(song) {
+        this.playlist.push(song);
+    }
+
+    this.next = function() {
+        this.position = this.position + 1;
+    }
+
+    this.length = function() {
+        return this.playlist.length;
+    }
+
+    this.clear = function() {
+        this.playlist = [];
+        this.position = -1;
+    }
+
+    this.reduce = function() {
+        this.playlist = this.playlist.slice(this.position, this.playlist.length);
+        this.position = 0;
+    }
+
+    this.currentlyPlaying = function() {
+        return this.playlist[this.position];
+    }
+}
+
+function USBDevice() {
     this.port = "";
     this.model = "";
     this.state = "uninitialized";
@@ -508,20 +554,11 @@ function User() {
     }
 }
 
-function Song(user, uri, usb) {
+function Song(user, uri) {
     this.owner = user;
     this.uri = uri;
-    this.usb = usb;
 }
 
-function addToQueue(songs) {
-    //
-    let usr = new User();
-
-    for (let i = 0; i < songs.length; i++) {
-        
-    }
-}
 
 // Yes these next 2 functions are weird but due to scoping it needs to be outside of the 
 // spotify object to work
@@ -537,9 +574,10 @@ function SpotifyPlaylist() {
 
     // General vars
     this.configured = false;
-    this.playedSongs = [];
-    this.songsBeforeRepeat = 10;
-    this.queuedSongs = [];
+    // this.playedSongs = [];
+    // this.songsBeforeRepeat = 10;
+    // this.queuedSongs = [];
+    this.playlist = new PlaylistHandler();
     this.playlistURI = "";
     this.playlistID = "";
     this.deviceID = "";
@@ -726,6 +764,7 @@ function SpotifyPlaylist() {
             return;
         }
         this.addSongs([defaultSong], true);
+        this.playlist.addSong(new Song(defaultID, defaultSong));
         // add default song
         // play it
     }
