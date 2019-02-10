@@ -166,7 +166,11 @@ def server_communication(dest, method, header=None, body=None, respFunc=None):
     if (respFunc is not None):
         respFunc(r)
     else:
-        print(r)
+        print("Status: " + str(r.status_code) + " ")
+        if (r.headers["Content-Type"] == "application/json"):
+            print(r.json())
+        else:
+            print(r.text)
 
 # act = action, loc = location, mod = model
 def send_usb(act, loc, mod, respFunc=None):
