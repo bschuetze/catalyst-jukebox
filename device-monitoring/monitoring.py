@@ -175,7 +175,7 @@ def server_communication(dest, method, header=None, body=None, respFunc=None, **
 # act = action, loc = location, mod = model
 def send_usb(act, loc, mod, respFunc=None):
     dest = "http://" + get_ip() + ":" + str(NODE_PORT) + "/usbUpdate"
-    server_communication(dest, "POST", None, {"model": mod, "location": loc, "action": act}, connectDevice, port=loc, model=mod)
+    server_communication(dest, "POST", None, {"model": mod, "location": loc, "action": act}, respFunc, port=loc, model=mod)
 
 def connectDevice(resp, **args):
     print(resp)
@@ -237,9 +237,11 @@ def usb_event(action, device):
 
                     print("Connected devices: " + str(connectedDevices))
 
-        except:
-            print(pathSplit[len(pathSplit) - 1] +
-                " is not a number of the form X.Y or X.Y.Z")
+        except Exception as e:
+            print("ERROR:")
+            print(e)
+            # print(pathSplit[len(pathSplit) - 1] +
+            #     " is not a number of the form X.Y or X.Y.Z")
 
 
     # if (device.get("ID_PATH") is not None):
