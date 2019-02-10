@@ -48,69 +48,73 @@ def onboardLEDPulse(timer):
 
 connectToWiFi(utils.WIFI_PWD)
 
-# CATALYST STUFF
-IN_USE = False
-BUZZING = False
-IDENTIFYING = False
-OWNER = ""
-CONNECTED = False
+class Pager:
+    def __init__(self):
+        # CATALYST STUFF
+        self.IN_USE = False
+        self.BUZZING = False
+        self.IDENTIFYING = False
+        self.OWNER = ""
+        self.CONNECTED = False
 
-def resetPager():
-    print("Resetting pager")
-    IN_USE = False
-    BUZZING = False
-    OWNER = ""
-    CONNECTED = False
+    def resetPager(self):
+        print("Resetting pager")
+        self.IN_USE = False
+        self.BUZZING = False
+        self.OWNER = ""
+        self.CONNECTED = False
 
-def assign(user):
-    print("Assigning to user: " + str(user))
-    IN_USE = True
-    OWNER = user
-    identify(True)
+    def assign(self, user):
+        print("Assigning to user: " + str(user))
+        self.IN_USE = True
+        self.OWNER = user
+        self.identify(True)
 
-def deassign():
-    print("Deassigning pager from " + str(OWNER))
-    IN_USE = False
-    OWNER = ""
+    def deassign(self):
+        print("Deassigning pager from " + str(self.OWNER))
+        self.IN_USE = False
+        self.OWNER = ""
 
-def detectConnection():
-    # Read pins, assign CONNECTED Accordingly
-    print("Reading Pins")
-    usbPinValue = False
-    if (usbPinValue != CONNECTED):
-        CONNECTED = usbPinValue
-        updateConnection()
-        if (CONNECTED):
-            print("Connected")
-        else:
-            print("Disconnected")
-            if (IDENTIFYING):
-                identify(False)
-            if (BUZZING):
-                buzz(False)
+    def detectConnection(self):
+        # Read pins, assign CONNECTED Accordingly
+        print("Reading Pins")
+        usbPinValue = False
+        if (usbPinValue != self.CONNECTED):
+            self.CONNECTED = usbPinValue
+            updateConnection()
+            if (self.CONNECTED):
+                print("Connected")
+            else:
+                print("Disconnected")
+                if (self.IDENTIFYING):
+                    self.identify(False)
+                if (self.BUZZING):
+                    self.buzz(False)
     
-def buzz(start):
-    if (start):
-        print("Buzzing")
-        BUZZING = True
-        # Make buzzer calls
-    else:
-        print("Ending buzz")
-        BUZZING = False
-        # Clear buzzer stuff
+    def buzz(self, start):
+        if (start):
+            print("Buzzing")
+            self.BUZZING = True
+            # Make buzzer calls
+        else:
+            print("Ending buzz")
+            self.BUZZING = False
+            # Clear buzzer stuff
 
-def identify(start):
-    if (start):
-        print("Identifying")
-        IDENTIFYING = True
-        # Light LEDS
-        # Start detect Connection
-    else:
-        print("Ending identify")
-        IDENTIFYING = False
-        # Kill LEDS
+    def identify(self, start):
+        if (start):
+            print("Identifying")
+            self.IDENTIFYING = True
+            # Light LEDS
+            # Start detect Connection
+        else:
+            print("Ending identify")
+            self.IDENTIFYING = False
+            # Kill LEDS
 
 # Devices
+pager = Pager()
+
 ONBOARD_LED = Pin(5, Pin.OUT)
 ONBOARD_LED.value(0)
 onboardLEDTimer = machine.Timer(0)
@@ -162,7 +166,7 @@ mqttConnected = False
 
 def updateConnection():
     client.publish(bytes(str(TOPIC_BASE + "/" + str(ID) +
-                             "/status/connected"), "utf-8"), str(CONNECTED))
+                             "/status/connected"), "utf-8"), str(pager.CONNECTED))
 
 def messageReceived(topic, msg):
     decTopic = topic.decode("ASCII")
@@ -171,11 +175,11 @@ def messageReceived(topic, msg):
     splitTopic = decTopic.split("/")
     if (splitTopic[-1] == "control"):
       if (decMsg == INIT_MSG):
-        resetPager()
-        detectConnection()
+        pager.resetPager()
+        pager.detectConnection()
         updateConnection()
     if (splitTopic[-1] == "checkout"):
-        assign(decMsg)
+        pager.assign(decMsg)
 
 while True:
     # ONBOARD_LED.value(not ONBOARD_LED.value())
