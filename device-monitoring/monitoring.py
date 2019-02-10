@@ -175,7 +175,7 @@ def server_communication(dest, method, header=None, body=None, respFunc=None, **
 # act = action, loc = location, mod = model
 def send_usb(act, loc, mod, respFunc=None):
     dest = "http://" + get_ip() + ":" + str(NODE_PORT) + "/usbUpdate"
-    server_communication(dest, "POST", None, {"model": mod, "location": loc, "action": act}, connectDevice, (port=loc, model=mod))
+    server_communication(dest, "POST", None, {"model": mod, "location": loc, "action": act}, connectDevice, port=loc, model=mod)
 
 def connectDevice(resp, **args):
     print(resp)
