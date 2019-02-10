@@ -133,7 +133,7 @@ function refreshAuth() {
 }
 
 // Auth check function
-function authCallback(data) {
+function authCallback(data, status) {
     if (util.emptyObject(data)) {
         console.log("No return data provided");
         return;
@@ -613,7 +613,7 @@ function SpotifyPlaylist() {
     }
 
     this.getUserID = function() {
-        this.spotifyRequest(apiURL + "me", "GET", {}, {}, function(data) {
+        this.spotifyRequest(apiURL + "me", "GET", {}, {}, function(data, status) {
             if (!util.emptyObject(data) && data.hasOwnProperty("id")) {
                 console.log("Setting user ID: " + data["id"]);
                 userID = data["id"];
@@ -627,7 +627,7 @@ function SpotifyPlaylist() {
         // Require to store 'this' as it changes inside the fetch call
         let self = this;
 
-        this.spotifyRequest(apiURL + "me/player/devices", "GET", {}, {}, function(data) {
+        this.spotifyRequest(apiURL + "me/player/devices", "GET", {}, {}, function(data, status) {
             if (!util.emptyObject(data)) {
                 if (data.hasOwnProperty("devices")) {
                     for (let i = 0; i < data["devices"].length; i++) {
@@ -691,7 +691,7 @@ function SpotifyPlaylist() {
 
         this.spotifyRequest(apiURL + "playlists/" + this.playlistID + "/tracks", "POST",
                             {"Content-Type": "application/json" }, {"uris": songURIs}, 
-                            function (data) {
+                            function(data, status) {
             if (!util.emptyObject(data)) {
                 if (data.hasOwnProperty("error")) {
                     console.log("Something went wrong adding: " + songURIs + " to playlist");
@@ -709,7 +709,7 @@ function SpotifyPlaylist() {
     this.play = function(context, ix) {
         this.spotifyRequest(apiURL + "me/player/play", "PUT", {}, 
                             {"context_uri": this.playlistURI, "offset": {"position": ix}}, 
-                            function(data) {
+                            function(data, status) {
             if (!util.emptyObject(data)) {
                 if (data.hasOwnProperty("error")) {
                     console.log("Something went wrong setting playback");
@@ -729,7 +729,7 @@ function SpotifyPlaylist() {
         let self = this;
 
         this.spotifyRequest(apiURL + "playlists/" + this.playlistID + "/tracks", "DELETE", 
-        {"Content-Type": "application/json"}, {"tracks": songs}, function(data) {
+        {"Content-Type": "application/json"}, {"tracks": songs}, function(data, status) {
             if (!util.emptyObject(data)) {
                 if (data.hasOwnProperty("error")) {
                     console.log("Something went wrong removing " + songs.length + " songs from playlist");
@@ -743,7 +743,7 @@ function SpotifyPlaylist() {
     }
 
     this.currentlyPlaying = function() {
-        this.spotifyRequest(apiURL + "me/player/currently-playing", "GET", {}, {}, function(data) {
+        this.spotifyRequest(apiURL + "me/player/currently-playing", "GET", {}, {}, function(data, status) {
             if (data["is_playing"]) {
                 console.log("Currently Playing:");
             } else {
@@ -786,7 +786,7 @@ function SpotifyPlaylist() {
         // Require to store 'this' as it changes inside the fetch call
         let self = this;
 
-        this.spotifyRequest(apiURL + "playlists/" + this.playlistID + "/tracks?fields=total", "GET", {}, {}, function(data) {
+        this.spotifyRequest(apiURL + "playlists/" + this.playlistID + "/tracks?fields=total", "GET", {}, {}, function(data, status) {
             if (!util.emptyObject(data) && data.hasOwnProperty("total")) {
                 console.log("Playlist has " + data["total"] + " songs total");
                 self.playlistLength = data["total"];
@@ -810,7 +810,7 @@ function SpotifyPlaylist() {
         // Require to store 'this' as it changes inside the fetch call
         let self = this;
 
-        this.spotifyRequest(apiURL + "playlists/" + this.playlistID + "/tracks", "GET", {}, {}, function(data) {
+        this.spotifyRequest(apiURL + "playlists/" + this.playlistID + "/tracks", "GET", {}, {}, function(data, status) {
             if (!util.emptyObject(data) && data.hasOwnProperty("items")) {
                 let playlistTracks = [];
                 for (let i = 0; i < data["items"].length; i++) {
@@ -856,7 +856,7 @@ function SpotifyPlaylist() {
             // Require to store 'this' as it changes inside the fetch call
             let self = this;
 
-            this.spotifyRequest(apiURL + "users/" + userID + "/playlists", "POST", {"Content-Type": "application/json"}, makePlaylistBody, function(data) {
+            this.spotifyRequest(apiURL + "users/" + userID + "/playlists", "POST", {"Content-Type": "application/json"}, makePlaylistBody, function(data, status) {
                 if (!util.emptyObject(data)) {
                     if (data.hasOwnProperty("error")) {
                         console.log("Error when trying to create new playlist:");
@@ -885,7 +885,7 @@ function SpotifyPlaylist() {
         // Require to store 'this' as it changes inside the fetch call
         let self = this;
 
-        this.spotifyRequest(apiURL + "me/playlists?limit=0", "GET", {}, {}, function (data) {
+        this.spotifyRequest(apiURL + "me/playlists?limit=0", "GET", {}, {}, function(data, status) {
             if (!util.emptyObject(data) && data.hasOwnProperty("total")) {
                 self.totalPlaylists = data["total"];
                 self.playlistOffset = data["total"] - self.playlists.length;
@@ -904,7 +904,7 @@ function SpotifyPlaylist() {
             // Require to store 'this' as it changes inside the fetch call
             let self = this;
 
-            this.spotifyRequest(apiURL + "me/playlists?limit=" + this.playlistLimit + "&offset=" + this.playlistOffset, "GET", {}, {}, function (data) {
+            this.spotifyRequest(apiURL + "me/playlists?limit=" + this.playlistLimit + "&offset=" + this.playlistOffset, "GET", {}, {}, function(data, status) {
                 if (!util.emptyObject(data) && data.hasOwnProperty("items")) {
                     for (let i = 0; i < data["items"].length; i++) {
                         if (self.parsedPlaylists >= self.totalPlaylists) {

@@ -83,7 +83,7 @@ function buttonPress() {
     if (correctTracks.length > 0) {
         // make request if track data exists and is valid
         trackJSON["tracks"] = correctTracks;
-        webRequest(destinationURL, "POST", { "Content-Type": "application/json" }, trackJSON, function(data) {
+        webRequest(destinationURL, "POST", { "Content-Type": "application/json" }, trackJSON, function(data, status) {
             if (data == "Tracks added to pending, please connect phone to USB") {
                 state = 1;
             } else {

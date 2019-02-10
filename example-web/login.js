@@ -106,7 +106,7 @@ function parseCode(search) {
     return {code: c, state: s};
 }
 
-function authRedirect(link) {
+function authRedirect(link, status) {
     if (link == null || !link.hasOwnProperty("Auth-URL")) {
         console.log("Link not provided");
         return;

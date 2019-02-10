@@ -16,9 +16,9 @@ function webResponse(response, respFunc) {
         return response.json().then(data => {
             // process your JSON data further
             if (respFunc !== undefined) {
-                respFunc(data);
+                respFunc(data, response.status);
             } else {
-                console.log("Data:")
+                console.log("Status: " + response.status + ", Data:")
                 console.log(data);
             }
         });
@@ -29,9 +29,9 @@ function webResponse(response, respFunc) {
             // console.log("Content: " + text + "\nResponse header: " + response.headers.get("content-type"));
             // console.log(response.headers);
             if (respFunc !== undefined) {
-                respFunc(text);
+                respFunc(text, response.status);
             } else {
-                console.log(text);
+                console.log("Status: " + response.status + ", Text: " + text);
             }
         });
     }
