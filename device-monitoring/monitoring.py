@@ -40,11 +40,28 @@ class Pager:
         return str("PAGER - ID: " + str(self.ID) + ", in-use: " + str(self.inUse) + ", connected: " +
                 str(self.connected) + ", initialized: " + str(self.initialized))
 
-    def updateConnection(con):
+    def updateConnection(self, con):
         self.connected = con
 
-    def init():
+    def notInUse(self):
+        return (not self.inUse)
+
+    def init(self):
         self.initialized = True
+
+    def checkOut(self):
+        self.inUse = True
+
+
+class User:
+    def __init__(self, id, model, port, pid):
+        self.userID = id
+        self.model = model
+        self.port = port
+        self.pagerID = pid
+
+    def matches(self, mod, port):
+        return (self.model == mod and self.port == port)
 
 TOPIC_BASE = "catalyst-jukebox"
 PAGER_IDS = []
@@ -88,10 +105,9 @@ def onMessage(client, userdata, msg):
             print("Updating Pager " + topicSplit[1] + " connection state to " + msgDec)
             MQTT_PAGERS[topicSplit[1]].updateConnection(msgDec)
             MQTT_PAGERS[topicSplit[1]].init()
+        
 
 
-def checkoutPager():
-    print("Checking out pager")
 
 
 
@@ -121,6 +137,8 @@ USB_BLACKLIST = ["USB_2.0_Hub__Safe_"]
 USB_PAGERS = ["FT231X_USB_UART"]
 # Pluggable ports start at 1.2
 USB_PORT_START = 12
+# USERS
+USERS = []
 # List of connected devices
 connectedDevices = {}
 # List of all Pagers
@@ -134,6 +152,20 @@ monitor = pyudev.Monitor.from_netlink(context)
 monitor.filter_by('usb')
 print (context)
 print (monitor)
+
+
+# MQTT STUFF
+client = mqtt.Client(client_id=CLIENT_ID, clean_session=True)
+# client = mqtt.Client()
+client.on_connect = onConnect
+client.on_disconnect = onDisconnect
+client.on_subscribe = onSubscribe
+client.on_message = onMessage
+client.connect(get_ip(), 1883, 60)
+client.loop_start()
+time.sleep(5)
+# print("LOOPING")
+# client.loop_forever()
 
 # def 
 
@@ -178,10 +210,30 @@ def send_usb(act, loc, mod, respFunc=None):
     server_communication(dest, "POST", None, {"model": mod, "location": loc, "action": act}, respFunc, port=loc, model=mod)
 
 def connectDevice(resp, **args):
-    print(resp)
-    print(args)
+    # Body return has the form ID:0000
+    if (resp.status_code == 200):
+        tempSplit = resp.text.split(":")
+        tempID = tempSplit[-1]
 
+        # Get a free pager
+        for pid in PAGER_IDS:
+            if (MQTT_PAGERS[pid].notInUse()):
+                print("Checking out pager: " + pid + " for user " + tempID)
+                tempPagerID = pid
+                checkoutPager(tempPagerID, tempID)
+                break
 
+        USERS.append(User(tempID, args["model"], args["port"], tempPagerID))
+    else:
+        print("Status not 200")
+        print(resp)
+        print(args)
+
+def checkoutPager(pid, uid):
+    MQTT_PAGERS[pid].checkOut()
+    client.publish((TOPIC_BASE + "/" + pid +
+                    "/checkout"), payload=str(uid), qos=1, retain=False)
+    
 
 def usb_event(action, device):
     # print(action)
@@ -298,18 +350,7 @@ def usb_event(action, device):
     # else:
     #     print("USB device path is None type, " + str(device) + " " + action)
 
-# MQTT STUFF
-client = mqtt.Client(client_id=CLIENT_ID, clean_session=True)
-# client = mqtt.Client()
-client.on_connect = onConnect
-client.on_disconnect = onDisconnect
-client.on_subscribe = onSubscribe
-client.on_message = onMessage
-client.connect(get_ip(), 1883, 60)
-client.loop_start()
-time.sleep(5)
-# print("LOOPING")
-# client.loop_forever()
+
 
 
 # USB STUFF

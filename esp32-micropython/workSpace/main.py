@@ -51,37 +51,64 @@ connectToWiFi(utils.WIFI_PWD)
 # CATALYST STUFF
 IN_USE = False
 BUZZING = False
+IDENTIFYING = False
 OWNER = ""
 CONNECTED = False
 
 def resetPager():
+    print("Resetting pager")
     IN_USE = False
     BUZZING = False
     OWNER = ""
     CONNECTED = False
 
 def assign(user):
+    print("Assigning to user: " + str(user))
     IN_USE = True
     OWNER = user
+    identify(True)
 
 def deassign():
+    print("Deassigning pager from " + str(OWNER))
     IN_USE = False
     OWNER = ""
 
 def detectConnection():
     # Read pins, assign CONNECTED Accordingly
     print("Reading Pins")
-
+    usbPinValue = False
+    if (usbPinValue != CONNECTED):
+        CONNECTED = usbPinValue
+        updateConnection()
+        if (CONNECTED):
+            print("Connected")
+        else:
+            print("Disconnected")
+            if (IDENTIFYING):
+                identify(False)
+            if (BUZZING):
+                buzz(False)
+    
 def buzz(start):
     if (start):
+        print("Buzzing")
         BUZZING = True
         # Make buzzer calls
     else:
+        print("Ending buzz")
         BUZZING = False
         # Clear buzzer stuff
 
-
-
+def identify(start):
+    if (start):
+        print("Identifying")
+        IDENTIFYING = True
+        # Light LEDS
+        # Start detect Connection
+    else:
+        print("Ending identify")
+        IDENTIFYING = False
+        # Kill LEDS
 
 # Devices
 ONBOARD_LED = Pin(5, Pin.OUT)
@@ -133,6 +160,9 @@ client = MQTTClient(NAME, JUKEBOX_IP)
 publishedName = False
 mqttConnected = False
 
+def updateConnection():
+    client.publish(bytes(str(TOPIC_BASE + "/" + str(ID) +
+                             "/status/connected"), "utf-8"), str(CONNECTED))
 
 def messageReceived(topic, msg):
     decTopic = topic.decode("ASCII")
@@ -143,8 +173,9 @@ def messageReceived(topic, msg):
       if (decMsg == INIT_MSG):
         resetPager()
         detectConnection()
-        client.publish(bytes(str(TOPIC_BASE + "/" + str(ID) +
-                                 "/status/connected"), "utf-8"), str(CONNECTED))
+        updateConnection()
+    if (splitTopic[-1] == "checkout"):
+        assign(decMsg)
 
 while True:
     # ONBOARD_LED.value(not ONBOARD_LED.value())
@@ -162,6 +193,7 @@ while True:
         client.publish(bytes(str(TOPIC_BASE + "/global/init"), "utf-8"), (str(ID)))
         client.set_callback(messageReceived)
         client.subscribe(bytes(str(TOPIC_BASE + "/" + str(ID) + "/control"), "utf-8"))
+        client.subscribe(bytes(str(TOPIC_BASE + "/" + str(ID) + "/checkout"), "utf-8"))
 
     if (publishedName and station.isconnected()):
         client.check_msg()
