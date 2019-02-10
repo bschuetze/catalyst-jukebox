@@ -164,7 +164,7 @@ def server_communication(dest, method, header=None, body=None, respFunc=None, **
         print("Method not properly defined: " + method)
 
     if (respFunc is not None):
-        respFunc(r, args)
+        respFunc(r, **args)
     else:
         print("Status: " + str(r.status_code) + " ")
         if (r.headers["Content-Type"] == "application/json"):
@@ -200,7 +200,7 @@ def usb_event(action, device):
             if ((int(usbPort) >= USB_PORT_START) and (device.get('ID_MODEL') not in USB_BLACKLIST)):
                 if (device.get("ID_MODEL") in USB_PAGERS):
                     if (action == "add"):
-                        # tempPager = Pager(usbPort, device.get("ID_MODEL"))
+                        tempPager = Pager(usbPort, device.get("ID_MODEL"))
                         # pagers.append(tempPager)
                         print("Pager " + tempPager.modelID +
                               " connected at usb port " + usbPort)
