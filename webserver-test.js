@@ -7,6 +7,7 @@ const url = require('url');
 const path = require('path');
 const ip = require('ip');
 const crypto = require('crypto');
+const biguint = require('biguint-format');
 const qs = require('querystring');
 const fetch = require('node-fetch');
 const servefav = require('serve-favicon');
@@ -273,6 +274,7 @@ function handler(req, res) { //create server (request, response)
                             console.log("USB update: " + bodyJSON["model"] + " " + bodyJSON["action"] + " " + 
                                         bodyJSON["location"]);
                             let tempid = requestCheck(bodyJSON);
+                            console.log("Request ID: " + tempid);
                             if (tempid > 0) {
                                 res.writeHead(200, { 'Content-Type': 'text/html' });
                                 return res.end("ID:" + tempid);
@@ -555,7 +557,7 @@ function USBDevice() {
 }
 
 function User() {
-    this.id = crypto.randomBytes(8).toString("hex"); // Generate random 16 char hex string for user ID
+    this.id = biguint(crypto.randomBytes(4), "dec"); // Generate random number in decimal
     
     this.getID = function() {
         return this.id;
