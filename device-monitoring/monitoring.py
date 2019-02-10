@@ -175,10 +175,10 @@ def send_usb(act, loc, mod, respFunc=None):
 
 
 def usb_event(action, device):
-    print(action)
-    print(device.device_path)
-    print(device.get("ID_PATH"))
-    print(device.get("ID_MODEL"))
+    # print(action)
+    # print(device.device_path)
+    # print(device.get("ID_PATH"))
+    # print(device.get("ID_MODEL"))
 
     if (device.device_path is not None and device.get("ID_MODEL") is not None):
         devicePathFull = device.device_path
