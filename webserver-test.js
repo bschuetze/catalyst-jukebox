@@ -272,9 +272,14 @@ function handler(req, res) { //create server (request, response)
                         if (usbUpdateCheck(bodyJSON)) {
                             console.log("USB update: " + bodyJSON["model"] + " " + bodyJSON["action"] + " " + 
                                         bodyJSON["location"]);
-                            res.writeHead(200, { 'Content-Type': 'text/html' });
-                            requestCheck(bodyJSON);
-                            return res.end("USB data updated");
+                            let tempid = requestCheck(bodyJSON);
+                            if (tempid > 0) {
+                                res.writeHead(200, { 'Content-Type': 'text/html' });
+                                return res.end("ID:" + tempid);
+                            } else {
+                                res.writeHead(412, { 'Content-Type': 'text/html' });
+                                return res.end("No pending request present");
+                            }
                         } else {
                             console.log("USB update does not match expected format");
                             res.writeHead(400, { 'Content-Type': 'text/html' });
@@ -498,8 +503,11 @@ function requestCheck(body) {
         // Currently only gets the most recent request, will break if phones connected out of sequence
         let request = pendingRequests.shift();
         spotifyHandler.addRequest(request);
+        return request["id"];
     } else {
         console.log("No currently pending requests, please disconnect phone and make request");
+        // Error ID
+        return -1;
     }
 }
 
@@ -644,7 +652,12 @@ function SpotifyPlaylist() {
         });
     }    
 
-    
+    // Request has the form: {"id": 000, "tracks": [""]}
+    this.addRequest = function(req) {
+        for (let i = 0; i < req["tracks"].length; i++) {
+            
+        }
+    }
     
     this.setDevice = function() {
         console.log("Setting playback device to: " + deviceName);

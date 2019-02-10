@@ -90,7 +90,8 @@ def onMessage(client, userdata, msg):
             MQTT_PAGERS[topicSplit[1]].init()
 
 
-
+def checkoutPager():
+    print("Checking out pager")
 
 
 
