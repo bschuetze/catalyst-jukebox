@@ -138,7 +138,7 @@ print (monitor)
 # def 
 
 # Sends JSON data
-def server_communication(dest, method, header=None, body=None, respFunc=None):
+def server_communication(dest, method, header=None, body=None, respFunc=None, **args):
     h = {}
     b = {}
 
@@ -164,7 +164,7 @@ def server_communication(dest, method, header=None, body=None, respFunc=None):
         print("Method not properly defined: " + method)
 
     if (respFunc is not None):
-        respFunc(r)
+        respFunc(r, args)
     else:
         print("Status: " + str(r.status_code) + " ")
         if (r.headers["Content-Type"] == "application/json"):
@@ -175,10 +175,11 @@ def server_communication(dest, method, header=None, body=None, respFunc=None):
 # act = action, loc = location, mod = model
 def send_usb(act, loc, mod, respFunc=None):
     dest = "http://" + get_ip() + ":" + str(NODE_PORT) + "/usbUpdate"
-    server_communication(dest, "POST", None, {"model": mod, "location": loc, "action": act}, respFunc)
+    server_communication(dest, "POST", None, {"model": mod, "location": loc, "action": act}, connectDevice, (port=loc, model=mod))
 
-def connectDevice(resp):
-    print("s")
+def connectDevice(resp, **args):
+    print(resp)
+    print(args)
 
 
 
