@@ -177,6 +177,10 @@ def send_usb(act, loc, mod, respFunc=None):
     dest = "http://" + get_ip() + ":" + str(NODE_PORT) + "/usbUpdate"
     server_communication(dest, "POST", None, {"model": mod, "location": loc, "action": act}, respFunc)
 
+def connectDevice(resp):
+    print("s")
+
+
 
 def usb_event(action, device):
     # print(action)
@@ -209,7 +213,7 @@ def usb_event(action, device):
                             print("Monitoring " + device.get("ID_MODEL") +
                                 " at usb port " + usbPort)
                             # Send info to server
-                            send_usb(action, usbPort, device.get("ID_MODEL"))
+                            send_usb(action, usbPort, device.get("ID_MODEL"), connectDevice)
                         else:
                             print(device.get('ID_MODEL') + " connected at usb port " + usbPort +
                                 " but port already contains " + connectedDevices[usbPort])
