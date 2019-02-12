@@ -119,8 +119,14 @@ ONBOARD_LED = Pin(5, Pin.OUT)
 ONBOARD_LED.value(0)
 onboardLEDTimer = machine.Timer(0)
 
+USB_PIN = Pin(13, Pin.IN)
+GREEN_LED = Pin(16, Pin.OUT)
+GREEN_LED.value(0)
+WHITE_LED = Pin(17, Pin.OUT)
+WHITE_LED.value(0)
+
 # WiFi
-loops = 0
+loops = 10
 while (not station.isconnected() and loops < 10):
     # Give some time to connect to Network and clear out log
     time.sleep(5)
@@ -202,7 +208,16 @@ while True:
     if (publishedName and station.isconnected()):
         client.check_msg()
     
+    if (USB_PIN.value() == 0):
+      GREEN_LED.value(0)
+      WHITE_LED.value(1)
+    elif (USB_PIN.value() == 1):
+      GREEN_LED.value(1)
+      WHITE_LED.value(0)
+      
+    
     time.sleep(5)
+
 
 
 
