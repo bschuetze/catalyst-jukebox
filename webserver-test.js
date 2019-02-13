@@ -644,7 +644,7 @@ function setSpotifyTimeout(duration) {
 }
 
 function setCurrentPlayingTimeout(duration) {
-    currentlyPlayingTimeout = setTimeout(callCurrentlyPlaying, duration * 1000);
+    currentlyPlayingTimeout = setInterval(callCurrentlyPlaying, duration * 1000);
 }
 
 function callSpotifyDevice() {
@@ -687,6 +687,7 @@ function SpotifyPlaylist() {
         this.getDeviceID();
         this.initPlaylist();
         this.configured = true;
+        setCurrentPlayingTimeout(15);
     }
 
     this.getUserID = function() {
