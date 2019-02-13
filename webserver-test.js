@@ -271,6 +271,7 @@ function handler(req, res) { //create server (request, response)
                     req.on("end", function () {
                         bodyJSON = JSON.parse(body);
                         let currentUID = spotifyHandler.currentPlayingUID();
+                        console.log("Current UID: " + currentUID);
                         res.writeHead(200, { 'Content-Type': 'text/html' });
                         return res.end("UID:" + currentUID);
                     });
