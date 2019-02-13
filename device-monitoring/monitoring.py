@@ -371,8 +371,8 @@ usbObserver.start()
 #         print(btpagers)
 
 
-print("sleeping 300s")
-time.sleep(300)
+print("sleeping 3000s")
+time.sleep(3000)
 
 # for device in context.list_devices(subsystem='usb'):
 #     print(device)

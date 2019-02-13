@@ -76,10 +76,10 @@ def usbHandler(pin):
     pager.detectConnection(USB_PIN.value())
     if (USB_PIN.value() == 0):
         GREEN_LED.value(0)
-        WHITE_LED.value(1)
+        RED_LED.value(1)
     elif (USB_PIN.value() == 1):
         GREEN_LED.value(1)
-        WHITE_LED.value(0)
+        RED_LED.value(0)
 
 
 connectToWiFi(utils.WIFI_PWD)
@@ -185,8 +185,8 @@ USB_PIN = Pin(13, Pin.IN)
 
 GREEN_LED = Pin(16, Pin.OUT)
 GREEN_LED.value(0)
-WHITE_LED = Pin(17, Pin.OUT)
-WHITE_LED.value(0)
+RED_LED = Pin(17, Pin.OUT)
+RED_LED.value(0)
 
 VIBR_CONTROL = Pin(4, Pin.OUT)
 VIBR_CONTROL.value(0)
@@ -249,6 +249,7 @@ publishedName = False
 mqttConnected = False
 
 def updateConnection():
+    print("Publishing status: " + str(pager.CONNECTED))
     client.publish(bytes(str(TOPIC_BASE + "/" + str(ID) +
                              "/status/connected"), "utf-8"), str(pager.CONNECTED))
 
@@ -260,7 +261,7 @@ def messageReceived(topic, msg):
     if (splitTopic[-1] == "control"):
       if (decMsg == INIT_MSG):
         pager.resetPager()
-        pager.detectConnection(USB_PIN)
+        pager.detectConnection(USB_PIN.value())
         # updateConnection()
     if (splitTopic[-1] == "checkout"):
         pager.assign(decMsg)
@@ -280,6 +281,7 @@ while True:
         client.connect()
 
     if (not publishedName and station.isconnected()):
+        pager.MQTT_READY = True
         print("Logging name with MQTT server")
         publishedName = True
         print(bytes(str(TOPIC_BASE + "/global/init"), "utf-8"))
@@ -288,7 +290,6 @@ while True:
         client.set_callback(messageReceived)
         client.subscribe(bytes(str(TOPIC_BASE + "/" + str(ID) + "/control"), "utf-8"))
         client.subscribe(bytes(str(TOPIC_BASE + "/" + str(ID) + "/checkout"), "utf-8"))
-        pager.MQTT_READY = True
 
     if (publishedName and station.isconnected()):
         client.check_msg()
