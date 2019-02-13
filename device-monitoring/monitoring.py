@@ -15,6 +15,7 @@ import requests
 import socket
 import sched
 import paho.mqtt.client as mqtt
+import RPi.GPIO as GPIO
 
 # get_ip() original code from: 
 # https://stackoverflow.com/questions/166506/finding-local-ip-addresses-using-pythons-stdlib
@@ -63,13 +64,14 @@ class User:
     def matches(self, mod, port):
         return (self.model == mod and self.port == port)
 
+
+GPIO.setmode(GPIO.BCM)
 TOPIC_BASE = "catalyst-jukebox"
 PAGER_IDS = []
 MQTT_PAGERS = {}
 CLIENT_ID = "catalyst-jukebox_MAIN"
 schedule = sched.scheduler(time.time, time.sleep)
 BUZZ_DURATION = 15
-
 
 def onConnect(client, userdata, flags, rc):
     print("MQTT connected with code: " + mqtt.connack_string(rc))
@@ -375,7 +377,23 @@ def usb_event(action, device):
     # else:
     #     print("USB device path is None type, " + str(device) + " " + action)
 
-
+# Button callback
+def locateButtonCB(channel):
+    if (GPIO.input(16)):
+        print("Locate button high")
+        # Pin 16 high
+        locatePager()
+    else:
+        # Pin 16 low
+        print("Locate button low")
+        # Button
+        # Receive:
+GPIO.setup(16, GPIO.IN)
+# Supply:
+GPIO.setup(21, GPIO.OUT)
+GPIO.output(21, GPIO.HIGH)
+# Interrupts:
+GPIO.add_event_detect(16, GPIO.BOTH, callback=locateButtonCB)
 
 
 # USB STUFF
