@@ -789,7 +789,9 @@ function SpotifyPlaylist() {
         });
     }
 
-    this.play = function(ix) {
+    this.play = function (ix) {
+        // Require to store 'this' as it changes inside the fetch call
+        let self = this;
         
         this.spotifyRequest(apiURL + "me/player/play", "PUT", {}, 
                             {"context_uri": this.playlistURI, "offset": {"position": ix}}, 
