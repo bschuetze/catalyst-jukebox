@@ -382,7 +382,7 @@ def locateButtonCB(channel):
     if (GPIO.input(16)):
         print("Locate button high")
         # Pin 16 high
-        locatePager()
+        # locatePager()
     else:
         # Pin 16 low
         print("Locate button low")
