@@ -394,7 +394,7 @@ GPIO.setup(16, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(21, GPIO.OUT)
 GPIO.output(21, GPIO.HIGH)
 # Interrupts:
-GPIO.add_event_detect(16, GPIO.BOTH, callback=locateButtonCB, bouncetime=100)
+GPIO.add_event_detect(16, GPIO.BOTH, callback=locateButtonCB, bouncetime=30)
 
 
 # USB STUFF
