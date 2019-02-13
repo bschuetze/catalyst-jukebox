@@ -381,20 +381,22 @@ def usb_event(action, device):
 def locateButtonCB(channel):
     if (GPIO.input(16)):
         print("Locate button high")
+        GPIO.output(21, GPIO.HIGH)
         # Pin 16 high
-        # locatePager()
+        locatePager()
     else:
         # Pin 16 low
         print("Locate button low")
+        GPIO.output(21, GPIO.LOW)
 
-        # Button
-        # Receive:
+# Button
+# Receive:
 GPIO.setup(16, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 # Supply:
 GPIO.setup(21, GPIO.OUT)
 GPIO.output(21, GPIO.HIGH)
 # Interrupts:
-GPIO.add_event_detect(16, GPIO.BOTH, callback=locateButtonCB, bouncetime=30)
+GPIO.add_event_detect(16, GPIO.BOTH, callback=locateButtonCB, bouncetime=100)
 
 
 # USB STUFF
