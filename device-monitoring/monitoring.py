@@ -251,12 +251,18 @@ def locatePagerCB(resp):
     if (resp.status_code == 200):
         tempSplit = resp.text.split(":")
         currentUserID = tempSplit[-1]
+        print("Current UID: " + str(currentUserID))
+        found = False
         for user in USERS:
             if (user.userID == currentUserID):
+                print("Found pager: " + user.pagerID)
+                found = True
                 buzzPager(user.pagerID, True)
                 schedule.enter(BUZZ_DURATION, 1, buzzPager,
                                kwargs={"pid": str(user.pagerID), "start": False})
-
+                break
+        if (not Found):
+            print("Did not find a user with ID: " + str(currentUserID))
     else:
         print("Status not 200")
         print(resp)
