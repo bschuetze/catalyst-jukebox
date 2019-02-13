@@ -779,7 +779,7 @@ function SpotifyPlaylist() {
                 } else {
                     console.log("Successfully added: " + songURIs + " to playlist");
                     if (playSong != null && playSong) {
-                        self.play(self.playlistURI, 0);
+                        self.play(0);
                     }
                     if (self.configured) {
                         self.updateRepeat();
@@ -789,10 +789,24 @@ function SpotifyPlaylist() {
         });
     }
 
-    this.play = function(context, ix) {
+    this.play = function(ix) {
         this.spotifyRequest(apiURL + "me/player/play", "PUT", {}, 
                             {"context_uri": this.playlistURI, "offset": {"position": ix}}, 
                             function(data, status) {
+            if (!util.emptyObject(data)) {
+                if (data.hasOwnProperty("error")) {
+                    console.log("Something went wrong setting playback");
+                    console.log(data);
+                } else {
+                    console.log("Successfully set playback to context: " + this.playlistURI);
+                }
+            }
+        });
+    }
+
+    this.updateContext = function () {
+        this.spotifyRequest(apiURL + "me/player/play", "PUT", {}, { "context_uri": this.playlistURI },
+        function (data, status) {
             if (!util.emptyObject(data)) {
                 if (data.hasOwnProperty("error")) {
                     console.log("Something went wrong setting playback");
@@ -859,6 +873,7 @@ function SpotifyPlaylist() {
             if (callback != null && callback && data["is_playing"]) {
                 self.playlist.updateCurrentlyPlaying(data["item"]["uri"], data["progress_ms"]);
                 self.updateRepeat();
+                self.updateContext();
             }
         });
     }
