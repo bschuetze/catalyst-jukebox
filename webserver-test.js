@@ -28,6 +28,7 @@ const defaultSong = "spotify:track:2Z8WuEywRWYTKe1NybPQEW";
 var getDeviceTimeout;
 const defaultID = 123456789;
 var pendingRequests = [];
+var currentlyPlayingTimeout;
 
 // Auth variables
 const authorizeURL = "https://accounts.spotify.com/authorize";
@@ -542,8 +543,49 @@ function PlaylistHandler() {
     this.playlist = [];
     this.position = -1;
 
+    this.currentSong = "";
+    this.currentms = 0;
+
     this.addSong = function(song) {
         this.playlist.push(song);
+    }
+
+    this.removeUserSongs = function(uid) {
+        let songsToRemove = []
+        for (let i = 0; i < this.playlist.length; i++) {
+            if (this.playlist[i].owner == uid) {
+                songsToRemove.push(this.playlist[i].uri);
+                if (i < this.position) {
+                    this.position = this.position - 1;
+                } else if (i == this.position) {
+                    // Do nothing as the song will naturally move to the 'next'
+                } else { // i > this.position
+                    // Do nothing as the song has yet to be played and has no effect on position
+                }
+                this.playlist.splice(i, 1);
+            }
+        }
+    }
+
+    this.updateCurrentlyPlaying = function(uri, ms) {
+        if (uri != this.playlist[this.position].uri) {
+            this.next();
+            if (ms != null) {
+                this.currentms = ms;
+            }
+        } else if (ms != null && this.currentms > ms && this.playlist[this.position + 1] != null 
+                   && this.playlist[this.position + 1].uri == uri) {
+            this.next();
+            this.currentms = ms;
+        } else {
+            if (ms != null) {
+                this.currentms = ms;
+            }
+        }
+    }
+
+    this.lastSong = function() {
+        return (this.position == this.playlist.length - 1);
     }
 
     this.next = function() {
@@ -601,8 +643,16 @@ function setSpotifyTimeout(duration) {
     getDeviceTimeout = setTimeout(callSpotifyDevice, duration);
 }
 
+function setCurrentPlayingTimeout(duration) {
+    currentlyPlayingTimeout = setTimeout(callCurrentlyPlaying, duration * 1000);
+}
+
 function callSpotifyDevice() {
     spotifyHandler.getDeviceID();
+}
+
+function callCurrentlyPlaying() {
+    spotifyHandler.currentlyPlaying(true);
 }
 
 function SpotifyPlaylist() {
@@ -620,7 +670,7 @@ function SpotifyPlaylist() {
 
     // this.getDeviceTimeout;
 
-    this.repeat = "off";       // track | context | off.
+    this.repeat = "context";       // track | context | off.
     this.shuffle = false; // true | false
 
     // .getPlaylist() vars
@@ -697,6 +747,15 @@ function SpotifyPlaylist() {
         });
     }
 
+    this.updateRepeat = function() {
+        if (this.playlist.lastSong()) {
+            this.repeat = "track";
+        } else {
+            this.repeat = "context"
+        }
+        this.setRepeat();
+    }
+
     this.setRepeat = function() {
         console.log("Setting repeat to " + this.repeat);
         this.spotifyRequest(apiURL + "me/player/repeat?state=" + this.repeat, "PUT");
@@ -724,6 +783,9 @@ function SpotifyPlaylist() {
                     console.log("Successfully added: " + songURIs + " to playlist");
                     if (playSong != null && playSong) {
                         self.play(self.playlistURI, 0);
+                    }
+                    if (self.configured) {
+                        self.updateRepeat();
                     }
                 }
             }
@@ -771,7 +833,7 @@ function SpotifyPlaylist() {
         return curSong.owner;
     }
 
-    this.currentlyPlaying = function() {
+    this.currentlyPlaying = function(callback) {
         this.spotifyRequest(apiURL + "me/player/currently-playing", "GET", {}, {}, function(data, status) {
             if (data["is_playing"]) {
                 console.log("Currently Playing:");
@@ -791,6 +853,10 @@ function SpotifyPlaylist() {
             console.log("  Artist(s): " + songArtists)
             console.log("  Album: " + data["item"]["album"]["name"]);
             console.log("  Track URI: " + data["item"]["uri"]);
+
+            if (callback != null && callback && data["is_playing"]) {
+                self.playlist.updateCurrentlyPlaying(data["item"]["uri"], data["progress_ms"]);
+            }
         });
     }
 
