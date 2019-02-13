@@ -834,7 +834,10 @@ function SpotifyPlaylist() {
         return curSong.owner;
     }
 
-    this.currentlyPlaying = function(callback) {
+    this.currentlyPlaying = function (callback) {
+        // Require to store 'this' as it changes inside the fetch call
+        let self = this;
+        
         this.spotifyRequest(apiURL + "me/player/currently-playing", "GET", {}, {}, function(data, status) {
             if (data["is_playing"]) {
                 console.log("Currently Playing:");
