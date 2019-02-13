@@ -569,6 +569,9 @@ function PlaylistHandler() {
 
     this.updateCurrentlyPlaying = function(uri, ms) {
         if (uri != this.playlist[this.position].uri) {
+            console.log("Updating currently playing from: " + this.playlist[this.position].uri + 
+                        ", to: " + uri + ", which should match: " +
+                        this.playlist[this.position + 1].uri);
             this.next();
             if (ms != null) {
                 this.currentms = ms;
@@ -837,26 +840,28 @@ function SpotifyPlaylist() {
     this.currentlyPlaying = function (callback) {
         // Require to store 'this' as it changes inside the fetch call
         let self = this;
-        
+
         this.spotifyRequest(apiURL + "me/player/currently-playing", "GET", {}, {}, function(data, status) {
-            if (data["is_playing"]) {
-                console.log("Currently Playing:");
-            } else {
-                console.log("Currently Paused:");
-            }
-            console.log("  Song: " + data["item"]["name"]);
-            let songArtists = "";
-            for (let i = 0; i < data["item"]["artists"].length; i++) {
-                songArtists = songArtists + data["item"]["artists"][i]["name"];
-                if (i == data["item"]["artists"].length - 2) {
-                    songArtists = songArtists + " & ";
-                } else if (i < data["item"]["artists"].length - 2) {
-                    songArtists = songArtists + ", ";
+            if (callback == null || !callback) {
+                if (data["is_playing"]) {
+                    console.log("Currently Playing:");
+                } else {
+                    console.log("Currently Paused:");
                 }
+                console.log("  Song: " + data["item"]["name"]);
+                let songArtists = "";
+                for (let i = 0; i < data["item"]["artists"].length; i++) {
+                    songArtists = songArtists + data["item"]["artists"][i]["name"];
+                    if (i == data["item"]["artists"].length - 2) {
+                        songArtists = songArtists + " & ";
+                    } else if (i < data["item"]["artists"].length - 2) {
+                        songArtists = songArtists + ", ";
+                    }
+                }
+                console.log("  Artist(s): " + songArtists)
+                console.log("  Album: " + data["item"]["album"]["name"]);
+                console.log("  Track URI: " + data["item"]["uri"]);
             }
-            console.log("  Artist(s): " + songArtists)
-            console.log("  Album: " + data["item"]["album"]["name"]);
-            console.log("  Track URI: " + data["item"]["uri"]);
 
             if (callback != null && callback && data["is_playing"]) {
                 self.playlist.updateCurrentlyPlaying(data["item"]["uri"], data["progress_ms"]);
