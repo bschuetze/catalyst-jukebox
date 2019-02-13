@@ -547,6 +547,7 @@ function PlaylistHandler() {
     this.currentms = 0;
 
     this.addSong = function(song) {
+        console.log("Adding: " + song.uri + ", request by: " + song.owner);
         this.playlist.push(song);
     }
 
@@ -614,17 +615,6 @@ function PlaylistHandler() {
     }
 }
 
-function USBDevice() {
-    this.port = "";
-    this.model = "";
-    this.state = "uninitialized";
-
-    this.update = function (port, model, state) {
-        this.port = port;
-        this.model = model;
-        this.state = state;
-    }
-}
 
 function User() {
     this.id = biguint(crypto.randomBytes(4), "dec"); // Generate random number in decimal
@@ -752,12 +742,15 @@ function SpotifyPlaylist() {
     }
 
     this.updateRepeat = function() {
+        let prevRepeat = this.repeat;
         if (this.playlist.lastSong()) {
             this.repeat = "track";
         } else {
             this.repeat = "context"
         }
-        this.setRepeat();
+        if (this.repeat != prevRepeat) {
+            this.setRepeat();
+        }
     }
 
     this.setRepeat = function() {
@@ -865,6 +858,7 @@ function SpotifyPlaylist() {
 
             if (callback != null && callback && data["is_playing"]) {
                 self.playlist.updateCurrentlyPlaying(data["item"]["uri"], data["progress_ms"]);
+                self.updateRepeat();
             }
         });
     }
