@@ -790,6 +790,9 @@ function SpotifyPlaylist() {
     }
 
     this.play = function(ix) {
+        // Require to store 'this' as it changes inside the fetch call
+        let self = this;
+        
         this.spotifyRequest(apiURL + "me/player/play", "PUT", {}, 
                             {"context_uri": this.playlistURI, "offset": {"position": ix}}, 
                             function(data, status) {
@@ -798,7 +801,7 @@ function SpotifyPlaylist() {
                     console.log("Something went wrong setting playback");
                     console.log(data);
                 } else {
-                    console.log("Successfully set playback to context: " + this.playlistURI);
+                    console.log("Successfully set playback to context: " + self.playlistURI);
                 }
             }
         });
