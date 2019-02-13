@@ -386,9 +386,10 @@ def locateButtonCB(channel):
     else:
         # Pin 16 low
         print("Locate button low")
+
         # Button
         # Receive:
-GPIO.setup(16, GPIO.IN)
+GPIO.setup(16, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 # Supply:
 GPIO.setup(21, GPIO.OUT)
 GPIO.output(21, GPIO.HIGH)
