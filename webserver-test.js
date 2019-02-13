@@ -790,8 +790,6 @@ function SpotifyPlaylist() {
     }
 
     this.play = function(ix) {
-        // Require to store 'this' as it changes inside the fetch call
-        let self = this;
         
         this.spotifyRequest(apiURL + "me/player/play", "PUT", {}, 
                             {"context_uri": this.playlistURI, "offset": {"position": ix}}, 
@@ -808,6 +806,9 @@ function SpotifyPlaylist() {
     }
 
     this.updateContext = function () {
+        // Require to store 'this' as it changes inside the fetch call
+        let self = this;
+
         this.spotifyRequest(apiURL + "me/player/play", "PUT", {}, { "context_uri": this.playlistURI },
         function (data, status) {
             if (!util.emptyObject(data)) {
@@ -815,7 +816,7 @@ function SpotifyPlaylist() {
                     console.log("Something went wrong setting playback");
                     console.log(data);
                 } else {
-                    console.log("Successfully set playback to context: " + context);
+                    console.log("Successfully set playback to context: " + self.playlistURI);
                 }
             }
         });
@@ -876,7 +877,7 @@ function SpotifyPlaylist() {
             if (callback != null && callback && data["is_playing"]) {
                 self.playlist.updateCurrentlyPlaying(data["item"]["uri"], data["progress_ms"]);
                 self.updateRepeat();
-                self.updateContext();
+                // self.updateContext();
             }
         });
     }
