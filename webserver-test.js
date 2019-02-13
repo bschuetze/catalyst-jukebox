@@ -806,6 +806,7 @@ function SpotifyPlaylist() {
         }
         this.addSongs([defaultSong], true);
         this.playlist.addSong(new Song(defaultID, defaultSong));
+        this.playlist.next();
         // add default song
         // play it
     }
