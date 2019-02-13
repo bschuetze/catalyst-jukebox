@@ -13,7 +13,7 @@ import pyudev
 import time
 import requests
 import socket
-import bluetooth as bt
+import sched
 import paho.mqtt.client as mqtt
 
 # get_ip() original code from: 
@@ -67,6 +67,8 @@ TOPIC_BASE = "catalyst-jukebox"
 PAGER_IDS = []
 MQTT_PAGERS = {}
 CLIENT_ID = "catalyst-jukebox_MAIN"
+schedule = sched.scheduler(time.time, time.sleep)
+BUZZ_DURATION = 15
 
 
 def onConnect(client, userdata, flags, rc):
@@ -233,7 +235,30 @@ def checkoutPager(pid, uid):
     MQTT_PAGERS[pid].checkOut()
     client.publish((TOPIC_BASE + "/" + pid +
                     "/checkout"), payload=str(uid), qos=1, retain=False)
-    
+
+def buzzPager(pid, start):
+    print("Buzzing " + str(pid) + " " + str(start))
+    client.publish((TOPIC_BASE + "/" + pid + "/locate"),
+                   payload=str(start), qos=1, retain=False)
+
+def locatePager():
+    dest = "http://" + get_ip() + ":" + str(NODE_PORT) + "/currentUID"
+    server_communication(dest, "POST", None, None, locatePagerCB)
+
+def locatePagerCB(resp):
+    if (resp.status_code == 200):
+        tempSplit = resp.text.split(":")
+        currentUserID = tempSplit[-1]
+        for user in USERS:
+            if (user.userID == currentUserID):
+                buzzPager(user.pagerID, True)
+                schedule.enter(BUZZ_DURATION, 1, buzzPager,
+                               kwargs={"pid": str(user.pagerID), "start": False})
+
+    else:
+        print("Status not 200")
+        print(resp)
+
 
 def usb_event(action, device):
     # print(action)

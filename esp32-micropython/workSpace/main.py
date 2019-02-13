@@ -160,10 +160,14 @@ class Pager:
         if (start):
             print("Identifying")
             self.IDENTIFYING = True
+            ALERT_LED1.value(1)
+            ALERT_LED2.value(1)
             # Start detect Connection
         else:
             print("Ending identify")
             self.IDENTIFYING = False
+            ALERT_LED1.value(0)
+            ALERT_LED2.value(0)
 
 # Devices
 pager = Pager()
@@ -261,10 +265,13 @@ def messageReceived(topic, msg):
     if (splitTopic[-1] == "control"):
       if (decMsg == INIT_MSG):
         pager.resetPager()
-        pager.detectConnection(USB_PIN.value())
+        usbHandler(USB_PIN)
+        # pager.detectConnection(USB_PIN.value())
         # updateConnection()
     if (splitTopic[-1] == "checkout"):
         pager.assign(decMsg)
+    if (splitTopic[-1] == "locate"):
+        pager.buzz(decMsg)
 
 
 # Interrupt handlers
@@ -286,10 +293,11 @@ while True:
         publishedName = True
         print(bytes(str(TOPIC_BASE + "/global/init"), "utf-8"))
         print(str(ID))
-        client.publish(bytes(str(TOPIC_BASE + "/global/init"), "utf-8"), (str(ID)))
         client.set_callback(messageReceived)
         client.subscribe(bytes(str(TOPIC_BASE + "/" + str(ID) + "/control"), "utf-8"))
         client.subscribe(bytes(str(TOPIC_BASE + "/" + str(ID) + "/checkout"), "utf-8"))
+        client.subscribe(bytes(str(TOPIC_BASE + "/" + str(ID) + "/locate"), "utf-8"))
+        client.publish(bytes(str(TOPIC_BASE + "/global/init"), "utf-8"), (str(ID)))
 
     if (publishedName and station.isconnected()):
         client.check_msg()
@@ -297,6 +305,7 @@ while True:
     # pager.buzz(not pager.BUZZING)
     
     time.sleep(5)
+
 
 
 

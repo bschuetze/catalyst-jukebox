@@ -255,6 +255,30 @@ function handler(req, res) { //create server (request, response)
 
                 res.writeHead(200, { 'Content-Type': 'text/html' });
                 return res.end("Request successful");
+            } else if (loc.pathname == "/currentUID") {
+                if (req.headers.host == ip.address() + ":" + port) {
+                    // Code originally from: https://stackoverflow.com/questions/4295782/how-to-process-post-data-in-node-js
+                    // BEGIN SNIPPET
+                    let body = "";
+                    let bodyJSON = {};
+                    req.on("data", function (data) {
+                        if (body.length > 1e6) {
+                            // Request is coming with large amounts of data, not a good idea to continue to parse it
+                            request.connection.destroy();
+                        }
+                        body += data;
+                    }); // END SNIPPET
+                    req.on("end", function () {
+                        bodyJSON = JSON.parse(body);
+                        let currentUID = spotifyHandler.currentPlayingUID();
+                        res.writeHead(200, { 'Content-Type': 'text/html' });
+                        return res.end("UID:" + currentUID);
+                    });
+                } else {
+                    console.log("UID request does not match expected source");
+                    res.writeHead(401, { 'Content-Type': 'text/html' });
+                    return res.end("Unauthorized Origin");
+                }
             } else if (loc.pathname == "/usbUpdate") {
                 if (req.headers.host == ip.address() + ":" + port) {
                     // Code originally from: https://stackoverflow.com/questions/4295782/how-to-process-post-data-in-node-js
@@ -657,8 +681,9 @@ function SpotifyPlaylist() {
     // Request has the form: {"id": 000, "tracks": [""]}
     this.addRequest = function(req) {
         for (let i = 0; i < req["tracks"].length; i++) {
-            
+            this.playlist.addSong(new Song(req["id"], req["tracks"][i]));
         }
+        this.addSongs(req["tracks"]);
     }
     
     this.setDevice = function() {
@@ -669,10 +694,6 @@ function SpotifyPlaylist() {
             self.setRepeat();
             self.setShuffle();
         });
-    }
-
-    this.songRequest = function() {
-
     }
 
     this.setRepeat = function() {
@@ -742,6 +763,11 @@ function SpotifyPlaylist() {
                 }
             }
         });
+    }
+
+    this.currentPlayingUID = function() {
+        let curSong = this.playlist.currentlyPlaying();
+        return curSong.owner;
     }
 
     this.currentlyPlaying = function() {
