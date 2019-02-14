@@ -136,7 +136,7 @@ class Pager:
                 self.buzz(False)
     
     def buzz(self, start):
-        if (start):
+        if (start == "True"):
             print("Buzzing")
             self.BUZZING = True
             # Make buzzer calls
@@ -262,6 +262,7 @@ def messageReceived(topic, msg):
     decTopic = topic.decode("ASCII")
     decMsg = msg.decode("ASCII")
     print("Topic: " + decTopic + ", Msg: " + decMsg)
+    print()
     splitTopic = decTopic.split("/")
     if (splitTopic[-1] == "control"):
       if (decMsg == INIT_MSG):
@@ -306,6 +307,7 @@ while True:
     # pager.buzz(not pager.BUZZING)
     
     time.sleep(5)
+
 
 
 

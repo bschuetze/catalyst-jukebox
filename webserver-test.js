@@ -25,7 +25,8 @@ var spotifyHandler = new SpotifyPlaylist();
 const publicPlaylist = true;
 const deviceName = "raspotify (catalyst-jukebox)";
 // const deviceName = "BRENT-PC";
-const defaultSong = "spotify:track:2Z8WuEywRWYTKe1NybPQEW";
+// const defaultSong = "spotify:track:2Z8WuEywRWYTKe1NybPQEW"; // ACTUAL
+const defaultSong = "spotify:track:5f0FCcrkvyhiRT5wynS0XN"; // SHORT FOR DEBUGGING
 var getDeviceTimeout;
 const defaultID = 123456789;
 var pendingRequests = [];
