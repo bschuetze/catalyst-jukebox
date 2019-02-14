@@ -647,6 +647,7 @@ function User() {
 function Song(user, uri) {
     this.owner = user;
     this.uri = uri;
+    this.played = false;
 }
 
 

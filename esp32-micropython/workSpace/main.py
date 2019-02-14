@@ -278,6 +278,8 @@ def messageReceived(topic, msg):
         # updateConnection()
     if (splitTopic[-1] == "checkout"):
         pager.assign(decMsg)
+    if (splitTopic[-1] == "return"):
+        pager.deassign()
     if (splitTopic[-1] == "locate"):
         pager.buzz(decMsg)
 
@@ -302,9 +304,10 @@ while True:
         print(bytes(str(TOPIC_BASE + "/global/init"), "utf-8"))
         print(str(ID))
         client.set_callback(messageReceived)
-        client.subscribe(bytes(str(TOPIC_BASE + "/" + str(ID) + "/control"), "utf-8"))
-        client.subscribe(bytes(str(TOPIC_BASE + "/" + str(ID) + "/checkout"), "utf-8"))
-        client.subscribe(bytes(str(TOPIC_BASE + "/" + str(ID) + "/locate"), "utf-8"))
+        # client.subscribe(bytes(str(TOPIC_BASE + "/" + str(ID) + "/control"), "utf-8"))
+        # client.subscribe(bytes(str(TOPIC_BASE + "/" + str(ID) + "/checkout"), "utf-8"))
+        # client.subscribe(bytes(str(TOPIC_BASE + "/" + str(ID) + "/locate"), "utf-8"))
+        client.subscribe(bytes(str(TOPIC_BASE + "/" + str(ID) + "/#"), "utf-8"))
         client.publish(bytes(str(TOPIC_BASE + "/global/init"), "utf-8"), (str(ID)))
 
     if (publishedName and station.isconnected()):
