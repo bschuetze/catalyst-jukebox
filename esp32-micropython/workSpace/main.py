@@ -129,10 +129,11 @@ class Pager:
                 print("Connected")
             else:
                 print("Disconnected")
-                if (self.IDENTIFYING):
-                    self.identify(False)
-                if (self.BUZZING):
-                    self.buzz(False)
+                
+            if (self.IDENTIFYING):
+                self.identify(False)
+            if (self.BUZZING):
+                self.buzz(False)
     
     def buzz(self, start):
         if (start):
