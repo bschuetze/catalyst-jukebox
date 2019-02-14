@@ -234,6 +234,22 @@ def connectDevice(resp, **args):
         print(resp)
         print(args)
 
+def disconnectDevice(port, modID):
+    if (usbPort in connectedDevices):
+        connectedDevices.pop(usbPort)
+        print("Disconnecting " + device.get('ID_MODEL') +
+                " from usb port " + usbPort)
+        for idx, user in enumerate(USERS):
+            if (user.port == port and user.model == modID):
+                print("Disconnected device belonged to user: " + user.userID)
+
+                dest = "http://" + get_ip() + ":" + str(NODE_PORT) + "/usbUpdate"
+                server_communication(dest, "POST", None, {
+                         "model": modID, "location": port, "action": "remove"})
+
+                break
+
+
 def checkoutPager(pid, uid):
     MQTT_PAGERS[pid].checkOut()
     client.publish((TOPIC_BASE + "/" + pid +
@@ -309,11 +325,7 @@ def usb_event(action, device):
                                 " but port already contains " + connectedDevices[usbPort])
                             ## NEED TO HANDLE THIS WITH A MANUAL CHECK
                     elif (action == "remove"):
-                        if (usbPort in connectedDevices):
-                            connectedDevices.pop(usbPort)
-                            print("Disconnecting " + device.get('ID_MODEL') +
-                                " from usb port " + usbPort)
-                            send_usb(action, usbPort, device.get("ID_MODEL"))
+                        disconnectDevice(usbPort, device.get("ID_MODEL"))
                         else:
                             print(device.get('ID_MODEL') + " disconnecting from usb port " + usbPort +
                                 " but port is already empty")

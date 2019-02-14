@@ -300,14 +300,22 @@ function handler(req, res) { //create server (request, response)
                         if (usbUpdateCheck(bodyJSON)) {
                             console.log("USB update: " + bodyJSON["model"] + " " + bodyJSON["action"] + " " + 
                                         bodyJSON["location"]);
-                            let tempid = requestCheck(bodyJSON);
-                            console.log("Request ID: " + tempid);
-                            if (tempid > 0) {
-                                res.writeHead(200, { 'Content-Type': 'text/html' });
-                                return res.end("ID:" + tempid);
+                            if (bodyJSON["action"] == "add") {
+                                let tempid = requestCheck(bodyJSON);
+                                console.log("Request ID: " + tempid);
+                                if (tempid > 0) {
+                                    res.writeHead(200, { 'Content-Type': 'text/html' });
+                                    return res.end("ID:" + tempid);
+                                } else {
+                                    res.writeHead(412, { 'Content-Type': 'text/html' });
+                                    return res.end("No pending request present");
+                                }
+                            } else if (bodyJSON["action"] == "remove") {
+
                             } else {
-                                res.writeHead(412, { 'Content-Type': 'text/html' });
-                                return res.end("No pending request present");
+                                console.log("USB update action does not match expected, got " + bodyJSON["action"]);
+                                res.writeHead(400, { 'Content-Type': 'text/html' });
+                                return res.end("USB update action does not match expected, got " + bodyJSON["action"]);
                             }
                         } else {
                             console.log("USB update does not match expected format");
@@ -553,20 +561,40 @@ function PlaylistHandler() {
     }
 
     this.removeUserSongs = function(uid) {
-        let songsToRemove = []
+        let updatePlay = false;
         for (let i = 0; i < this.playlist.length; i++) {
             if (this.playlist[i].owner == uid) {
-                songsToRemove.push(this.playlist[i].uri);
-                if (i < this.position) {
-                    this.position = this.position - 1;
-                } else if (i == this.position) {
-                    // Do nothing as the song will naturally move to the 'next'
-                } else { // i > this.position
-                    // Do nothing as the song has yet to be played and has no effect on position
+                if (this.playlist[i].played) {
+                    console.log("Song " + this.playlist[i].uri + " already been played, no need to remove");
+                } else {
+                    updatePlay = (updatePlay || this.removeSong(i));
                 }
-                this.playlist.splice(i, 1);
             }
         }
+        return updatePlay;
+    }
+
+    this.removeSong = function(pos) {
+        if (pos == this.position) {
+            console.log("Removing " + this.playlist[i].uri)
+            // Currently playing song to be removed
+            this.playlist.splice(pos, 1);
+            if (this.lastSong()) {
+                // If it is the last song, then we need to go back one
+                this.position = this.position - 1;
+            }
+            return true;
+        } else if (pos > this.position) {
+            console.log("Removing " + this.playlist[i].uri)
+            // Future song to be removed, no need to update other handlers
+            this.playlist.splice(pos, 1);
+            return false;
+        }
+        return false;
+    }
+
+    this.currentSongPlayed = function() {
+        this.playlist[this.position].played = true;
     }
 
     this.updateCurrentlyPlaying = function(uri, playing) {
@@ -577,6 +605,8 @@ function PlaylistHandler() {
             return true;
         }
         if (!playing) {
+            // Update play state of current song
+            this.currentSongPlayed();
             if (!this.lastSong()) {
                 // Update to next song
                 this.next();
@@ -865,26 +895,30 @@ function SpotifyPlaylist() {
         });
     }
 
+    this.removeSongs = function(uid) {
+        let update = this.playlist.removeUserSongs(uid);
+    }
+
     // Takes in a list of song objects:
     // [{"uri": "xxxx:xxx:xxx"}, ...]
     // This currently deleted all occurences of a song, may need to edit?
-    this.removeSongs = function(songs, callback) {
-        // Require to store 'this' as it changes inside the fetch call
-        let self = this;
+    // this.removeSongs = function(songs, callback) {
+    //     // Require to store 'this' as it changes inside the fetch call
+    //     let self = this;
 
-        this.spotifyRequest(apiURL + "playlists/" + this.playlistID + "/tracks", "DELETE", 
-        {"Content-Type": "application/json"}, {"tracks": songs}, function(data, status) {
-            if (!util.emptyObject(data)) {
-                if (data.hasOwnProperty("error")) {
-                    console.log("Something went wrong removing " + songs.length + " songs from playlist");
-                    console.log(data);
-                } else {
-                    console.log("Successfully removed " + songs.length + " songs from playlist");
-                    self.getPlaylistLength(callback);
-                }
-            }
-        });
-    }
+    //     this.spotifyRequest(apiURL + "playlists/" + this.playlistID + "/tracks", "DELETE", 
+    //     {"Content-Type": "application/json"}, {"tracks": songs}, function(data, status) {
+    //         if (!util.emptyObject(data)) {
+    //             if (data.hasOwnProperty("error")) {
+    //                 console.log("Something went wrong removing " + songs.length + " songs from playlist");
+    //                 console.log(data);
+    //             } else {
+    //                 console.log("Successfully removed " + songs.length + " songs from playlist");
+    //                 self.getPlaylistLength(callback);
+    //             }
+    //         }
+    //     });
+    // }
 
     this.currentPlayingUID = function() {
         let curSong = this.playlist.currentlyPlaying();
