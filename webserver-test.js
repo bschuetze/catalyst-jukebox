@@ -753,7 +753,7 @@ function SpotifyPlaylist() {
         for (let i = 0; i < req["tracks"].length; i++) {
             this.playlist.addSong(new Song(req["id"], req["tracks"][i]));
         }
-        this.addSongs(req["tracks"]);
+        // this.addSongs(req["tracks"]);
     }
     
     this.setDevice = function(start) {
