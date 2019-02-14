@@ -238,23 +238,21 @@ def connectDevice(resp, **args):
         print(args)
 
 def disconnectDevice(port, modID):
-    if (usbPort in connectedDevices):
-        connectedDevices.pop(usbPort)
-        print("Disconnecting " + device.get('ID_MODEL') +
-                " from usb port " + usbPort)
-        removeIndex = -1
-        for idx, user in enumerate(USERS):
-            if (user.port == port and user.model == modID):
-                print("Disconnected device belonged to user: " + user.userID)
-                removeIndex = idx
-                dest = "http://" + get_ip() + ":" + str(NODE_PORT) + "/usbUpdate"
-                server_communication(dest, "POST", None, 
-                        {"model": modID, "location": port, "action": "remove", "user": user.userID})
-                break
-        if (removeIndex >= 0):
-            # REMOVE USER AND DEAL WITH THEIR PAGER
-            rUSER = USERS.pop(removeIndex)
-            earlyRemovalPager(rUSER.pagerID)
+    connectedDevices.pop(port)
+    print("Disconnecting " + modID + " from usb port " + port)
+    removeIndex = -1
+    for idx, user in enumerate(USERS):
+        if (user.port == port and user.model == modID):
+            print("Disconnected device belonged to user: " + user.userID)
+            removeIndex = idx
+            dest = "http://" + get_ip() + ":" + str(NODE_PORT) + "/usbUpdate"
+            server_communication(dest, "POST", None, 
+                    {"model": modID, "location": port, "action": "remove", "user": user.userID})
+            break
+    if (removeIndex >= 0):
+        # REMOVE USER AND DEAL WITH THEIR PAGER
+        rUSER = USERS.pop(removeIndex)
+        earlyRemovalPager(rUSER.pagerID)
 
 
 def earlyRemovalPager(pid):
@@ -337,7 +335,8 @@ def usb_event(action, device):
                                 " but port already contains " + connectedDevices[usbPort])
                             ## NEED TO HANDLE THIS WITH A MANUAL CHECK
                     elif (action == "remove"):
-                        disconnectDevice(usbPort, device.get("ID_MODEL"))
+                        if (usbPort in connectedDevices):
+                            disconnectDevice(usbPort, device.get("ID_MODEL"))
                         else:
                             print(device.get('ID_MODEL') + " disconnecting from usb port " + usbPort +
                                 " but port is already empty")
