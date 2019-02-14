@@ -568,24 +568,39 @@ function PlaylistHandler() {
         }
     }
 
-    this.updateCurrentlyPlaying = function(uri, ms) {
+    this.updateCurrentlyPlaying = function(uri, playing) {
         if (uri != this.playlist[this.position].uri) {
-            console.log("Updating currently playing from: " + this.playlist[this.position].uri + 
-                        ", to: " + uri + ", which should match: " +
-                        this.playlist[this.position + 1].uri);
-            this.next();
-            if (ms != null) {
-                this.currentms = ms;
-            }
-        } else if (ms != null && this.currentms > ms && this.playlist[this.position + 1] != null 
-                   && this.playlist[this.position + 1].uri == uri) {
-            this.next();
-            this.currentms = ms;
-        } else {
-            if (ms != null) {
-                this.currentms = ms;
-            }
+            // Update to expected song
+            console.log("Expected playback to be: " + this.playlist[this.position].uri + 
+                        " but actually received: " + uri);
+            return true;
         }
+        if (!playing) {
+            if (!this.lastSong()) {
+                // Update to next song
+                this.next();
+            }
+            // If song hasn't been updated then will replay last song
+            return true;
+        }
+        return false;
+        // if (uri != this.playlist[this.position].uri) {
+        //     console.log("Updating currently playing from: " + this.playlist[this.position].uri + 
+        //                 ", to: " + uri + ", which should match: " +
+        //                 this.playlist[this.position + 1].uri);
+        //     this.next();
+        //     if (ms != null) {
+        //         this.currentms = ms;
+        //     }
+        // } else if (ms != null && this.currentms > ms && this.playlist[this.position + 1] != null 
+        //            && this.playlist[this.position + 1].uri == uri) {
+        //     this.next();
+        //     this.currentms = ms;
+        // } else {
+        //     if (ms != null) {
+        //         this.currentms = ms;
+        //     }
+        // }
     }
 
     this.lastSong = function() {
@@ -612,6 +627,10 @@ function PlaylistHandler() {
 
     this.currentlyPlaying = function() {
         return this.playlist[this.position];
+    }
+
+    this.currentlyPlayingURI = function() {
+        return this.playlist[this.position].uri;
     }
 }
 
@@ -663,7 +682,7 @@ function SpotifyPlaylist() {
 
     // this.getDeviceTimeout;
 
-    this.repeat = "context";       // track | context | off.
+    this.repeat = "off";       // track | context | off.
     this.shuffle = false; // true | false
 
     // .getPlaylist() vars
@@ -678,9 +697,15 @@ function SpotifyPlaylist() {
         console.log("Setting up playlist handling");
         this.getUserID();
         this.getDeviceID();
-        this.initPlaylist();
+        // // this.initPlaylist();
+        // this.configured = true;
+        // setCurrentPlayingTimeout(4);
+    }
+
+    this.setupCB = function() {
         this.configured = true;
-        setCurrentPlayingTimeout(15);
+        this.initPlay();
+        setCurrentPlayingTimeout(4);
     }
 
     this.getUserID = function() {
@@ -731,13 +756,16 @@ function SpotifyPlaylist() {
         this.addSongs(req["tracks"]);
     }
     
-    this.setDevice = function() {
+    this.setDevice = function(start) {
         console.log("Setting playback device to: " + deviceName);
         // Require to store 'this' as it changes inside the fetch call
         let self = this;
         this.spotifyRequest(apiURL + "me/player", "PUT", {}, {"device_ids": [this.deviceID]}, function() {
             self.setRepeat();
             self.setShuffle();
+            if (start != null && start) {
+                self.setupCB();
+            }
         });
     }
 
@@ -754,12 +782,12 @@ function SpotifyPlaylist() {
     }
 
     this.setRepeat = function() {
-        console.log("Setting repeat to " + this.repeat);
+        console.log("Setting repeat to: " + this.repeat);
         this.spotifyRequest(apiURL + "me/player/repeat?state=" + this.repeat, "PUT");
     }
 
     this.setShuffle = function() {
-        console.log("Setting shuffle to " + this.shuffle);
+        console.log("Setting shuffle to: " + this.shuffle);
         this.spotifyRequest(apiURL + "me/player/shuffle?state=" + this.shuffle, "PUT");
     }
 
@@ -789,19 +817,30 @@ function SpotifyPlaylist() {
         });
     }
 
-    this.play = function (ix) {
+    this.initPlay = function () {
+        this.play([defaultSong]);
+        this.playlist.addSong(new Song(defaultID, defaultSong));
+        this.playlist.next();
+    }
+
+    this.updatePlay = function () {
+        this.play([this.playlist.currentlyPlayingURI()]);
+    }
+
+    this.play = function (uris) {
         // Require to store 'this' as it changes inside the fetch call
         let self = this;
         
         this.spotifyRequest(apiURL + "me/player/play", "PUT", {}, 
-                            {"context_uri": this.playlistURI, "offset": {"position": ix}}, 
+                            {"uris": uris}, 
                             function(data, status) {
             if (!util.emptyObject(data)) {
                 if (data.hasOwnProperty("error")) {
                     console.log("Something went wrong setting playback");
                     console.log(data);
                 } else {
-                    console.log("Successfully set playback to context: " + self.playlistURI);
+                    console.log("Successfully set playback to: " + uris);
+                    self.setRepeat();
                 }
             }
         });
@@ -876,9 +915,12 @@ function SpotifyPlaylist() {
                 console.log("  Track URI: " + data["item"]["uri"]);
             }
 
-            if (callback != null && callback && data["is_playing"]) {
-                self.playlist.updateCurrentlyPlaying(data["item"]["uri"], data["progress_ms"]);
-                self.updateRepeat();
+            if (callback != null && callback) {
+                let newPlay = self.playlist.updateCurrentlyPlaying(data["item"]["uri"], data["is_playing"]);
+                if (newPlay) {
+                    self.updatePlay();
+                }
+                // self.updateRepeat();
                 // self.updateContext();
             }
         });
