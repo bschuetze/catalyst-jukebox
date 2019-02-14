@@ -16,6 +16,7 @@ import socket
 import sched
 import paho.mqtt.client as mqtt
 import RPi.GPIO as GPIO
+from threading import Timer
 
 # get_ip() original code from: 
 # https://stackoverflow.com/questions/166506/finding-local-ip-addresses-using-pythons-stdlib
@@ -70,7 +71,7 @@ TOPIC_BASE = "catalyst-jukebox"
 PAGER_IDS = []
 MQTT_PAGERS = {}
 CLIENT_ID = "catalyst-jukebox_MAIN"
-schedule = sched.scheduler(time.time, time.sleep)
+# schedule = sched.scheduler(time.time, time.sleep)
 BUZZ_DURATION = 15
 
 def onConnect(client, userdata, flags, rc):
@@ -260,7 +261,8 @@ def locatePagerCB(resp):
                 buzzPager(user.pagerID, True)
                 # schedule.enter(BUZZ_DURATION, 1, buzzPager,
                 #                kwargs={"pid": str(user.pagerID), "start": False})
-                schedule.enter(BUZZ_DURATION, 1, buzzPager, (str(user.pagerID), False))
+                # schedule.enter(BUZZ_DURATION, 1, buzzPager, (user.pagerID, False))
+                Timer(BUZZ_DURATION, buzzPager, (user.pagerID, False))
                 break
         if (not found):
             print("Did not find a user with ID: " + str(currentUserID))
