@@ -388,13 +388,11 @@ def usb_event(action, device):
 def locateButtonCB(channel):
     if (GPIO.input(16)):
         print("Locate button high")
-        GPIO.output(21, GPIO.HIGH)
         # Pin 16 high
         locatePager()
     else:
         # Pin 16 low
         print("Locate button low")
-        GPIO.output(21, GPIO.LOW)
 
 # Button
 # Receive:
