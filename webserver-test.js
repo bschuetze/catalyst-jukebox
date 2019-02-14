@@ -23,7 +23,8 @@ var _favicon = servefav(path.join(__dirname, "public", "favicon.ico"));
 const apiURL = "https://api.spotify.com/v1/"
 var spotifyHandler = new SpotifyPlaylist();
 const publicPlaylist = true;
-const deviceName = "raspotify (catalyst-jukebox)";
+// const deviceName = "raspotify (catalyst-jukebox)";
+const deviceName = "BRENT-PC";
 const defaultSong = "spotify:track:2Z8WuEywRWYTKe1NybPQEW";
 var getDeviceTimeout;
 const defaultID = 123456789;
