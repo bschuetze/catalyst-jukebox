@@ -137,25 +137,31 @@ class Pager:
     
     def buzz(self, start):
         if (start == "True"):
-            print("Buzzing")
-            self.BUZZING = True
-            # Make buzzer calls
-            VIBR_CONTROL.value(1)
-            BUZZ_CONTROL.value(1)
-            ALERT_LED1.value(1)
-            ALERT_LED2.value(1)
-            pulse(True, vibrationTimer, machine.Timer.PERIODIC, 500, vibrationPulse)
-            pulse(True, buzzerTimer, machine.Timer.PERIODIC, 2, buzzerPulse)
+            if (not self.BUZZING):
+                print("Buzzing")
+                self.BUZZING = True
+                # Make buzzer calls
+                VIBR_CONTROL.value(1)
+                BUZZ_CONTROL.value(1)
+                ALERT_LED1.value(1)
+                ALERT_LED2.value(1)
+                pulse(True, vibrationTimer, machine.Timer.PERIODIC, 500, vibrationPulse)
+                pulse(True, buzzerTimer, machine.Timer.PERIODIC, 2, buzzerPulse)
+            else:
+                print("Already buzzing")
         else:
-            print("Ending buzz")
-            self.BUZZING = False
-            # Clear buzzer stuff
-            VIBR_CONTROL.value(0)
-            BUZZ_CONTROL.value(0)
-            ALERT_LED1.value(0)
-            ALERT_LED2.value(0)
-            pulse(False, vibrationTimer, machine.Timer.PERIODIC, 500, vibrationPulse)
-            pulse(False, buzzerTimer, machine.Timer.PERIODIC, 2, buzzerPulse)
+            if (self.BUZZING):
+                print("Ending buzz")
+                self.BUZZING = False
+                # Clear buzzer stuff
+                VIBR_CONTROL.value(0)
+                BUZZ_CONTROL.value(0)
+                ALERT_LED1.value(0)
+                ALERT_LED2.value(0)
+                pulse(False, vibrationTimer, machine.Timer.PERIODIC, 500, vibrationPulse)
+                pulse(False, buzzerTimer, machine.Timer.PERIODIC, 2, buzzerPulse)
+            else:
+                print("Already not buzzing")
 
     def identify(self, start):
         if (start):
@@ -306,7 +312,7 @@ while True:
 
     # pager.buzz(not pager.BUZZING)
     
-    time.sleep(5)
+    time.sleep(2)
 
 
 
