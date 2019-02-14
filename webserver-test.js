@@ -586,7 +586,7 @@ function PlaylistHandler() {
 
     this.removeSong = function(pos) {
         if (pos == this.position) {
-            console.log("Removing " + this.playlist[i].uri)
+            console.log("Removing " + this.playlist[pos].uri)
             // Currently playing song to be removed
             this.playlist.splice(pos, 1);
             if (this.lastSong()) {
@@ -595,7 +595,7 @@ function PlaylistHandler() {
             }
             return true;
         } else if (pos > this.position) {
-            console.log("Removing " + this.playlist[i].uri)
+            console.log("Removing " + this.playlist[pos].uri)
             // Future song to be removed, no need to update other handlers
             this.playlist.splice(pos, 1);
             return false;
