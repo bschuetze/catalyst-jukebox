@@ -588,11 +588,11 @@ function PlaylistHandler() {
         if (pos == this.position) {
             console.log("Removing " + this.playlist[pos].uri)
             // Currently playing song to be removed
-            this.playlist.splice(pos, 1);
             if (this.lastSong()) {
                 // If it is the last song, then we need to go back one
                 this.position = this.position - 1;
             }
+            this.playlist.splice(pos, 1);
             return true;
         } else if (pos > this.position) {
             console.log("Removing " + this.playlist[pos].uri)
