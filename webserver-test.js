@@ -738,7 +738,7 @@ function SpotifyPlaylist() {
                         setSpotifyTimeout(5000);
                     } else {
                         clearTimeout(getDeviceTimeout);
-                        self.setDevice();
+                        self.setDevice(true);
                     }
                 } else {
                     console.log("No devices appearing");
