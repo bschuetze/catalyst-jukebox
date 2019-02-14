@@ -258,8 +258,9 @@ def locatePagerCB(resp):
                 print("Found pager: " + user.pagerID)
                 found = True
                 buzzPager(user.pagerID, True)
-                schedule.enter(BUZZ_DURATION, 1, buzzPager,
-                               kwargs={"pid": str(user.pagerID), "start": False})
+                # schedule.enter(BUZZ_DURATION, 1, buzzPager,
+                #                kwargs={"pid": str(user.pagerID), "start": False})
+                schedule.enter(BUZZ_DURATION, 1, buzzPager, (str(user.pagerID), False))
                 break
         if (not found):
             print("Did not find a user with ID: " + str(currentUserID))
