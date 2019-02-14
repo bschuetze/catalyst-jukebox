@@ -311,7 +311,17 @@ function handler(req, res) { //create server (request, response)
                                     return res.end("No pending request present");
                                 }
                             } else if (bodyJSON["action"] == "remove") {
-
+                                if (bodyJSON.hasOwnProperty("user")) {
+                                    spotifyHandler.removeSongs(bodyJSON["user"]);
+                                    // MORE HERE
+                                    console.log("Removing songs owned by " + bodyJSON["user"]);
+                                    res.writeHead(200, { 'Content-Type': 'text/html' });
+                                    return res.end("Removing songs owned by " + bodyJSON["user"]);
+                                } else {
+                                    console.log("USB update 'remove' has no user field");
+                                    res.writeHead(400, { 'Content-Type': 'text/html' });
+                                    return res.end("USB update 'remove' has no user field");
+                                }
                             } else {
                                 console.log("USB update action does not match expected, got " + bodyJSON["action"]);
                                 res.writeHead(400, { 'Content-Type': 'text/html' });
@@ -897,6 +907,9 @@ function SpotifyPlaylist() {
 
     this.removeSongs = function(uid) {
         let update = this.playlist.removeUserSongs(uid);
+        if (update) {
+            this.updatePlay();
+        }
     }
 
     // Takes in a list of song objects:

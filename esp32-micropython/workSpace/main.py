@@ -112,6 +112,11 @@ class Pager:
         self.IN_USE = False
         self.OWNER = ""
 
+    def earlyDisconnect(self):
+        print("Assigned phone was disconnected early")
+        self.deassign()
+        self.buzz("True")
+
     def detectConnection(self, val):
         # Read pins, assign CONNECTED Accordingly
         print("USB Pin value: " + str(val))
@@ -282,6 +287,8 @@ def messageReceived(topic, msg):
         pager.deassign()
     if (splitTopic[-1] == "locate"):
         pager.buzz(decMsg)
+    if (splitTopic[-1] == "earlyDisconnect"):
+        pager.earlyDisconnect()
 
 
 # Interrupt handlers

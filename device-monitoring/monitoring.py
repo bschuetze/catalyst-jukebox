@@ -54,6 +54,9 @@ class Pager:
     def checkOut(self):
         self.inUse = True
 
+    def earlyDisconnect(self):
+        self.inUse = False
+
 
 class User:
     def __init__(self, id, model, port, pid):
@@ -239,16 +242,25 @@ def disconnectDevice(port, modID):
         connectedDevices.pop(usbPort)
         print("Disconnecting " + device.get('ID_MODEL') +
                 " from usb port " + usbPort)
+        removeIndex = -1
         for idx, user in enumerate(USERS):
             if (user.port == port and user.model == modID):
                 print("Disconnected device belonged to user: " + user.userID)
-
+                removeIndex = idx
                 dest = "http://" + get_ip() + ":" + str(NODE_PORT) + "/usbUpdate"
-                server_communication(dest, "POST", None, {
-                         "model": modID, "location": port, "action": "remove"})
-
+                server_communication(dest, "POST", None, 
+                        {"model": modID, "location": port, "action": "remove", "user": user.userID})
                 break
+        if (removeIndex >= 0):
+            # REMOVE USER AND DEAL WITH THEIR PAGER
+            rUSER = USERS.pop(removeIndex)
+            earlyRemovalPager(rUSER.pagerID)
 
+
+def earlyRemovalPager(pid):
+    print("User with pager " + pid + " removed phone early")
+    MQTT_PAGERS[pid].earlyDisconnect()
+    client.publish((TOPIC_BASE + "/" + pid + "/earlyDisconnect"), payload="", qos=1, retain=False)
 
 def checkoutPager(pid, uid):
     MQTT_PAGERS[pid].checkOut()
