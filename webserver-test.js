@@ -21,14 +21,6 @@ var port = 6474;
 var _favicon = servefav(path.join(__dirname, "public", "favicon.ico"));
 var publicIP = "";
 
-getIP((err, ip) => {
-    if (err) {
-        console.log("Error getting external ip")
-    }
-    publicIP = ip;
-    console.log("Public IP: " + publicIP);
-});
-
 // Spotify API variables
 const apiURL = "https://api.spotify.com/v1/"
 var spotifyHandler = new SpotifyPlaylist();
@@ -108,6 +100,14 @@ fs.readFile("refresh-token.txt", "utf8", function (error, data) {
     // has taken place.
     refreshDataLoaded = true;
     completeAuth();
+});
+
+externalIP((err, ip) => {
+    if (err) {
+        console.log("Error getting external ip");
+    }
+    publicIP = ip;
+    console.log("Public IP: " + publicIP);
 });
 
 function completeAuth() {
