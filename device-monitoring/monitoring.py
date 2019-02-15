@@ -244,7 +244,7 @@ def send_pager_checkout(pid):
             uid = user.userID
             break
     dest = "http://" + get_ip() + ":" + str(NODE_PORT) + "/pagerCheckOut"
-    server_communication(dest, "POST", None, {"id": uid})
+    server_communication(dest, "POST", None, {"uid": uid})
 
 # act = action, loc = location, mod = model
 def send_usb(act, loc, mod, respFunc=None):
