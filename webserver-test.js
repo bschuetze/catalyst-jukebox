@@ -6,7 +6,7 @@ const fs = require('fs'); //require filesystem module
 const url = require('url');
 const path = require('path');
 const ip = require('ip');
-const extIP = require('external-ip');
+const externalIP = require('external-ip');
 const crypto = require('crypto');
 const biguint = require('biguint-format');
 const qs = require('querystring');
@@ -21,7 +21,7 @@ var port = 6474;
 var _favicon = servefav(path.join(__dirname, "public", "favicon.ico"));
 var publicIP = "";
 
-extIP((err, ip) => {
+externalIP((err, ip) => {
     if (err) {
         console.log("Error getting external ip")
     }
