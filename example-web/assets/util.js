@@ -21,6 +21,14 @@ function webResponse(response, respFunc) {
                 console.log(data);
             }
         });
+    } else if (contentType && (contentType.indexOf("image/png") !== -1 || contentType.indexOf("image/jpg") !== -1)) {
+        return response.blob().then(image => {
+            if (respFunc !== undefined) {
+                respFunc(image, response.status);
+            } else {
+                console.log("Status: " + response.status + ", Image as text: " + image);
+            }
+        });
     } else {
         return response.text().then(text => {
             // this is text, do something with it

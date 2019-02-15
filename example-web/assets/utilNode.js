@@ -18,7 +18,7 @@ function toWebLink (link) {
     return newLink;
 }
 
-function webResponse (response, respFunc) {
+function webResponse(response, respFunc) {
     // Response method originally found from here: https://stackoverflow.com/questions/37121301/how-to-check-if-the-response-of-a-fetch-is-a-json-object-in-javascript
     let contentType = response.headers.get("content-type");
     if (contentType && contentType.indexOf("application/json") !== -1) {
@@ -30,6 +30,14 @@ function webResponse (response, respFunc) {
             } else {
                 console.log("Status: " + response.status + ", Data:")
                 console.log(data);
+            }
+        });
+    } else if (contentType && (contentType.indexOf("image/png") !== -1 || contentType.indexOf("image/jpg") !== -1)) {
+        return response.blob().then(image => {
+            if (respFunc !== undefined) {
+                respFunc(image, response.status);
+            } else {
+                console.log("Status: " + response.status + ", Image as text: " + image);
             }
         });
     } else {
