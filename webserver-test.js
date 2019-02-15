@@ -987,34 +987,38 @@ function SpotifyPlaylist() {
         let self = this;
 
         this.spotifyRequest(apiURL + "me/player/currently-playing", "GET", {}, {}, function(data, status) {
-            if (callback == null || !callback) {
-                if (data["is_playing"]) {
-                    console.log("Currently Playing:");
-                } else {
-                    console.log("Currently Paused:");
-                }
-                console.log("  Song: " + data["item"]["name"]);
-                let songArtists = "";
-                for (let i = 0; i < data["item"]["artists"].length; i++) {
-                    songArtists = songArtists + data["item"]["artists"][i]["name"];
-                    if (i == data["item"]["artists"].length - 2) {
-                        songArtists = songArtists + " & ";
-                    } else if (i < data["item"]["artists"].length - 2) {
-                        songArtists = songArtists + ", ";
+            if (data["item"] != null) {
+                if (callback == null || !callback) {
+                    if (data["is_playing"]) {
+                        console.log("Currently Playing:");
+                    } else {
+                        console.log("Currently Paused:");
                     }
+                    console.log("  Song: " + data["item"]["name"]);
+                    let songArtists = "";
+                    for (let i = 0; i < data["item"]["artists"].length; i++) {
+                        songArtists = songArtists + data["item"]["artists"][i]["name"];
+                        if (i == data["item"]["artists"].length - 2) {
+                            songArtists = songArtists + " & ";
+                        } else if (i < data["item"]["artists"].length - 2) {
+                            songArtists = songArtists + ", ";
+                        }
+                    }
+                    console.log("  Artist(s): " + songArtists)
+                    console.log("  Album: " + data["item"]["album"]["name"]);
+                    console.log("  Track URI: " + data["item"]["uri"]);
                 }
-                console.log("  Artist(s): " + songArtists)
-                console.log("  Album: " + data["item"]["album"]["name"]);
-                console.log("  Track URI: " + data["item"]["uri"]);
-            }
 
-            if (callback != null && callback) {
-                let newPlay = self.playlist.updateCurrentlyPlaying(data["item"]["uri"], data["is_playing"]);
-                if (newPlay) {
-                    self.updatePlay();
+                if (callback != null && callback) {
+                    let newPlay = self.playlist.updateCurrentlyPlaying(data["item"]["uri"], data["is_playing"]);
+                    if (newPlay) {
+                        self.updatePlay();
+                    }
+                    // self.updateRepeat();
+                    // self.updateContext();
                 }
-                // self.updateRepeat();
-                // self.updateContext();
+            } else {
+                console.log("Currently playing value is null");
             }
         });
     }
