@@ -24,6 +24,8 @@ function setup() {
 }
 
 function draw() {
+    background(255);
+
     if (localIP != "" && qrLocal == null) {
         // qrLocal = new QRCode(qrLocalDiv, {
         //     text: localIP,
@@ -32,7 +34,7 @@ function draw() {
         //     colorDark: "#000000",
         //     colorLight: "#ffffff"
         // });
-        qrLocal = createImage(qrAPI + "?data=http://" + localIP + requestURL + "&size=" + qrSize);
+        qrLocal = loadImage(qrAPI + "?data=http://" + localIP + requestURL + "&size=" + qrSize);
     } else {
         image(qrLocal, 0, 0);
     }
@@ -45,13 +47,10 @@ function draw() {
         //     colorDark: "#000000",
         //     colorLight: "#ffffff"
         // });
-        qrPublic = createImage(qrAPI + "?data=http://" + publicIP + requestURL + "&size=" + qrSize);
+        qrPublic = loadImage(qrAPI + "?data=http://" + publicIP + requestURL + "&size=" + qrSize);
     } else {
         image(qrPublic, 300, 0);
     }
-
-    fill(255, 0, 0);
-    rect(100, 100, 100, 200);
 }
 
 function getIPCallback(data) {
