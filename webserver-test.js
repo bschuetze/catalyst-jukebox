@@ -64,11 +64,7 @@ util.webRequest(IP_DEST, "GET", {}, {}, function(data, status) {
         url: dest,
         dest: "example-web/assets/public-qr.png"
     };
-    imgDownload.image(opts).then(({ filename, image }) => {
-        console.log('File saved to', filename)
-    }).catch((err) => {
-            console.error(err)
-    });
+    imgDownload.image(opts);
 }
     
     
