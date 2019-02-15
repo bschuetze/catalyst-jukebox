@@ -11,7 +11,7 @@ const biguint = require('biguint-format');
 const qs = require('querystring');
 const fetch = require('node-fetch');
 const servefav = require('serve-favicon');
-const toBuffer = require('blob-to-buffer');
+const imgDownload = require('image-downloader');
 // import util
 // import {toWebLink, webResponse} from "./example-web/assets/util.js";
 const util = require("./example-web/assets/utilNode.js");
@@ -60,19 +60,27 @@ util.webRequest(IP_DEST, "GET", {}, {}, function(data, status) {
     console.log("Public IP: " + publicIP);
 
     let dest = "http://api.qrserver.com/v1/create-qr-code/?data=http://" + publicIP + ":6474/request&size=256x256"
-    util.webRequest(dest, "POST", {}, {}, function (data, status) {
-        console.log("QR Status: " + status)
-        console.log(data);
+    let opts = {
+        url: dest,
+        dest: "example-web/assets/public-qr.png"
+    };
+    imgDownload.image(opts).then(({ filename, image }) => {
+        console.log('File saved to', filename)
+    }).catch((err) => {
+            console.error(err)
+    });
+}
+    
+    
+    
+    
+    // util.webRequest(dest, "POST", {}, {}, function (data, status) {
+    //     console.log("QR Status: " + status)
+    //     console.log(data);
         // let objectURL = blobUtil.createObjectURL(data);
         // console.log(objectURL);
 
-        toBuffer(data, function (error, buffer) {
-            if (error) {
-                console.log("ERROR, QRCODE Public not saved");
-            } else {
-                console.log(buffer);
-            }
-        })
+        
 
         // console.log(data.buffer);
         // fs.createWriteStream("example-web/assets/public-qr.png").write(data, function (error) {
@@ -90,8 +98,8 @@ util.webRequest(IP_DEST, "GET", {}, {}, function(data, status) {
         //         console.log("Successfully written QRCODE Public image");
         //     }
         // });
-    });
-})
+//     });
+// })
 
 // Load client id and secret 
 fs.readFile("client-data.txt", "utf8", function (error, data) {
