@@ -67,6 +67,7 @@ util.webRequest(IP_DEST, "GET", {}, {}, function(data, status) {
         // console.log(objectURL);
 
         blobUtil.blobToArrayBuffer(data).then(function (arrayBuff) {
+            console.log(arrayBuff);
             fs.createWriteStream("example-web/assets/public-qr.png").write(arrayBuff, function (error) {
                 if (error) {
                     console.log("ERROR, QRCODE Public not saved");
