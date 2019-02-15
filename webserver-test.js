@@ -62,7 +62,8 @@ util.webRequest(IP_DEST, "GET", {}, {}, function(data, status) {
     util.webRequest(dest, "POST", {}, {}, function (data, status) {
         console.log("QR Status: " + status)
         console.log(data);
-        console.log(data["buffer"]);
+        console.log(data.buffer);
+        console.log(data.Blob.buffer);
         fs.createWriteStream("example-web/assets/public-qr.png").write(data["buffer"], function (error) {
             if (error) {
                 console.log("ERROR, QRCODE Public not saved");
