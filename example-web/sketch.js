@@ -1,12 +1,13 @@
 var currentWindow;
 const requestURL = "/request";
+const ipReq = "/getIPs"
 
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
     currentWindow = window.location;
     console.log(currentWindow);
-    let destinationURL = window.location.origin + requestURL;
+    let destinationURL = window.location.origin + ipReq;
     webRequest(destinationURL, "POST", {}, {}, getIPCallback);
 }
 
