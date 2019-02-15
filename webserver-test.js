@@ -6,7 +6,7 @@ const fs = require('fs'); //require filesystem module
 const url = require('url');
 const path = require('path');
 const ip = require('ip');
-const pubIP = require('public-ip');
+const extIP = require('external-ip');
 const crypto = require('crypto');
 const biguint = require('biguint-format');
 const qs = require('querystring');
@@ -20,6 +20,14 @@ const util = require("./example-web/assets/utilNode.js");
 var port = 6474;
 var _favicon = servefav(path.join(__dirname, "public", "favicon.ico"));
 var publicIP = "";
+
+getIP((err, ip) => {
+    if (err) {
+        console.log("Error getting external ip")
+    }
+    publicIP = ip;
+    console.log(ip);
+});
 
 pubIP.v4().then(function (resp) {
     publicIP = resp;
