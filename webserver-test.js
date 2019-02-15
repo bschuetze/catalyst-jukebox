@@ -103,7 +103,7 @@ fs.readFile("refresh-token.txt", "utf8", function (error, data) {
     completeAuth();
 });
 
-getIP(function (err, ip) {
+getIP((err, ip) => {
     console.log("Getting Public IP...")
     if (err) {
         console.log("Error getting external ip");
