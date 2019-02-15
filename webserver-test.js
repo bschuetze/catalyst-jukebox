@@ -11,7 +11,7 @@ const biguint = require('biguint-format');
 const qs = require('querystring');
 const fetch = require('node-fetch');
 const servefav = require('serve-favicon');
-const blobUtil = require('blob-util');
+const toBuffer = require('blob-to-buffer');
 // import util
 // import {toWebLink, webResponse} from "./example-web/assets/util.js";
 const util = require("./example-web/assets/utilNode.js");
@@ -66,18 +66,13 @@ util.webRequest(IP_DEST, "GET", {}, {}, function(data, status) {
         // let objectURL = blobUtil.createObjectURL(data);
         // console.log(objectURL);
 
-        blobUtil.blobToBase64String(data).then(function (base64String) {
-            console.log(base64String);
-            // fs.createWriteStream("example-web/assets/public-qr.png").write(arrayBuff, function (error) {
-            //     if (error) {
-            //         console.log("ERROR, QRCODE Public not saved");
-            //     } else {
-            //         console.log("Successfully written QRCODE Public image");
-            //     }
-            // });
-        }).catch(function (error) {
-            console.log("ERROR, QRCODE Public not saved");
-        });
+        toBuffer(data, function (error, buffer) {
+            if (error) {
+                console.log("ERROR, QRCODE Public not saved");
+            } else {
+                console.log(buffer);
+            }
+        })
 
         // console.log(data.buffer);
         // fs.createWriteStream("example-web/assets/public-qr.png").write(data, function (error) {
