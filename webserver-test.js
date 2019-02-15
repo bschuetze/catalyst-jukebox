@@ -54,10 +54,10 @@ const state = "state=" + crypto.randomBytes(8).toString("hex"); // Generate rand
 
 // Get IP
 const IP_DEST = "https://api.ipify.org?format=json";
-util.webRequest(IP_DEST, "GET", {}, {}, function(data) {
-    console.log(data);
+util.webRequest(IP_DEST, "GET", {}, {}, function(data, status) {
+    publicIP = data["ip"]
+    console.log("Public IP: " + publicIP);
 })
-
 
 // Load client id and secret 
 fs.readFile("client-data.txt", "utf8", function (error, data) {
