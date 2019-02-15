@@ -257,6 +257,36 @@ function handler(req, res) { //create server (request, response)
 
                 res.writeHead(200, { 'Content-Type': 'text/html' });
                 return res.end("Request successful");
+            } else if (loc.pathname == "/pagerCheckOut") {
+                if (req.headers.host == ip.address() + ":" + port) {
+                    // Code originally from: https://stackoverflow.com/questions/4295782/how-to-process-post-data-in-node-js
+                    // BEGIN SNIPPET
+                    let body = "";
+                    let bodyJSON = {};
+                    req.on("data", function (data) {
+                        if (body.length > 1e6) {
+                            // Request is coming with large amounts of data, not a good idea to continue to parse it
+                            request.connection.destroy();
+                        }
+                        body += data;
+                    }); // END SNIPPET
+                    req.on("end", function () {
+                        bodyJSON = JSON.parse(body);
+                        if (bodyJSON.hasOwnProperty("uid")) {
+                            spotifyHandler.pagerCheckedOut(bodyJSON["uid"]);
+                            res.writeHead(200, { 'Content-Type': 'text/html' });
+                            return res.end("Checked out pager for " + bodyJSON["uid"]);
+                        } else {
+                            console.log("Pager checkout does not contain uid");
+                            res.writeHead(400, { 'Content-Type': 'text/html' });
+                            return res.end("Pager checkout does not contain uid");
+                        }
+                    });
+                } else {
+                    console.log("Pager checkout does not match expected source");
+                    res.writeHead(401, { 'Content-Type': 'text/html' });
+                    return res.end("Unauthorized Origin");
+                }
             } else if (loc.pathname == "/currentUID") {
                 if (req.headers.host == ip.address() + ":" + port) {
                     // Code originally from: https://stackoverflow.com/questions/4295782/how-to-process-post-data-in-node-js
@@ -734,6 +764,7 @@ function SpotifyPlaylist() {
     this.parsedPlaylists = 0;
     this.totalPlaylists = 0;
     
+    this.requests = [];
 
     this.setup = function() {
         console.log("Setting up playlist handling");
@@ -792,10 +823,23 @@ function SpotifyPlaylist() {
 
     // Request has the form: {"id": 000, "tracks": [""]}
     this.addRequest = function(req) {
+        this.requests.push(req);
+    }
+
+    this.pagerCheckedOut = function(uid) {
+        let req = {"id": 0, "tracks": []}
+        for (let i = 0; i < this.requests.length; i++) {
+            if (this.requests[i]["id"] == uid) {
+                let temp = this.requests.splice(i, 1);
+                if (temp.length > 0) {
+                    req = temp.pop();
+                }
+                break;
+            }
+        }
         for (let i = 0; i < req["tracks"].length; i++) {
             this.playlist.addSong(new Song(req["id"], req["tracks"][i]));
         }
-        // this.addSongs(req["tracks"]);
     }
     
     this.setDevice = function(start) {

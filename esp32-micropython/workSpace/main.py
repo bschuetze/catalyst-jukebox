@@ -136,6 +136,7 @@ class Pager:
                 print("Disconnected")
                 
             if (self.IDENTIFYING):
+                identifyCheckOut()
                 self.identify(False)
             if (self.BUZZING):
                 self.buzz(False)
@@ -268,6 +269,11 @@ def updateConnection():
     print("Publishing status: " + str(pager.CONNECTED))
     client.publish(bytes(str(TOPIC_BASE + "/" + str(ID) +
                              "/status/connected"), "utf-8"), str(pager.CONNECTED))
+
+def identifyCheckOut():
+    print("Publishing successful checkout")
+    client.publish(bytes(str(TOPIC_BASE + "/" + str(ID) +
+                             "/status/checkedOut"), "utf-8"), "")
 
 def messageReceived(topic, msg):
     decTopic = topic.decode("ASCII")

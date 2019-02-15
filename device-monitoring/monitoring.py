@@ -136,6 +136,8 @@ def onMessage(client, userdata, msg):
                         u = USERS.pop(removeIdx)
                         earlyPagerReturn(u)
                         returnPager(topicSplit[1])
+        if (topicSplit[-1] == "checkedOut"):
+            send_pager_checkout(topicSplit[1])
         
 
 
@@ -234,6 +236,15 @@ def server_communication(dest, method, header=None, body=None, respFunc=None, **
             print(r.json())
         else:
             print(r.text)
+
+def send_pager_checkout(pid):
+    uid = ""
+    for user in USERS:
+        if (user.pagerID == pid):
+            uid = user.userID
+            break
+    dest = "http://" + get_ip() + ":" + str(NODE_PORT) + "/pagerCheckOut"
+    server_communication(dest, "POST", None, {"id": uid})
 
 # act = action, loc = location, mod = model
 def send_usb(act, loc, mod, respFunc=None):
