@@ -123,17 +123,19 @@ def onMessage(client, userdata, msg):
             MQTT_PAGERS[topicSplit[1]].updateConnection(msgDec)
             if (not MQTT_PAGERS[topicSplit[1]].initialized()):
                 MQTT_PAGERS[topicSplit[1]].initialize()
-            if (MQTT_PAGERS[topicSplit[1]].inUse()):
-                removeIdx = -1
-                for idx, user in enumerate(USERS):
-                    if (user.pagerID == topicSplit[1]):
-                        # Can't remove an element if iterating on array
-                        removeIdx = idx
-                        break
-                if (removeIdx >= 0):
-                    u = USERS.pop(removeIdx)
-                    earlyPagerReturn(u)
-                    returnPager(topicSplit[1])
+
+            if (msgDec == "True"):
+                if (MQTT_PAGERS[topicSplit[1]].inUse()):
+                    removeIdx = -1
+                    for idx, user in enumerate(USERS):
+                        if (user.pagerID == topicSplit[1]):
+                            # Can't remove an element if iterating on array
+                            removeIdx = idx
+                            break
+                    if (removeIdx >= 0):
+                        u = USERS.pop(removeIdx)
+                        earlyPagerReturn(u)
+                        returnPager(topicSplit[1])
         
 
 
