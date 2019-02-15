@@ -57,6 +57,9 @@ const IP_DEST = "https://api.ipify.org?format=json";
 util.webRequest(IP_DEST, "GET", {}, {}, function(data, status) {
     publicIP = data["ip"]
     console.log("Public IP: " + publicIP);
+
+    let dest = "http://api.qrserver.com/v1/create-qr-code/?data=http://" + publicIP + ":6474/request&size=256x256"
+    util.webRequest(dest, "POST");
 })
 
 // Load client id and secret 
