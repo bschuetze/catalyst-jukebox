@@ -43,13 +43,13 @@ function draw() {
         // qrLocal = loadImage(qrAPI + "?data=http://" + localIP + requestURL + "&size=" + qrSize, function() {
         //     qrLocalLoaded = true;
         // });
-        // qrLocal = loadImage("assets/local-qr.png", function() {
-        //     qrLocalLoaded = true;
-        // });
+        qrLocal = loadImage("assets/local-qr.png", function() {
+            qrLocalLoaded = true;
+        });
         // webRequest(dest, "POST", {"mode": "no-cors"}, {});
     } 
     if (qrLocalLoaded) {
-        image(qrLocal, 0, 0);
+        image(qrLocal, width * 0.1, height * 0.1, width * 0.3, width * 0.3);
     }
 
     if (publicIP != "" && qrPublic == null) {
@@ -70,7 +70,7 @@ function draw() {
         // webRequest(dest, "POST", {"mode": "no-cors" }, {});
     } 
     if (qrPublicLoaded) {
-        image(qrPublic, 300, 0);
+        image(qrPublic, width * 0.6, height * 0.1, width * 0.3, width * 0.3);
     }
 }
 
