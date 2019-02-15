@@ -6,6 +6,7 @@ const fs = require('fs'); //require filesystem module
 const url = require('url');
 const path = require('path');
 const ip = require('ip');
+const pubIP = require('public-ip');
 const crypto = require('crypto');
 const biguint = require('biguint-format');
 const qs = require('querystring');
@@ -18,6 +19,12 @@ const util = require("./example-web/assets/utilNode.js");
 // Server variables
 var port = 6474;
 var _favicon = servefav(path.join(__dirname, "public", "favicon.ico"));
+var publicIP = "";
+
+pubIP.v4().then(function (resp) {
+    publicIP = resp;
+    console.log("Public IP: " + publicIP);
+});
 
 // Spotify API variables
 const apiURL = "https://api.spotify.com/v1/"
@@ -30,7 +37,6 @@ const defaultSong = "spotify:track:5f0FCcrkvyhiRT5wynS0XN"; // SHORT FOR DEBUGGI
 var getDeviceTimeout;
 const defaultID = 123456789;
 var pendingRequests = [];
-var currentlyPlayingTimeout;
 
 // Auth variables
 const authorizeURL = "https://accounts.spotify.com/authorize";
