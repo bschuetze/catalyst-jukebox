@@ -60,13 +60,13 @@ util.webRequest(IP_DEST, "GET", {}, {}, function(data, status) {
     publicIP = data["ip"]
     console.log("Public IP: " + publicIP);
 
-    let dest = "http://api.qrserver.com/v1/create-qr-code/?data=http://" + publicIP + ":6474/request&size=256x256"
+    let dest = "http://api.qrserver.com/v1/create-qr-code/?data=http://" + publicIP + ":6474/request&size=256x256";
     let opts = {
         url: dest,
         dest: "example-web/assets/public-qr.png"
     };
     imgDownload.image(opts);
-}
+});
     
     
     
