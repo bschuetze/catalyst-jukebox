@@ -3,6 +3,8 @@ const requestURL = "/request";
 const ipReq = "/getIPs"
 var localIP = "";
 var publicIP = "";
+var qrPublic = null;
+var qrLocal = null;
 
 
 function setup() {
@@ -14,6 +16,26 @@ function setup() {
 }
 
 function draw() {
+    if (localIP != "" && qrLocal == null) {
+        qrLocal = new QRCode("qrLocal", {
+            text: localIP,
+            width: 128,
+            height: 128,
+            colorDark: "#000000",
+            colorLight: "#ffffff"
+        });
+    }
+
+    if (publicIP != "" && qrPublic == null) {
+        qrPublic = new QRCode("qrPublic", {
+            text: publicIP,
+            width: 128,
+            height: 128,
+            colorDark: "#000000",
+            colorLight: "#ffffff"
+        });
+    }
+
     fill(255, 0, 0);
     rect(100, 100, 100, 200);
 }
