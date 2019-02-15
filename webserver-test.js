@@ -60,6 +60,8 @@ util.webRequest(IP_DEST, "GET", {}, {}, function(data, status) {
 
     let dest = "http://api.qrserver.com/v1/create-qr-code/?data=http://" + publicIP + ":6474/request&size=256x256"
     util.webRequest(dest, "POST", {}, {}, function (data, status) {
+        console.log("QR Status: " + status)
+        console.log(data);
         fs.writeFile("example-web/assets/public-qr.png", data, function (error) {
             if (error) {
                 console.log("ERROR, QRCODE Public not saved");
