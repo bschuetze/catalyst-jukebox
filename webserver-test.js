@@ -62,9 +62,9 @@ util.webRequest(IP_DEST, "GET", {}, {}, function(data, status) {
     util.webRequest(dest, "POST", {}, {}, function (data, status) {
         fs.writeFile("testimage.png", data, function (error) {
             if (error) {
-                console.log("ERROR, refresh token file not written");
+                console.log("ERROR, QRCODE Public not saved");
             } else {
-                console.log("Successfully written refresh token details");
+                console.log("Successfully written QRCODE Public image");
             }
         });
     });
