@@ -6,8 +6,6 @@ const fs = require('fs'); //require filesystem module
 const url = require('url');
 const path = require('path');
 const ip = require('ip');
-'use strict';
-const getIP = require('external-ip');
 const crypto = require('crypto');
 const biguint = require('biguint-format');
 const qs = require('querystring');
@@ -50,9 +48,17 @@ var authCode = "";
 var redirectURI = "redirect_uri=http://" + ip.address() + ":" + port + "/login";
 var scope = "scope=user-read-playback-state user-modify-playback-state playlist-modify-public playlist-modify-private playlist-read-private user-read-recently-played user-read-currently-playing";
 var responseType = "code";
-const state = "state=" + crypto.randomBytes(8).toString("hex"); // Generate random 16 char hex string
 var authTimeOut;
+const state = "state=" + crypto.randomBytes(8).toString("hex"); // Generate random 16 char hex string
 // Above line found here: https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript/8084248#8084248
+
+// Get IP
+const IP_DEST = "https://api.ipify.org?format=json";
+webRequest(IP_DEST, "GET", {}, {}, function(data) {
+    console.log(data);
+})
+
+
 // Load client id and secret 
 fs.readFile("client-data.txt", "utf8", function (error, data) {
     if (error) {
@@ -101,15 +107,6 @@ fs.readFile("refresh-token.txt", "utf8", function (error, data) {
     // has taken place.
     refreshDataLoaded = true;
     completeAuth();
-});
-
-getIP((err, ip) => {
-    console.log("Getting Public IP...")
-    if (err) {
-        console.log("Error getting external ip");
-    }
-    publicIP = ip;
-    console.log("Public IP: " + publicIP);
 });
 
 function completeAuth() {
