@@ -5,19 +5,23 @@ var localIP = "";
 var publicIP = "";
 var qrPublic = null;
 var qrLocal = null;
+var qrLocalDiv;
+var qrPublicDiv;
 
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
     currentWindow = window.location;
-    console.log(currentWindow);
     let destinationURL = window.location.origin + ipReq;
     webRequest(destinationURL, "POST", {}, {}, getIPCallback);
+
+    qrLocalDiv = createDiv();
+    qrPublicDiv = createDiv();
 }
 
 function draw() {
     if (localIP != "" && qrLocal == null) {
-        qrLocal = new QRCode("qrLocal", {
+        qrLocal = new QRCode(qrLocalDiv, {
             text: localIP,
             width: 128,
             height: 128,
@@ -27,7 +31,7 @@ function draw() {
     }
 
     if (publicIP != "" && qrPublic == null) {
-        qrPublic = new QRCode("qrPublic", {
+        qrPublic = new QRCode(qrPublicDiv, {
             text: publicIP,
             width: 128,
             height: 128,
