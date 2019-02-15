@@ -62,13 +62,15 @@ util.webRequest(IP_DEST, "GET", {}, {}, function(data, status) {
     util.webRequest(dest, "POST", {}, {}, function (data, status) {
         console.log("QR Status: " + status)
         console.log(data);
-        fs.writeFile("example-web/assets/public-qr.png", data, function (error) {
-            if (error) {
-                console.log("ERROR, QRCODE Public not saved");
-            } else {
-                console.log("Successfully written QRCODE Public image");
-            }
-        });
+        fs.createWriteStream("example-web/assets/public-qr.png").write(data.buffer);
+
+        // fs.writeFile("example-web/assets/public-qr.png", data, function (error) {
+        //     if (error) {
+        //         console.log("ERROR, QRCODE Public not saved");
+        //     } else {
+        //         console.log("Successfully written QRCODE Public image");
+        //     }
+        // });
     });
 })
 
