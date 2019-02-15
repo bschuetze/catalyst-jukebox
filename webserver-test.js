@@ -60,14 +60,32 @@ util.webRequest(IP_DEST, "GET", {}, {}, function(data, status) {
     publicIP = data["ip"]
     console.log("Public IP: " + publicIP);
 
-    let dest = "http://api.qrserver.com/v1/create-qr-code/?data=http://" + publicIP + ":6474/request&size=256x256";
+    // Public image
+    let dest = "http://api.qrserver.com/v1/create-qr-code/?data=http://" + publicIP + ":6474/request&size=1000x1000";
     let opts = {
         url: dest,
         dest: "example-web/assets/public-qr.png"
     };
-    imgDownload.image(opts);
+    imgDownload.image(opts).then(({ filename, image }) => {
+        console.log("Successfully written QRCODE Public image to " + filename);
+    }).catch((error) => {
+        console.error(error)
+    });
+
+    // Local image
+    let dest = "http://api.qrserver.com/v1/create-qr-code/?data=http://" + ip.address() + ":6474/request&size=1000x1000";
+    let opts = {
+        url: dest,
+        dest: "example-web/assets/local-qr.png"
+    };
+    imgDownload.image(opts).then(({ filename, image }) => {
+        console.log("Successfully written QRCODE Local image to " + filename);
+    }).catch((error) => {
+        console.error(error)
+    });
 });
     
+
     
     
     
