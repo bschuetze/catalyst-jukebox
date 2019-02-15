@@ -6,7 +6,7 @@ function setup() {
     createCanvas(windowWidth, windowHeight);
     currentWindow = window.location;
     console.log(currentWindow);
-    let destinationURL = window.location.origin
+    let destinationURL = window.location.origin + requestURL;
     webRequest(destinationURL, "POST", {}, {}, getIPCallback);
 }
 
