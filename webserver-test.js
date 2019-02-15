@@ -73,8 +73,8 @@ util.webRequest(IP_DEST, "GET", {}, {}, function(data, status) {
     });
 
     // Local image
-    let dest = "http://api.qrserver.com/v1/create-qr-code/?data=http://" + ip.address() + ":6474/request&size=1000x1000";
-    let opts = {
+    dest = "http://api.qrserver.com/v1/create-qr-code/?data=http://" + ip.address() + ":6474/request&size=1000x1000";
+    opts = {
         url: dest,
         dest: "example-web/assets/local-qr.png"
     };
