@@ -296,29 +296,23 @@ function handler(req, res) { //create server (request, response)
                     return res.end("Unauthorized Origin");
                 }
             } else if (loc.pathname == "/getIPs") {
-                if (req.headers.host == ip.address() + ":" + port) {
-                    // Code originally from: https://stackoverflow.com/questions/4295782/how-to-process-post-data-in-node-js
-                    // BEGIN SNIPPET
-                    let body = "";
-                    let bodyJSON = {};
-                    req.on("data", function (data) {
-                        if (body.length > 1e6) {
-                            // Request is coming with large amounts of data, not a good idea to continue to parse it
-                            request.connection.destroy();
-                        }
-                        body += data;
-                    }); // END SNIPPET
-                    req.on("end", function () {
-                        console.log("Sending IP details");
-                        res.writeHead(200, { 'Content-Type': 'application/json' });
-                        let ipJSON = {"localip": ip.address(), "publicip": publicIP}
-                        return res.end(JSON.stringify(ipJSON));
-                    });
-                } else {
-                    console.log("Pager checkout does not match expected source");
-                    res.writeHead(401, { 'Content-Type': 'text/html' });
-                    return res.end("Unauthorized Origin");
-                }
+                // Code originally from: https://stackoverflow.com/questions/4295782/how-to-process-post-data-in-node-js
+                // BEGIN SNIPPET
+                let body = "";
+                let bodyJSON = {};
+                req.on("data", function (data) {
+                    if (body.length > 1e6) {
+                        // Request is coming with large amounts of data, not a good idea to continue to parse it
+                        request.connection.destroy();
+                    }
+                    body += data;
+                }); // END SNIPPET
+                req.on("end", function () {
+                    console.log("Sending IP details");
+                    res.writeHead(200, { 'Content-Type': 'application/json' });
+                    let ipJSON = {"localip": ip.address(), "publicip": publicIP}
+                    return res.end(JSON.stringify(ipJSON));
+                });
             } else if (loc.pathname == "/currentUID") {
                 if (req.headers.host == ip.address() + ":" + port) {
                     // Code originally from: https://stackoverflow.com/questions/4295782/how-to-process-post-data-in-node-js
