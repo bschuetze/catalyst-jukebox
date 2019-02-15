@@ -34,28 +34,37 @@ def get_ip():
 class Pager:
     def __init__(self, id):
         self.ID = id
-        self.inUse = False
+        self.using = False
         self.connected = False
-        self.initialized = False
+        self.init = False
 
     def __str__(self):
-        return str("PAGER - ID: " + str(self.ID) + ", in-use: " + str(self.inUse) + ", connected: " +
-                str(self.connected) + ", initialized: " + str(self.initialized))
+        return str("PAGER - ID: " + str(self.ID) + ", in-use: " + str(self.using) + ", connected: " +
+                str(self.connected) + ", initialized: " + str(self.init))
 
     def updateConnection(self, con):
         self.connected = con
 
-    def notInUse(self):
-        return (not self.inUse)
+    def id(self):
+        return self.ID
 
-    def init(self):
-        self.initialized = True
+    def inUse(self):
+        return (self.using)
+
+    def initialized(self):
+        return (self.init)
+
+    def initialize(self):
+        self.init = True
 
     def checkOut(self):
-        self.inUse = True
+        self.using = True
+
+    def returned(self):
+        self.using = False
 
     def earlyDisconnect(self):
-        self.inUse = False
+        self.using = False
 
 
 class User:
@@ -112,7 +121,19 @@ def onMessage(client, userdata, msg):
         if (topicSplit[-1] == "connected"):
             print("Updating Pager " + topicSplit[1] + " connection state to " + msgDec)
             MQTT_PAGERS[topicSplit[1]].updateConnection(msgDec)
-            MQTT_PAGERS[topicSplit[1]].init()
+            if (not MQTT_PAGERS[topicSplit[1]].initialized()):
+                MQTT_PAGERS[topicSplit[1]].initialize()
+            if (MQTT_PAGERS[topicSplit[1]].inUse()):
+                removeIdx = -1
+                for idx, user in enumerate(USERS):
+                    if (user.pagerID == topicSplit[1]):
+                        # Can't remove an element if iterating on array
+                        removeIdx = idx
+                        break
+                if (removeIdx >= 0):
+                    u = USERS.pop(removeIdx)
+                    earlyPagerReturn(u)
+                    returnPager(topicSplit[1])
         
 
 
@@ -237,6 +258,12 @@ def connectDevice(resp, **args):
         print(resp)
         print(args)
 
+def earlyPagerReturn(user):
+    print("User " + user.userID + " returned pager " + user.pagerID + " early, removing songs.")
+    dest = "http://" + get_ip() + ":" + str(NODE_PORT) + "/usbUpdate"
+    server_communication(dest, "POST", None,
+                         {"model": user.model, "location": user.port, "action": "remove", "user": user.userID})
+
 def disconnectDevice(port, modID):
     connectedDevices.pop(port)
     print("Disconnecting " + modID + " from usb port " + port)
@@ -264,6 +291,11 @@ def checkoutPager(pid, uid):
     MQTT_PAGERS[pid].checkOut()
     client.publish((TOPIC_BASE + "/" + pid +
                     "/checkout"), payload=str(uid), qos=1, retain=False)
+
+def returnPager(pid):
+    MQTT_PAGERS[pid].returned()
+    client.publish((TOPIC_BASE + "/" + pid +
+                    "/return"), payload="", qos=1, retain=False)
 
 def buzzPager(pid, start):
     print("Buzzing " + str(pid) + " " + str(start))
@@ -447,9 +479,9 @@ usbObserver.start()
 #         btpagers.append((name, addr))
 #         print(btpagers)
 
-
-print("sleeping 3000s")
-time.sleep(3000)
+while True:
+    print("sleeping 3000s")
+    time.sleep(3000)
 
 # for device in context.list_devices(subsystem='usb'):
 #     print(device)
