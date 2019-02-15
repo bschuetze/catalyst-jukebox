@@ -312,7 +312,7 @@ function handler(req, res) { //create server (request, response)
                         console.log("Sending IP details");
                         res.writeHead(200, { 'Content-Type': 'application/json' });
                         let ipJSON = {"localip": ip.address(), "publicip": publicIP}
-                        return res.end(ipJSON);
+                        return res.end(JSON.stringify(ipJSON));
                     });
                 } else {
                     console.log("Pager checkout does not match expected source");
