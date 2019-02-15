@@ -59,7 +59,9 @@ util.webRequest(IP_DEST, "GET", {}, {}, function(data, status) {
     console.log("Public IP: " + publicIP);
 
     let dest = "http://api.qrserver.com/v1/create-qr-code/?data=http://" + publicIP + ":6474/request&size=256x256"
-    util.webRequest(dest, "POST");
+    util.webRequest(dest, "POST", {}, {}, function (data, status) {
+        fs.writeFile("testimage.png", data);
+    });
 })
 
 // Load client id and secret 
