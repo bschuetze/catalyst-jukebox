@@ -54,7 +54,7 @@ const state = "state=" + crypto.randomBytes(8).toString("hex"); // Generate rand
 
 // Get IP
 const IP_DEST = "https://api.ipify.org?format=json";
-webRequest(IP_DEST, "GET", {}, {}, function(data) {
+util.webRequest(IP_DEST, "GET", {}, {}, function(data) {
     console.log(data);
 })
 
