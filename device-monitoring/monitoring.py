@@ -246,7 +246,7 @@ def connectDevice(resp, **args):
 
         # Get a free pager
         for pid in PAGER_IDS:
-            if (MQTT_PAGERS[pid].notInUse()):
+            if (not MQTT_PAGERS[pid].inUse()):
                 print("Checking out pager: " + pid + " for user " + tempID)
                 tempPagerID = pid
                 checkoutPager(tempPagerID, tempID)
