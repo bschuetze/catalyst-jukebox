@@ -66,15 +66,15 @@ util.webRequest(IP_DEST, "GET", {}, {}, function(data, status) {
         // let objectURL = blobUtil.createObjectURL(data);
         // console.log(objectURL);
 
-        blobUtil.blobToArrayBuffer(data).then(function (arrayBuff) {
-            console.log(arrayBuff);
-            fs.createWriteStream("example-web/assets/public-qr.png").write(arrayBuff, function (error) {
-                if (error) {
-                    console.log("ERROR, QRCODE Public not saved");
-                } else {
-                    console.log("Successfully written QRCODE Public image");
-                }
-            });
+        blobUtil.blobToBase64String(data).then(function (base64String) {
+            console.log(base64String);
+            // fs.createWriteStream("example-web/assets/public-qr.png").write(arrayBuff, function (error) {
+            //     if (error) {
+            //         console.log("ERROR, QRCODE Public not saved");
+            //     } else {
+            //         console.log("Successfully written QRCODE Public image");
+            //     }
+            // });
         }).catch(function (error) {
             console.log("ERROR, QRCODE Public not saved");
         });
