@@ -26,11 +26,6 @@ extIP((err, ip) => {
         console.log("Error getting external ip")
     }
     publicIP = ip;
-    console.log(ip);
-});
-
-pubIP.v4().then(function (resp) {
-    publicIP = resp;
     console.log("Public IP: " + publicIP);
 });
 
