@@ -12,6 +12,9 @@ const qrAPI = "http://api.qrserver.com/v1/create-qr-code/"
 // ?data=text&size=0x0"
 const qrSize = "256x256";
 
+var qrLocalLoaded;
+var qrPublicLoaded;
+
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
@@ -21,6 +24,8 @@ function setup() {
 
     // qrLocalDiv = createDiv();
     // qrPublicDiv = createDiv();
+    qrLocalLoaded = false;
+    qrPublicLoaded = false;
 }
 
 function draw() {
@@ -34,8 +39,11 @@ function draw() {
         //     colorDark: "#000000",
         //     colorLight: "#ffffff"
         // });
-        qrLocal = loadImage(qrAPI + "?data=http://" + localIP + requestURL + "&size=" + qrSize);
-    } else {
+        qrLocal = loadImage(qrAPI + "?data=http://" + localIP + requestURL + "&size=" + qrSize, function() {
+            qrLocalLoaded = true;
+        });
+    } 
+    if (qrLocalLoaded) {
         image(qrLocal, 0, 0);
     }
 
@@ -47,8 +55,11 @@ function draw() {
         //     colorDark: "#000000",
         //     colorLight: "#ffffff"
         // });
-        qrPublic = loadImage(qrAPI + "?data=http://" + publicIP + requestURL + "&size=" + qrSize);
-    } else {
+        qrPublic = loadImage(qrAPI + "?data=http://" + publicIP + requestURL + "&size=" + qrSize, function() {
+            qrPublicLoaded = true;
+        });
+    } 
+    if (qrPublicLoaded) {
         image(qrPublic, 300, 0);
     }
 }
