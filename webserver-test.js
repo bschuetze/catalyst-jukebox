@@ -6,7 +6,8 @@ const fs = require('fs'); //require filesystem module
 const url = require('url');
 const path = require('path');
 const ip = require('ip');
-const externalIP = require('external-ip');
+'use strict';
+const getIP = require('external-ip');
 const crypto = require('crypto');
 const biguint = require('biguint-format');
 const qs = require('querystring');
@@ -102,7 +103,8 @@ fs.readFile("refresh-token.txt", "utf8", function (error, data) {
     completeAuth();
 });
 
-externalIP((err, ip) => {
+getIP(function (err, ip) {
+    console.log("Getting Public IP...")
     if (err) {
         console.log("Error getting external ip");
     }
