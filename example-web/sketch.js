@@ -1,6 +1,8 @@
 var currentWindow;
 const requestURL = "/request";
 const ipReq = "/getIPs"
+var localIP = "";
+var publicIP = "";
 
 
 function setup() {
@@ -18,4 +20,8 @@ function draw() {
 
 function getIPCallback(data) {
     console.log(data);
+    localIP = data["localip"];
+    publicIP = data["publicip"];
+    console.log("Local IP: " + localIP);
+    console.log("Public IP: " + publicIP);
 }
