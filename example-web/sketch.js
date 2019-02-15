@@ -39,9 +39,11 @@ function draw() {
         //     colorDark: "#000000",
         //     colorLight: "#ffffff"
         // });
-        qrLocal = loadImage(qrAPI + "?data=http://" + localIP + requestURL + "&size=" + qrSize, function() {
-            qrLocalLoaded = true;
-        });
+        let dest = qrAPI + "?data=http://" + localIP + requestURL + "&size=" + qrSize;
+        // qrLocal = loadImage(qrAPI + "?data=http://" + localIP + requestURL + "&size=" + qrSize, function() {
+        //     qrLocalLoaded = true;
+        // });
+        webRequest(dest, "POST", {mode: "no-cors"}, {});
     } 
     if (qrLocalLoaded) {
         image(qrLocal, 0, 0);
@@ -55,9 +57,12 @@ function draw() {
         //     colorDark: "#000000",
         //     colorLight: "#ffffff"
         // });
-        qrPublic = loadImage(qrAPI + "?data=http://" + publicIP + requestURL + "&size=" + qrSize, function() {
-            qrPublicLoaded = true;
-        });
+        let dest = qrAPI + "?data=http://" + publicIP + requestURL + "&size=" + qrSize;
+        // qrPublic = loadImage(qrAPI + "?data=http://" + publicIP + requestURL + "&size=" + qrSize, function() {
+        //     qrPublicLoaded = true;
+        // });
+
+        webRequest(dest, "POST", { mode: "no-cors" }, {});
     } 
     if (qrPublicLoaded) {
         image(qrPublic, 300, 0);
