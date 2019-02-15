@@ -60,7 +60,13 @@ util.webRequest(IP_DEST, "GET", {}, {}, function(data, status) {
 
     let dest = "http://api.qrserver.com/v1/create-qr-code/?data=http://" + publicIP + ":6474/request&size=256x256"
     util.webRequest(dest, "POST", {}, {}, function (data, status) {
-        fs.writeFile("testimage.png", data);
+        fs.writeFile("testimage.png", data, function (error) {
+            if (error) {
+                console.log("ERROR, refresh token file not written");
+            } else {
+                console.log("Successfully written refresh token details");
+            }
+        });
     });
 })
 
