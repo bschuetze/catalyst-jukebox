@@ -177,6 +177,11 @@ connectedDevices = {}
 # List of all Pagers
 pagers = []
 
+# FREE PAGER CHECK TIME
+pagerCheckTime = 20
+
+
+
 # Pyudev vars
 context = pyudev.Context()
 monitor = pyudev.Monitor.from_netlink(context)
@@ -258,14 +263,22 @@ def connectDevice(resp, **args):
         tempID = tempSplit[-1]
 
         # Get a free pager
-        for pid in PAGER_IDS:
-            if (not MQTT_PAGERS[pid].inUse()):
-                print("Checking out pager: " + pid + " for user " + tempID)
-                tempPagerID = pid
-                checkoutPager(tempPagerID, tempID)
-                break
+        pagerFree = False
 
-        USERS.append(User(tempID, args["model"], args["port"], tempPagerID))
+        while (not pagerFree):
+            for pid in PAGER_IDS:
+                if (not MQTT_PAGERS[pid].inUse()):
+                    print("Checking out pager: " + pid + " for user " + tempID)
+                    pagerFree = True
+                    tempPagerID = pid
+                    checkoutPager(tempPagerID, tempID)
+                    break
+
+            if (pagerFree):
+                USERS.append(User(tempID, args["model"], args["port"], tempPagerID))
+            else:
+                print("No free pagers currently, checking again in " + pagerCheckTime + "s")
+                time.sleep(pagerCheckTime)
     else:
         print("Status not 200")
         print(resp)

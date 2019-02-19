@@ -16,7 +16,8 @@ import random
 
 # Enter network details here
 WIFI_SSID = "23412_900"
-JUKEBOX_IP = "192.168.0.5"
+#JUKEBOX_IP = "192.168.0.5"
+JUKEBOX_IP = "192.168.43.244"
 station = network.WLAN(network.STA_IF)
 station.active(True)
 # connectToWiFi("password")
@@ -329,6 +330,7 @@ while True:
     # pager.buzz(not pager.BUZZING)
     
     time.sleep(2)
+
 
 
 
