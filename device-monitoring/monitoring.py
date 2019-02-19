@@ -271,7 +271,7 @@ def connectDevice(resp, **args):
 def connectCheckout(tempID, args):
 # Get a free pager
     pagerFree = False
-    
+
     while (not pagerFree):
         for pid in PAGER_IDS:
             if (not MQTT_PAGERS[pid].inUse()):
@@ -284,7 +284,7 @@ def connectCheckout(tempID, args):
         if (pagerFree):
             USERS.append(User(tempID, args["model"], args["port"], tempPagerID))
         else:
-            print("No free pagers currently, checking again in " + pagerCheckTime + "s")
+            print("No free pagers currently, checking again in " + str(pagerCheckTime) + "s")
             time.sleep(pagerCheckTime)
 
 
