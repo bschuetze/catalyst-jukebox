@@ -261,28 +261,32 @@ def connectDevice(resp, **args):
     if (resp.status_code == 200):
         tempSplit = resp.text.split(":")
         tempID = tempSplit[-1]
+        connectCheckout(tempID, args)
 
-        # Get a free pager
-        pagerFree = False
-
-        while (not pagerFree):
-            for pid in PAGER_IDS:
-                if (not MQTT_PAGERS[pid].inUse()):
-                    print("Checking out pager: " + pid + " for user " + tempID)
-                    pagerFree = True
-                    tempPagerID = pid
-                    checkoutPager(tempPagerID, tempID)
-                    break
-
-            if (pagerFree):
-                USERS.append(User(tempID, args["model"], args["port"], tempPagerID))
-            else:
-                print("No free pagers currently, checking again in " + pagerCheckTime + "s")
-                time.sleep(pagerCheckTime)
     else:
         print("Status not 200")
         print(resp)
         print(args)
+
+def connectCheckout(tempID, args):
+# Get a free pager
+    pagerFree = False
+    
+    while (not pagerFree):
+        for pid in PAGER_IDS:
+            if (not MQTT_PAGERS[pid].inUse()):
+                print("Checking out pager: " + pid + " for user " + tempID)
+                pagerFree = True
+                tempPagerID = pid
+                checkoutPager(tempPagerID, tempID)
+                break
+
+        if (pagerFree):
+            USERS.append(User(tempID, args["model"], args["port"], tempPagerID))
+        else:
+            print("No free pagers currently, checking again in " + pagerCheckTime + "s")
+            time.sleep(pagerCheckTime)
+
 
 def earlyPagerReturn(user):
     print("User " + user.userID + " returned pager " + user.pagerID + " early, removing songs.")
