@@ -15,15 +15,10 @@
 # Catalyst Jukebox
 #### *A modern jukebox with a focus on social interactions*
 ## What is it?
+TODODODODODO
 
 ## Why should I care?
-
-
-
-
-
-
-does it have links to other important documentation?  
+TODODODODODO
 
 
 # Setup
@@ -296,7 +291,7 @@ After completing the [setup](#setup) section, you're ready to run the jukebox ap
 
 ## Locating the requester
 
-To locate a songs requester, simply press the button attached to the Pi, if this person still has their pager, it will now light up, vibrate and buzz for a specified amount of time (default 10s).
+To locate a song's requester, simply press the button attached to the Pi, if this person still has their pager, it will now light up, vibrate and buzz for a specified amount of time (default 10s).
 
 
 ## Authorizing Spotify
@@ -353,9 +348,3 @@ Used Libraries and other sources:
 * [Python requests](https://pypi.org/project/requests/): Apache-2.0
 * [Python pyudev](https://pypi.org/project/pyudev/): GNU
 * [Python paho MQTT](https://pypi.org/project/paho-mqtt/): OSI Approved
-
-
-
-
-does it say how to contact you?  
-is there an opportunity for others to contribute—and an explanation for how they might get involved?  
