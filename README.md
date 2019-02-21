@@ -70,22 +70,37 @@ Here is a list of hardware I have used for this project:
 ### Install relevant software
 On the Pi:  
 
-1. Install [Raspotify](https://github.com/dtcooper/raspotify)  
+1. Clone the [Catalyst Jukebox repo](https://github.com/bschuetze/catalyst-jukebox)  
+(install git if needed `sudo apt install git`)
+
+2. Install [Raspotify](https://github.com/dtcooper/raspotify)  
 `curl -sL https://dtcooper.github.io/raspotify/install.sh | sh`
     * (optional) update the config `/etc/default/raspotify`
 
-2. Install [Node.js](https://nodejs.org/en/)  
+3. Install [Node.js](https://nodejs.org/en/)  
 `sudo apt-get install nodejs`
 
-3. Install [npm](https://www.npmjs.com/)  
+4. Install [npm](https://www.npmjs.com/)  
 `sudo apt-get install npm`
 
-4. Install / [Upgrade to Python 3](https://cs.anu.edu.au/courses/china-study-tour/news/2019/02/01/brents-update-blog-05/#python)
+5. Install [mosquitto](https://mosquitto.org/)  
+    * `sudo apt install mosquitto`  
+    * `sudo apt install mosquitto-clients`
+    * Run as a service:  
+    `sudo systemctl enable mosquitto.service`
 
-5. Install [pipenv](https://pipenv.readthedocs.io/en/latest/)  
+5. Install / [Upgrade to Python 3](https://cs.anu.edu.au/courses/china-study-tour/news/2019/02/01/brents-update-blog-05/#python)
+
+6. Install [pipenv](https://pipenv.readthedocs.io/en/latest/)  
 `pip install --user pipenv`
 
-6. Install all the required Node.js modules
+7. `cd` in to the `device-monitoring` folder in the catalyst-jukebox repo you cloned
+
+8. Run `pipenv install` to install the required packages listed in the `Pipfile`
+    * Also install RPI.GPIo which wouldn't work with pipenv using  
+    `pip install RPi.GPIO`
+
+8. Install all the required Node.js modules
     * `npm install ip` [https://www.npmjs.com/package/ip](https://www.npmjs.com/package/ip)
     * `npm install biguint-format` [https://www.npmjs.com/package/biguint-format](https://www.npmjs.com/package/biguint-format)
     * `npm install node-fetch` [https://www.npmjs.com/package/node-fetch](https://www.npmjs.com/package/node-fetch)
@@ -278,7 +293,10 @@ Used Libraries and other sources:
     * [request](https://www.npmjs.com/package/request): Apache-2.0
     * [image-downloader](https://www.npmjs.com/package/image-downloader): MIT
 * [NPM Terms of use](https://www.npmjs.com/policies/terms)
-* [Python paho MQTT](https://pypi.org/project/paho-mqtt/), "License: OSI Approved"
+* [Python RPI.GPIO](https://pypi.org/project/RPi.GPIO/): MIT
+* [Python requests](https://pypi.org/project/requests/): Apache-2.0
+* [Python pyudev](https://pypi.org/project/pyudev/): GNU
+* [Python paho MQTT](https://pypi.org/project/paho-mqtt/): OSI Approved
 
 
 
