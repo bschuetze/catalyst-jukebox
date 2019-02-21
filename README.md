@@ -24,8 +24,22 @@ Here is a list of hardware I have used for this project:
 * [Raspberry Pi 3 Model B](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/) for the server and Spotify audio device
 * [5 inch touch screen](https://www.ebay.com.au/itm/5-Inch-LCD-Touch-Screen-HDMI-Display-800-480-Raspberry-Pi-3-2-eParcel-Sydney/152408334219?ssPageName=STRK%3AMEBIDX%3AIT&_trksid=p2057872.m2749.l2649) for the Raspberry Pi to display QR codes and other information  
 *Note: any screen is probably fine, however this is a generic model and as such I don't have a better link, so this is the exact one I used*
-* [Sparkfun ESP32 Thing] as the location device *(also referred to as the 'restaurant pager/buzzer')*
-
+* [Sparkfun ESP32 Thing](https://www.sparkfun.com/products/13907) as the location device *(also referred to as the 'restaurant pager/buzzer')*  
+*Note: any ESP32 is probably fine, however this one has LiPo charging and power already implemented which is nice*
+* Components
+    * Resistors (Ω)
+        * 1K (x1)
+        * 220 (x4, more if you want more LEDS)
+        * ~3K3 (x1)
+        * ~2K (x1)
+    * Diode (x1, IN4002 or similar)
+    * Capacitor (x1, 0.1 µF)
+    * Transistor (x1, 2N2222 or similar)
+    * LEDS (x4, I used Red, Green, 2 Blue)
+    * 3V Vibration Motor (x1)
+    * Buzzer (x1)
+    * Momentary button (x1, I used an illuminated model)
+    * Some way to connect everything (wires, solder, jumper cables, hearders etc.)
 
 # How to Contribute
 If you wanna contribute to this project, great! If you want to collaborate or have any questions, please feel free to [get in touch](#contact) and we can work something out, otherwise you can make [make a pull request](https://help.github.com/en/articles/creating-a-pull-request) for me to merge any small changes you'd like to make.
