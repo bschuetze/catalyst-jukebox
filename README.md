@@ -12,16 +12,16 @@
 ---
 
 # Catalyst Jukebox
-A modern jukebox with a focus on social interactions
+#### *A modern jukebox with a focus on social interactions*
+## What is it?
+
+## Why should I care?
 
 
 
 
 
 
-
-does it clearly say what your artefact is and why people should care?  
-does it include any visual elements? (screenshots, diagrams or videos are great to grab people’s attention)  
 does it have links to other important documentation?  
 
 
