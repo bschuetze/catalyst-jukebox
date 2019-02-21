@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "e3a8e549041e7268e223dcc44b7151480dcf844d06505c7bd07184cd5b1c1683"
+            "sha256": "69c140ca18add2fcc7acad1323b5489d4d905a2fdc6318066e22747b00287757"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -37,15 +37,12 @@
             ],
             "version": "==2.8"
         },
-        "pybluez": {
+        "paho-mqtt": {
             "hashes": [
-                "sha256:15f7deeedf1e1ef06be88a457e8cd69c61e6a621914b082f64644e20a58f8589",
-                "sha256:4ce006716a54d9d18e8186a3f1c8b12a8e6befecffe8fd5828a291fb694ce49d",
-                "sha256:5e2d602894c82291f677c6a8b1bd06fa140f0eaff7e9c4537537faa73df017f0",
-                "sha256:75009604b0923aec14e8dfa544e5713cb983fbfaa4af1646ae66234901de3979"
+                "sha256:e440a052b46d222e184be3be38676378722072fcd4dfd2c8f509fb861a7b0b79"
             ],
             "index": "pypi",
-            "version": "==0.22"
+            "version": "==1.4.0"
         },
         "pyudev": {
             "hashes": [

@@ -6,9 +6,9 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-pyudev = "*"
+paho-mqtt = "*"
 requests = "*"
-pybluez = "*"
+pyudev = "*"
 
 [requires]
 python_version = "3.5"
