@@ -291,10 +291,15 @@ After completing the [setup](#setup) section, you're ready to run the jukebox ap
 
 4. Create a new client ID if you don't already have one for your jukebox
     * Fill in the details something similar to this  
-    ![Spotify Create App](assets/spotify-client-id.jpg?raw=true) 
+    ![Spotify Create App](assets/spotify-client-id.png?raw=true) 
     * Select no when prompted for commercial integration
     * Accept the ToS  
-    ![Spotify Client ID](assets/spotify-dashboard.jpg?raw=true) 
+    * You should now be able to view your Client ID and Client Secret  
+    ![Spotify Client ID](assets/spotify-dashboard.jpg?raw=true)
+    * From here, you will now need to click 'edit settings' and whitelist the redirect urls you will be using, this will be your local IP on the Pi which you [got earlier](#local-ip)
+    For example if my local ip on the Pi was 192.168.1.20, my whitelisted redirect urls would look like this:  
+    ![Redirect urls](assets/redirect-urls.png?raw=true)
+
 
 # How to Contribute
 If you wanna contribute to this project, great! If you want to collaborate or have any questions, please feel free to [get in touch](#contact) and we can work something out, otherwise you can make [make a pull request](https://help.github.com/en/articles/creating-a-pull-request) for me to merge any small changes you'd like to make.
