@@ -1,6 +1,7 @@
 ## FLASHING COMMANDS:
-# /c/Python3/Scripts/esptool.py.exe --chip esp32 -p COM3 erase_flash
-# /c/Python3/Scripts/esptool.py.exe --chip esp32 -p COM3 write_flash -z 0x1000 /x/University/COMPCHST/catalyst-jukebox/esp32-micropython/esp32-20190207-v1.10-54-g43a894fb4.bin
+# esptool.py.exe --chip esp32 -p COM3 erase_flash
+# esptool.py.exe --chip esp32 -p COM3 write_flash -z 0x1000 esp32-20190207-v1.10-54-g43a894fb4.bin
+# Useful DOCS
 # https://hackernoon.com/get-on-the-good-foot-with-micropython-on-the-esp32-decdd32c4720
 # http://www.learningaboutelectronics.com/Articles/Vibration-motor-circuit.php
 
@@ -16,8 +17,7 @@ import random
 
 # Enter network details here
 WIFI_SSID = "23412_900"
-#JUKEBOX_IP = "192.168.0.5"
-JUKEBOX_IP = "192.168.43.244"
+JUKEBOX_IP = "192.168.0.5"
 station = network.WLAN(network.STA_IF)
 station.active(True)
 # connectToWiFi("password")
@@ -330,6 +330,7 @@ while True:
     # pager.buzz(not pager.BUZZING)
     
     time.sleep(2)
+
 
 
 

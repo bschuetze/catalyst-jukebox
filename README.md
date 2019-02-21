@@ -70,13 +70,6 @@ Note: Step 6 and 7 can be done from uPyCraft, however mine only worked intermitt
 7. Write the new micropython firmware you just downloaded to the board with:  
 `esptool.py.exe --chip esp32 -p COM3(YOUR PORT) write_flash -z 0x1000 /path/to/firmware.bin`
 
-8. Open the uPyCraft IDE
-    * Ensure that the board is set to ESP32  
-    ![Board Setting](assets/upycraft-board.png?raw=true)
-    * Under serial, select the same port as you found your board to be on before  
-    ![Serial Setting](assets/upycraft-serial.png?raw=true)
-
-
 #### Flashing with uPyCraft
 1. Select BurnFirmware  
 ![Burn Firmware Option](assets/burn-firmware.png?raw=true)
@@ -86,6 +79,29 @@ Note: Step 6 and 7 can be done from uPyCraft, however mine only worked intermitt
 
 3. Wait for the burn to complete  
 ![Burning Progress](assets/burn-progress.png?raw=true)
+
+### Uploading Program
+
+1. Open the uPyCraft IDE
+
+2. Ensure that the board is set to ESP32  
+![Board Setting](assets/upycraft-board.png?raw=true)
+
+3. Under serial, select the same port as you found your board to be on before  
+![Serial Setting](assets/upycraft-serial.png?raw=true)
+
+4. If all is well, you should see a terminal at the bottom with >>>  
+![uPyCraft IDE](assets/upycraft-home.png?raw=true)
+
+5. Enter your wifi password in the utils.py file  
+![utils.py](assets/utils-py.png?raw=true)
+
+6. Save that file and drag and drop it onto the 'device' on the left, once you have done that it should upload to the board  
+![utils download](assets/utils-download.png?raw=true)
+
+7. Next we open the main.py file and update the JUKEBOX_IP to the local IP of the julebox we [found earlier] TODODODODODODODO  
+![IP](assets/main-ip.png?raw=true)
+
 
 ## Wiring
 
