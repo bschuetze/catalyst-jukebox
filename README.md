@@ -59,6 +59,34 @@ Here is a list of hardware I have used for this project:
     * [Mac](https://randomnerdtutorials.com/install-upycraft-ide-mac-os-x-instructions/)
     * [Linux](https://randomnerdtutorials.com/install-upycraft-ide-linux-ubuntu-instructions/)
 
+5. Plug the ESP32 into your computer and find its location (the upycraft links will have some information on this, for me it is COM3 on Windows)
+
+Note: Step 6 and 7 can be done from uPyCraft, however mine only worked intermittently whereas the normal methods worked every time, you can try that method if you want to [here](#flashing-with-upycraft).
+
+6. Erase the existing flash with:  
+`esptool.py.exe --chip esp32 -p COM3(YOUR PORT) erase_flash`  
+*Note: windows uses esptool.py.exe, it will be different on Linux and Mac*
+
+7. Write the new micropython firmware you just downloaded to the board with:  
+`esptool.py.exe --chip esp32 -p COM3(YOUR PORT) write_flash -z 0x1000 /path/to/firmware.bin`
+
+8. Open the uPyCraft IDE
+    * Ensure that the board is set to ESP32  
+    ![Board Setting](assets/upycraft-board.png?raw=true)
+    * Under serial, select the same port as you found your board to be on before  
+    ![Serial Setting](assets/upycraft-serial.png?raw=true)
+
+
+#### Flashing with uPyCraft
+1. Select BurnFirmware  
+![Burn Firmware Option](assets/burn-firmware.png?raw=true)
+
+2. Enter the following settings in the popup (your port will differ as well as firmware name)  
+![Updating Firmware](assets/update-firmware.png?raw=true)
+
+3. Wait for the burn to complete  
+![Burning Progress](assets/burn-progress.png?raw=true)
+
 ## Wiring
 
 ### ESP32 Wiring Diagram
