@@ -64,8 +64,16 @@ Here is a list of hardware I have used for this project:
     ![etcher](assets/etcher.png)
 
 3. Boot the Raspberry Pi
-    * update software
-    * enable ssh, set hostname, enable networking, locale etc.  
+    * Update software
+    * Enable ssh, set hostname, enable networking, locale etc.  
+
+### Install relevant software
+1. Install [Raspotify](https://github.com/dtcooper/raspotify)  
+`curl -sL https://dtcooper.github.io/raspotify/install.sh | sh`
+    * (optional) update the config `/etc/default/raspotify`
+
+2. Install [Node.js](https://nodejs.org/en/)  
+`sudo apt-get install nodejs`
 
 ## Configuring Restaurant Pager (ESP32)
 ### Flashing Software
@@ -159,6 +167,7 @@ This software is released uner the [MIT License](LICENSE.md)
 
 Used Libraries and other sources:  
 * [Spotify Developer Terms of Service](https://developer.spotify.com/terms/)
+* [Raspotify](https://github.com/dtcooper/raspotify) released under MIT
 * p5.js was created by [Lauren McCarthy](http://lauren-mccarthy.com/) and is developed by a community of collaborators, with support from the [Processing Foundation](http://processing.org/foundation/) and [NYU ITP](http://itp.nyu.edu/itp/)
 * [Node.js license](https://raw.githubusercontent.com/nodejs/node/master/LICENSE)
 * [NPM Terms of use](https://www.npmjs.com/policies/terms)
