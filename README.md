@@ -1,4 +1,4 @@
-![Catalyst Jukebox Banner](http://url/to/img.png)
+![Catalyst Jukebox Banner](assets/catalyst.png?raw=true)
 
 # Catalyst Jukebox
 A modern jukebox with a focus on social interactions
@@ -17,6 +17,7 @@ does it have links to other important documentation?
 # Setup
 
 ## Hardware
+![Raspberry Pi 3 B](assets/raspberry-pi-3-b.jpg?raw=true)
 For this project, I have used a [Raspberry Pi 3 Model B](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/) for the server and Spotify audio device  
 For displaying QR codes and other information, I have used a [5 inch touch screen](https://www.ebay.com.au/itm/5-Inch-LCD-Touch-Screen-HDMI-Display-800-480-Raspberry-Pi-3-2-eParcel-Sydney/152408334219?ssPageName=STRK%3AMEBIDX%3AIT&_trksid=p2057872.m2749.l2649) *(any screen is probably fine, however this is a generic model and as such I don't have a better link, so this is the exact one I used)* for the Raspberry Pi
 
