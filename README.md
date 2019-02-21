@@ -107,6 +107,7 @@ Note: Step 6 and 7 can be done from uPyCraft, however mine only worked intermitt
 ![Upload Main](assets/main-upload.png?raw=true)
 
 ## Wiring
+Note: when wiring up the boards, *especially* if soldering, please ensure that all power sources are disconnected
 
 ### ESP32 Wiring Diagram
 ![ESP32 Wiring Diagram](assets/esp32-circuit.png?raw=true)  
@@ -115,6 +116,18 @@ Note: Step 6 and 7 can be done from uPyCraft, however mine only worked intermitt
 ### Pi Wiring Diagram
 ![Raspberry Pi Wiring Diagram](assets/pi-circuit.png?raw=true)  
 [Circuit Link](https://www.circuit-diagram.org/circuits/e828d5e3)
+
+
+# License
+This software is released uner the [MIT License](LICENCE.md):  
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+Used Libraries and other sources:  
+* [Spotify Developer Terms of Service](https://developer.spotify.com/terms/)
+* p5.js was created by [Lauren McCarthy](http://lauren-mccarthy.com/) and is developed by a community of collaborators, with support from the [Processing Foundation](http://processing.org/foundation/) and [NYU ITP](http://itp.nyu.edu/itp/)
+* [Node.js license](https://raw.githubusercontent.com/nodejs/node/master/LICENSE)
+* [NPM Terms of use](https://www.npmjs.com/policies/terms)
+* [Python paho MQTT](https://pypi.org/project/paho-mqtt/), "License: OSI Approved"
 
 
 # How to Contribute
