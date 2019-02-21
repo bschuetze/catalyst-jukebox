@@ -4,6 +4,7 @@
 # Contents
 * [Project Introduction](#catalyst-jukebox)
 * [Setup](#setup)
+* [Running the Jukebox](#running-the-jukebox)
 * [Contributing](#how-to-contribute)
 * [Contact](#contact)
 * [Other Media](#other-media)
@@ -89,18 +90,18 @@ On the Pi:
     * Run as a service:  
     `sudo systemctl enable mosquitto.service`
 
-5. Install / [Upgrade to Python 3](https://cs.anu.edu.au/courses/china-study-tour/news/2019/02/01/brents-update-blog-05/#python)
+6. Install / [Upgrade to Python 3](https://cs.anu.edu.au/courses/china-study-tour/news/2019/02/01/brents-update-blog-05/#python)
 
-6. Install [pipenv](https://pipenv.readthedocs.io/en/latest/)  
+7. Install [pipenv](https://pipenv.readthedocs.io/en/latest/)  
 `pip install --user pipenv`
 
-7. `cd` in to the `device-monitoring` folder in the catalyst-jukebox repo you cloned
+8. `cd` in to the `device-monitoring` folder in the catalyst-jukebox repo you cloned
 
-8. Run `pipenv install` to install the required packages listed in the `Pipfile`
+9. Run `pipenv install` to install the required packages listed in the `Pipfile`
     * Also install RPI.GPIo which wouldn't work with pipenv using  
     `pip install RPi.GPIO`
 
-8. Install all the required Node.js modules
+10. Install all the required Node.js modules
     * `npm install ip` [https://www.npmjs.com/package/ip](https://www.npmjs.com/package/ip)
     * `npm install biguint-format` [https://www.npmjs.com/package/biguint-format](https://www.npmjs.com/package/biguint-format)
     * `npm install node-fetch` [https://www.npmjs.com/package/node-fetch](https://www.npmjs.com/package/node-fetch)
@@ -108,6 +109,9 @@ On the Pi:
     * `npm install request` [https://www.npmjs.com/package/request](https://www.npmjs.com/package/request)
     * `npm install image-downloader` [https://www.npmjs.com/package/image-downloader](https://www.npmjs.com/package/image-downloader)
 
+11. Get the local IP of the PI  
+    * Run `ifconfig` from the CLI on the Pi and locate the local IP  
+    ![Local IP](assets/local-ip.png?raw=true)
 
 
 ### Connect the screen
@@ -265,6 +269,9 @@ Note: when wiring up the boards, *especially* if soldering, please ensure that a
 ![Raspberry Pi Wiring Diagram](assets/pi-circuit.png?raw=true)  
 [Circuit Link](https://www.circuit-diagram.org/circuits/e828d5e3)
 
+
+# Running the Jukebox
+After completing the [setup](#setup) section, you're ready to
 
 # How to Contribute
 If you wanna contribute to this project, great! If you want to collaborate or have any questions, please feel free to [get in touch](#contact) and we can work something out, otherwise you can make [make a pull request](https://help.github.com/en/articles/creating-a-pull-request) for me to merge any small changes you'd like to make.
