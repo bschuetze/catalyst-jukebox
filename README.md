@@ -273,23 +273,27 @@ Note: when wiring up the boards, *especially* if soldering, please ensure that a
 # Running the Jukebox
 After completing the [setup](#setup) section, you're ready to run the jukebox application
 1. Run the webserver with node webserver.js
-    * If this your first time using, then you will need to [login](#authorizing-spotify)
+    * If this your first time using the Jukebox, then you will need to [login](#authorizing-spotify)
 
 2. In another CLI (or using screen), `cd` into the `device-monitoring` folder and run  
 `pipenv shell` followed by `python monitoring.py`
 
 3. Press the RST (reset) button on the ESP32 to make it restart and sync with the monitoring.py script
 
-4. 
+4. That's it! Everything should be running as intended now
+
+## Requesting a song
+1. Go to `http://(PI Local IP):6474/request` and paste in a space separated list of Spotify track URIs  
+    ![Track URI](assets/spotify-uri.png?raw=true)
+
+
 
 ## Authorizing Spotify
 1. Ensure that you have completed Step 1 of the [running the jukebox](#running-the-jukebox) process
 
-2. Navigate to `http://(PI Local IP):6474/login`
+2. Open the [Spotify developers application dashboard](https://developer.spotify.com/dashboard/applications)
 
-3. In a separate tab, open the [Spotify developers application dashboard](https://developer.spotify.com/dashboard/applications)
-
-4. Create a new client ID if you don't already have one for your jukebox
+3. Create a new client ID if you don't already have one for your jukebox
     * Fill in the details something similar to this  
     ![Spotify Create App](assets/spotify-client-id.png?raw=true) 
     * Select no when prompted for commercial integration
@@ -299,6 +303,12 @@ After completing the [setup](#setup) section, you're ready to run the jukebox ap
     * From here, you will now need to click 'edit settings' and whitelist the redirect urls you will be using, this will be your local IP on the Pi which you [got earlier](#local-ip)
     For example if my local ip on the Pi was 192.168.1.20, my whitelisted redirect urls would look like this:  
     ![Redirect urls](assets/redirect-urls.png?raw=true)
+
+4. Navigate to `http://(PI Local IP):6474/login` and paste in the Client ID and Secret in the corresponding boxes and click 'submit'
+
+5. You will be redirected to the Spotify Authorization page, if you agree to the requested scope then click accept
+
+6. That's it, your details should all be submitted
 
 
 # How to Contribute
