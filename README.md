@@ -54,8 +54,20 @@ Here is a list of hardware I have used for this project:
     * Protoboard or Breadboard etc.
     * Some way to connect everything (wires, solder, jumper cables, hearders etc.)
 
+## Configuring Raspberry Pi
+### Set up the Pi
+1. Download the [Raspbian Desktop](https://www.raspberrypi.org/downloads/raspbian/) image from the [Raspberry Pi Website](https://www.raspberrypi.org/)
 
-## Configuring Restaurant Pager
+2. Flash the image to an SD card (windows method follows)
+    * Download and install [etcher](https://www.balena.io/etcher/)
+    * Flash the raspbian image to a microsd card (preferrably 8GB+) using etcher  
+    ![etcher](assets/etcher.png)
+
+3. Boot the Raspberry Pi
+    * update software
+    * enable ssh, set hostname, enable networking, locale etc.  
+
+## Configuring Restaurant Pager (ESP32)
 ### Flashing Software
 *Note:* If you're using Windows then you may need drivers for the ESP32, if you're using the 'Thing' like I am then you'll need [FTDI Drivers](https://www.ftdichip.com/Drivers/VCP.htm), other boards may need [something else](https://www.silabs.com/products/interface/usb-bridges/classic-usb-bridges/device.cp2102).  
 
