@@ -68,12 +68,36 @@ Here is a list of hardware I have used for this project:
     * Enable ssh, set hostname, enable networking, locale etc.  
 
 ### Install relevant software
+On the pi:  
+
 1. Install [Raspotify](https://github.com/dtcooper/raspotify)  
 `curl -sL https://dtcooper.github.io/raspotify/install.sh | sh`
     * (optional) update the config `/etc/default/raspotify`
 
 2. Install [Node.js](https://nodejs.org/en/)  
 `sudo apt-get install nodejs`
+
+3. Install [npm](https://www.npmjs.com/)  
+`sudo apt-get install npm`
+
+4.
+
+### Connect the screen
+On the Pi:  
+1. Clone the LCD driver repository at the [LCD-show](https://github.com/goodtft/LCD-show) repo
+2. `cd` into the LCD-show directory
+3. For this specific screen, we will use the 'LCD5-show' script
+4. Run `chmod 744 LCD5-show` to make the script executable
+5. Run the script with `sudo ./LCD5-show`  
+*Note: your Pi may restart after running this script*  
+
+At this point the Pi should be all ready to go, now plug in the screen via the header like so:  
+*Note: the following 2 images were provided in some of the 'documentation' with the screen and are not my own*  
+![Screen 1](assets/display-pins.jpg?raw=true)  
+and then attach the included hdmi connector:  
+![Screen 2](assets/display-hdmi.jpg?raw=true)  
+and you should have display!  
+![Screen 3](assets/display-on.jpg?raw=true)  
 
 ## Configuring Restaurant Pager (ESP32)
 ### Flashing Software
