@@ -104,7 +104,7 @@ Note: Step 6 and 7 can be done from uPyCraft, however mine only worked intermitt
 
 8. Upload that file using the 'play' button on the right  
 ![Upload Main](assets/upycraft-play.png?raw=true)  
-![Upload Main](assets/upload-main.png?raw=true)
+![Upload Main](assets/main-upload.png?raw=true)
 
 ## Wiring
 
