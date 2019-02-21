@@ -80,7 +80,20 @@ On the Pi:
 3. Install [npm](https://www.npmjs.com/)  
 `sudo apt-get install npm`
 
-4.
+4. Install / [Upgrade to Python 3](https://cs.anu.edu.au/courses/china-study-tour/news/2019/02/01/brents-update-blog-05/#python)
+
+5. Install [pipenv](https://pipenv.readthedocs.io/en/latest/)  
+`pip install --user pipenv`
+
+6. Install all the required Node.js modules
+    * `npm install ip` [https://www.npmjs.com/package/ip](https://www.npmjs.com/package/ip)
+    * `npm install biguint-format` [https://www.npmjs.com/package/biguint-format](https://www.npmjs.com/package/biguint-format)
+    * `npm install node-fetch` [https://www.npmjs.com/package/node-fetch](https://www.npmjs.com/package/node-fetch)
+    * `npm install serve-favicon` [https://www.npmjs.com/package/serve-favicon](https://www.npmjs.com/package/serve-favicon)
+    * `npm install request` [https://www.npmjs.com/package/request](https://www.npmjs.com/package/request)
+    * `npm install image-downloader` [https://www.npmjs.com/package/image-downloader](https://www.npmjs.com/package/image-downloader)
+
+
 
 ### Connect the screen
 On the Pi:  
@@ -259,6 +272,11 @@ Used Libraries and other sources:
 * [Raspotify](https://github.com/dtcooper/raspotify) released under MIT
 * p5.js was created by [Lauren McCarthy](http://lauren-mccarthy.com/) and is developed by a community of collaborators, with support from the [Processing Foundation](http://processing.org/foundation/) and [NYU ITP](http://itp.nyu.edu/itp/)
 * [Node.js license](https://raw.githubusercontent.com/nodejs/node/master/LICENSE)
+    * [ip](https://www.npmjs.com/package/ip): MIT
+    * [node-fetch](https://www.npmjs.com/package/node-fetch): MIT
+    * [serve-favicon](https://www.npmjs.com/package/serve-favicon): MIT
+    * [request](https://www.npmjs.com/package/request): Apache-2.0
+    * [image-downloader](https://www.npmjs.com/package/image-downloader): MIT
 * [NPM Terms of use](https://www.npmjs.com/policies/terms)
 * [Python paho MQTT](https://pypi.org/project/paho-mqtt/), "License: OSI Approved"
 

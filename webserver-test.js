@@ -1,20 +1,14 @@
-// Webserver test, initial code will be used from: 
-// https://www.w3schools.com/nodejs/nodejs_raspberrypi_webserver_websocket.asp
-
-const http = require('http').createServer(handler); //require http server, and create server with function handler()
-const fs = require('fs'); //require filesystem module
+const http = require('http').createServer(handler);
+const fs = require('fs');
 const url = require('url');
 const path = require('path');
-const ip = require('ip');
+const ip = require('ip'); // Requires install
 const crypto = require('crypto');
-const biguint = require('biguint-format');
-const qs = require('querystring');
-const fetch = require('node-fetch');
-const servefav = require('serve-favicon');
-const request = require('request');
-const imgDownload = require('image-downloader');
-// import util
-// import {toWebLink, webResponse} from "./example-web/assets/util.js";
+const biguint = require('biguint-format'); // Requires install
+const fetch = require('node-fetch'); // Requires install
+const servefav = require('serve-favicon'); // Requires install
+const request = require('request'); // Requires install
+const imgDownload = require('image-downloader'); // Requires install
 const util = require("./example-web/assets/utilNode.js");
 
 // Server variables
