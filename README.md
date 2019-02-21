@@ -1,5 +1,16 @@
 ![Catalyst Jukebox Banner](assets/catalyst.png?raw=true)
 
+
+# Conters
+* [Project Introduction](#catalyst-jukebox)
+* [Setup](#setup)
+* [Contributing](#how-to-contribute)
+* [Contact](#contact)
+* [Other Media](#other-media)
+* [License](#license)
+
+---
+
 # Catalyst Jukebox
 A modern jukebox with a focus on social interactions
 
@@ -118,6 +129,19 @@ Note: when wiring up the boards, *especially* if soldering, please ensure that a
 [Circuit Link](https://www.circuit-diagram.org/circuits/e828d5e3)
 
 
+# How to Contribute
+If you wanna contribute to this project, great! If you want to collaborate or have any questions, please feel free to [get in touch](#contact) and we can work something out, otherwise you can make [make a pull request](https://help.github.com/en/articles/creating-a-pull-request) for me to merge any small changes you'd like to make.
+
+
+# Contact
+Any enquiries feel free to contact me on: [brent.schuetze@anu.edu.au](mailto:brent.schuetze@anu.edu.au)
+
+
+# Other Media
+Find my blogposts on the build over at the [China Study Tour](https://cs.anu.edu.au/courses/china-study-tour/news/#brent-schuetze) website  
+My [YouTube Channel](https://www.youtube.com/channel/UCcbzaG6yzkxIH_NWM2gUyig)
+
+
 # License
 This software is released uner the [MIT License](LICENSE.md)
 
@@ -127,19 +151,6 @@ Used Libraries and other sources:
 * [Node.js license](https://raw.githubusercontent.com/nodejs/node/master/LICENSE)
 * [NPM Terms of use](https://www.npmjs.com/policies/terms)
 * [Python paho MQTT](https://pypi.org/project/paho-mqtt/), "License: OSI Approved"
-
-
-# How to Contribute
-If you wanna contribute to this project, great! If you want to collaborate or have any questions, please feel free to [get in touch](#contact) and we can work something out, otherwise you can make [make a pull request](https://help.github.com/en/articles/creating-a-pull-request) for me to merge any small changes you'd like to make.
-
-# Other Media
-Find my blogposts on the build over at the [China Study Tour](https://cs.anu.edu.au/courses/china-study-tour/news/#brent-schuetze) website  
-My [YouTube Channel](https://www.youtube.com/channel/UCcbzaG6yzkxIH_NWM2gUyig)
-
-
-# Contact
-Any enquiries feel free to contact me on: [brent.schuetze@anu.edu.au](mailto:brent.schuetze@anu.edu.au)
-
 
 
 
