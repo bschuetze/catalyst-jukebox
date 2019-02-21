@@ -22,7 +22,7 @@ does it have links to other important documentation?
 
 Here is a list of hardware I have used for this project:
 * [Raspberry Pi 3 Model B](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/) for the server and Spotify audio device
-* [5 inch touch screen](https://www.ebay.com.au/itm/5-Inch-LCD-Touch-Screen-HDMI-Display-800-480-Raspberry-Pi-3-2-eParcel-Sydney/152408334219?ssPageName=STRK%3AMEBIDX%3AIT&_trksid=p2057872.m2749.l2649) for the Raspberry Pi to display QR codes and other information  
+* [5 inch touch screen](https://www.ebay.com.au/itm/5-Inch-LCD-Touch-Screen-HDMI-Display-800-480-Raspberry-Pi-3-2-eParcel-Sydney/152408334219?ssPageName=STRK%3AMEBIDX%3AIT&_trksid=p2057872.m2749.l2649) for the Raspberry Pi to display QR codes and other information, you can also choose to forgo the screen if you'd like  
 *Note: any screen is probably fine, however this is a generic model and as such I don't have a better link, so this is the exact one I used*
 * [Sparkfun ESP32 Thing](https://www.sparkfun.com/products/13907) as the location device *(also referred to as the 'restaurant pager/buzzer')*  
 *Note: any ESP32 is probably fine, however this one has LiPo charging and power already implemented which is nice*
@@ -38,8 +38,21 @@ Here is a list of hardware I have used for this project:
     * LEDS (x4, I used Red, Green, 2 Blue)
     * 3V Vibration Motor (x1)
     * Buzzer (x1)
-    * Momentary button (x1, I used an illuminated model)
+    * Momentary Button (x1, I used an illuminated model)
+    * Protoboard or Breadboard etc.
     * Some way to connect everything (wires, solder, jumper cables, hearders etc.)
+
+
+## Wiring
+
+### ESP32 Wiring Diagram
+![ESP32 Wiring Diagram](assets/esp32-circuit.png?raw=true)  
+[Circuit Link](https://www.circuit-diagram.org/circuits/c1606980)
+
+### Pi Wiring Diagram
+![Raspberry Pi Wiring Diagram](assets/pi-circuit.png?raw=true)  
+[Circuit Link](https://www.circuit-diagram.org/circuits/e828d5e3)
+
 
 # How to Contribute
 If you wanna contribute to this project, great! If you want to collaborate or have any questions, please feel free to [get in touch](#contact) and we can work something out, otherwise you can make [make a pull request](https://help.github.com/en/articles/creating-a-pull-request) for me to merge any small changes you'd like to make.
