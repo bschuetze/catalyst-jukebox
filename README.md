@@ -99,9 +99,12 @@ Note: Step 6 and 7 can be done from uPyCraft, however mine only worked intermitt
 6. Save that file and drag and drop it onto the 'device' on the left, once you have done that it should upload to the board  
 ![utils download](assets/utils-download.png?raw=true)
 
-7. Next we open the main.py file and update the JUKEBOX_IP to the local IP of the julebox we [found earlier] TODODODODODODODO  
+7. Next we open the main.py file and update the WIFI_SSID to the name of your network and update the JUKEBOX_IP to the local IP of the julebox we [found earlier] TODODODODODODODO  
 ![IP](assets/main-ip.png?raw=true)
 
+8. Upload that file using the 'play' button on the right  
+![Upload Main](assets/upycraft-play.png?raw=true)  
+![Upload Main](assets/upload-main.png?raw=true)
 
 ## Wiring
 
