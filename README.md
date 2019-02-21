@@ -18,7 +18,7 @@ does it have links to other important documentation?
 
 ## Hardware
 ![Raspberry Pi 3 B](assets/raspberry-pi-3-b.jpg?raw=true)  
-![ESP32 Thing](assets/assets/esp32-thing.jpg?raw=true)  
+![ESP32 Thing](assets/esp32-thing.jpg?raw=true)  
 
 Here is a list of hardware I have used for this project:
 * [Raspberry Pi 3 Model B](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/) for the server and Spotify audio device
