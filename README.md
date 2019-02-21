@@ -271,7 +271,8 @@ Note: when wiring up the boards, *especially* if soldering, please ensure that a
 
 
 # Running the Jukebox
-After completing the [setup](#setup) section, you're ready to
+After completing the [setup](#setup) section, you're ready to run the jukebox application
+1. Run the webserver with node webserver.js
 
 # How to Contribute
 If you wanna contribute to this project, great! If you want to collaborate or have any questions, please feel free to [get in touch](#contact) and we can work something out, otherwise you can make [make a pull request](https://help.github.com/en/articles/creating-a-pull-request) for me to merge any small changes you'd like to make.
