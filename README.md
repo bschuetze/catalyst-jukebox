@@ -39,9 +39,25 @@ Here is a list of hardware I have used for this project:
     * 3V Vibration Motor (x1)
     * Buzzer (x1)
     * Momentary Button (x1, I used an illuminated model)
+    * LiPo Battery (x1)
     * Protoboard or Breadboard etc.
     * Some way to connect everything (wires, solder, jumper cables, hearders etc.)
 
+
+## Configuring Restaurant Pager
+### Flashing Software
+*Note:* If you're using Windows then you may need drivers for the ESP32, if you're using the 'Thing' like I am then you'll need [FTDI Drivers](https://www.ftdichip.com/Drivers/VCP.htm), other boards may need [something else](https://www.silabs.com/products/interface/usb-bridges/classic-usb-bridges/device.cp2102).  
+
+If you don't have it already, install [Python 3](https://realpython.com/installing-python/)
+
+Install the [ESPTool](https://github.com/espressif/esptool) with pip using `pip install esptool`
+
+Download the [ESP32 micropython firmware](http://micropython.org/download#esp32)
+
+Download the uPyCraft IDE
+* [Windows](https://randomnerdtutorials.com/install-upycraft-ide-windows-pc-instructions/)
+* [Mac](https://randomnerdtutorials.com/install-upycraft-ide-mac-os-x-instructions/)
+* [Linux](https://randomnerdtutorials.com/install-upycraft-ide-linux-ubuntu-instructions/)
 
 ## Wiring
 
