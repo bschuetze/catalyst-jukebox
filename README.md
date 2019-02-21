@@ -273,6 +273,28 @@ Note: when wiring up the boards, *especially* if soldering, please ensure that a
 # Running the Jukebox
 After completing the [setup](#setup) section, you're ready to run the jukebox application
 1. Run the webserver with node webserver.js
+    * If this your first time using, then you will need to [login](#authorizing-spotify)
+
+2. In another CLI (or using screen), `cd` into the `device-monitoring` folder and run  
+`pipenv shell` followed by `python monitoring.py`
+
+3. Press the RST (reset) button on the ESP32 to make it restart and sync with the monitoring.py script
+
+4. 
+
+## Authorizing Spotify
+1. Ensure that you have completed Step 1 of the [running the jukebox](#running-the-jukebox) process
+
+2. Navigate to `http://(PI Local IP):6474/login`
+
+3. In a separate tab, open the [Spotify developers application dashboard](https://developer.spotify.com/dashboard/applications)
+
+4. Create a new client ID if you don't already have one for your jukebox
+    * Fill in the details something similar to this  
+    ![Spotify Create App](assets/spotify-client-id.jpg?raw=true) 
+    * Select no when prompted for commercial integration
+    * Accept the ToS  
+    ![Spotify Client ID](assets/spotify-dashboard.jpg?raw=true) 
 
 # How to Contribute
 If you wanna contribute to this project, great! If you want to collaborate or have any questions, please feel free to [get in touch](#contact) and we can work something out, otherwise you can make [make a pull request](https://help.github.com/en/articles/creating-a-pull-request) for me to merge any small changes you'd like to make.
