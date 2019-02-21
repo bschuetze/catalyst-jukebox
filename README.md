@@ -68,7 +68,7 @@ Here is a list of hardware I have used for this project:
     * Enable ssh, set hostname, enable networking, locale etc.  
 
 ### Install relevant software
-On the pi:  
+On the Pi:  
 
 1. Install [Raspotify](https://github.com/dtcooper/raspotify)  
 `curl -sL https://dtcooper.github.io/raspotify/install.sh | sh`
@@ -98,6 +98,71 @@ and then attach the included hdmi connector:
 ![Screen 2](assets/display-hdmi.jpg?raw=true)  
 and you should have display!  
 ![Screen 3](assets/display-on.jpg?raw=true)  
+
+### Calibrate the screen
+1. If not already, boot into the visual display from headless mode with `startx`
+2. `cd` into the LCD-show directory you cloned in the [previous section](#connect-the-screen)
+3. Run `sudo dpkg -i -B xinput-calibrator_0.7.5-1_armhf.deb` and wait for it to finish
+4. Run the calibrator with `DISPLAY=:0.0 xinput_calibrator` and follow the prompts on the screen with the stylus
+    * once finished the screen should output something like this:  
+    ```
+    Calibrating standard Xorg driver "ADS7846 Touchscreen"
+    current calibration values: min_x=0, max_x=65535 and min_y=0, max_y=65535
+    If these values are estimated wrong, either supply it manually with the --precalib option, or run the 'get_precalib.sh' script to automatically get it (through HAL).
+    --> Making the calibration permanent <--
+    copy the snippet below into '/etc/X11/xorg.conf.d/99-calibration.conf' (/usr/share/X11/xorg.conf.d/ in some distro's)
+    Section "InputClass"
+    Identifier  "calibration"
+    MatchProduct    "ADS7846 Touchscreen"
+    Option  "MinX"  "3049"
+    Option  "MaxX"  "63589"
+    Option  "MinY"  "3108"
+    Option  "MaxY"  "63287"
+    Option  "SwapXY"    "0" # unless it was already set to 1
+    Option  "InvertX"   "0"  # unless it was already set
+    Option  "InvertY"   "0"  # unless it was already set
+    EndSection
+    ```
+    * This may be the new way of formatting the file, however mine did not work, instead I followed a different calibration value using the tool below
+5. Install evtest with `sudo apt-get install evtest`
+    * Run evtest with `sudo evtest`
+    * Touch the top left of the screen with the stylus and note the x and y values of the second to last line (the non 0 values)
+    ```
+    Event: time 1547204968.948348, -------------- SYN_REPORT ------------
+    Event: time 1547204968.968264, type 3 (EV_ABS), code 0 (ABS_X), value 183
+    Event: time 1547204968.968264, type 3 (EV_ABS), code 1 (ABS_Y), value 299
+    Event: time 1547204968.968264, type 3 (EV_ABS), code 24 (ABS_PRESSURE), value 65114
+    ```
+    * Repeat for the bottom right hand side
+    ```
+    Event: time 1547205103.758308, -------------- SYN_REPORT ------------
+    Event: time 1547205103.778335, type 3 (EV_ABS), code 0 (ABS_X), value 3916
+    Event: time 1547205103.778335, type 3 (EV_ABS), code 1 (ABS_Y), value 3947
+    Event: time 1547205103.778335, type 3 (EV_ABS), code 24 (ABS_PRESSURE), value 64952
+    ```
+    * Based on these results my values are as follows:
+    min_x: 183
+    min_y: 299
+    max_x: 3916
+    max_y: 3947
+6. Using these values, we can edit the configuration file with:  
+`sudo nano /etc/X11/xorg.conf.d/99-calibration.conf`  
+to look like this:  
+```
+Section "InputClass"
+ Identifier      "calibration"
+ MatchProduct    "ADS7846 Touchscreen"
+ Option  "Calibration"   "183 3916 299 3947"
+ Option  "SwapAxes"      "0"
+EndSection
+```
+7. To ensure this works with newer versions of raspbian run:  
+`sudo apt-get install xserver-xorg-input-evdev`
+8. Then:  
+`sudo cp -rf /usr/share/X11/xorg.conf.d/10-evdev.conf /usr/share/X11/xorg.conf.d/45-evdev.conf`
+9. Finally, reboot the Pi with `sudo reboot`  
+
+Your screen should now be calibrated correctly!
 
 ## Configuring Restaurant Pager (ESP32)
 ### Flashing Software
