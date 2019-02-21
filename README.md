@@ -283,9 +283,20 @@ After completing the [setup](#setup) section, you're ready to run the jukebox ap
 4. That's it! Everything should be running as intended now
 
 ## Requesting a song
-1. Go to `http://(PI Local IP):6474/request` and paste in a space separated list of Spotify track URIs  
-    ![Track URI](assets/spotify-uri.png?raw=true)
+1. Find the song(s) you want to add, and copy their URIs  
+![Track URI](assets/spotify-uri.png?raw=true)
 
+2. Go to `http://(PI Local IP):6474/request` and paste in the URIs as a space separated list and click submit
+
+3. **After** clicking submit, plug your phone in to the Pi using a USB cable
+
+4. Wait for one of the restaurant pagers to begin flashing the big LEDs, remove that pager from its USB connection, it should stop flashing and should switch from the USB power LED to the battery power LED
+
+5. That's it! Don't remove your phone or return the pager too early and your song(s) will play
+
+## Locating the requester
+
+To locate a songs requester, simply press the button attached to the Pi, if this person still has their pager, it will now light up, vibrate and buzz for a specified amount of time (default 10s).
 
 
 ## Authorizing Spotify
