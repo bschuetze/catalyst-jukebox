@@ -9,7 +9,7 @@ const fetch = require('node-fetch'); // Requires install
 const servefav = require('serve-favicon'); // Requires install
 const request = require('request'); // Requires install
 const imgDownload = require('image-downloader'); // Requires install
-const util = require("./example-web/assets/utilNode.js");
+const util = require("./web-files/assets/utilNode.js");
 
 // Server variables
 var port = 6474;
@@ -58,7 +58,7 @@ util.webRequest(IP_DEST, "GET", {}, {}, function(data, status) {
     let dest = "http://api.qrserver.com/v1/create-qr-code/?data=http://" + publicIP + ":6474/request&size=1000x1000";
     let opts = {
         url: dest,
-        dest: "example-web/assets/public-qr.png"
+        dest: "web-files/assets/public-qr.png"
     };
     imgDownload.image(opts).then(({ filename, image }) => {
         console.log("Successfully written QRCODE Public image to " + filename);
@@ -70,7 +70,7 @@ util.webRequest(IP_DEST, "GET", {}, {}, function(data, status) {
     dest = "http://api.qrserver.com/v1/create-qr-code/?data=http://" + ip.address() + ":6474/request&size=1000x1000";
     opts = {
         url: dest,
-        dest: "example-web/assets/local-qr.png"
+        dest: "web-files/assets/local-qr.png"
     };
     imgDownload.image(opts).then(({ filename, image }) => {
         console.log("Successfully written QRCODE Local image to " + filename);
@@ -78,37 +78,6 @@ util.webRequest(IP_DEST, "GET", {}, {}, function(data, status) {
         console.error(error)
     });
 });
-    
-
-    
-    
-    
-    // util.webRequest(dest, "POST", {}, {}, function (data, status) {
-    //     console.log("QR Status: " + status)
-    //     console.log(data);
-        // let objectURL = blobUtil.createObjectURL(data);
-        // console.log(objectURL);
-
-        
-
-        // console.log(data.buffer);
-        // fs.createWriteStream("example-web/assets/public-qr.png").write(data, function (error) {
-        //     if (error) {
-        //         console.log("ERROR, QRCODE Public not saved");
-        //     } else {
-        //         console.log("Successfully written QRCODE Public image");
-        //     }
-        // });
-
-        // fs.writeFile("example-web/assets/public-qr.png", data, function (error) {
-        //     if (error) {
-        //         console.log("ERROR, QRCODE Public not saved");
-        //     } else {
-        //         console.log("Successfully written QRCODE Public image");
-        //     }
-        // });
-//     });
-// })
 
 // Load client id and secret 
 fs.readFile("client-data.txt", "utf8", function (error, data) {
@@ -609,14 +578,13 @@ function handler(req, res) { //create server (request, response)
         var filename;
         if (loc.pathname == "/") {
             // index page
-            filename = "." + "/example-web/" + "index.html";
+            filename = "." + "/web-files/" + "index.html";
         } else if (loc.pathname == "/login") {
-            filename = "." + "/example-web/" + "login.html";
-            // } else if (loc.pathname == "/login") {
+            filename = "." + "/web-files/" + "login.html";
         } else if (loc.pathname == "/request") {
-            filename = "." + "/example-web/" + "request.html";
+            filename = "." + "/web-files/" + "request.html";
         } else {
-            filename = "." + "/example-web/" + loc.pathname;
+            filename = "." + "/web-files/" + loc.pathname;
         }
 
         // Content type
@@ -639,7 +607,7 @@ function handler(req, res) { //create server (request, response)
                 break;
         }
 
-        // fs.readFile(__dirname + '/example-web/index.html', function (err, data) { //read file index.html in public folder
+        
         fs.readFile(filename, function (err, data) { //read file index.html in public folder
             if (err) {
                 res.writeHead(404, { 'Content-Type': 'text/html' }); //display 404 on error
@@ -1290,50 +1258,3 @@ function SpotifyPlaylist() {
         util.webRequest(dest, reqMethod, completeHeader, completeBody, respFunc);
     }
 }
-
-// function spotifyPlayerRequest(reqMethod, reqFunc, reqHeader, respFunc) {
-//     let completeHeader = reqHeader;
-//     completeHeader["Authorization"] = token;
-//     console.log(completeHeader);
-//     // {
-//     //     "Content-Type": "application/json",
-//     //         "Authorization": token
-//     // }
-//     fetch("https://api.spotify.com/v1/" + userID + "/player/" + reqFunc, {
-//         headers: completeHeader,
-//         method: reqMethod
-//         // body: JSON.stringify({
-//         //     username: 'Elon Musk',
-//         //     email: 'elonmusk@gmail.com',
-//         // })
-//     }).then(response => {
-//         // Response method originally found from here: https://stackoverflow.com/questions/37121301/how-to-check-if-the-response-of-a-fetch-is-a-json-object-in-javascript
-//         let contentType = response.headers.get("content-type");
-//         if (contentType && contentType.indexOf("application/json") !== -1) {
-//             return response.json().then(data => {
-//                 // process your JSON data further
-//                 console.log("JSON Response");
-//                 if (data.hasOwnProperty("error")) {
-//                     requestError(data);
-//                 }
-//                 if (respFunc !== undefined) {
-//                     respFunc(data);
-//                 } else {
-//                     console.log(data);
-//                 }
-//             });
-//         } else {
-//             return response.text().then(text => {
-//                 // this is text, do something with it
-//                 console.log("Other Response");
-//                 // console.log("Content: " + text + "\nResponse header: " + response.headers.get("content-type"));
-//                 // console.log(response.headers);
-//                 if (respFunc !== undefined) {
-//                     respFunc(text);
-//                 } else {
-//                     console.log(text);
-//                 }
-//             });
-//         }
-//     }); // end response method
-// }
