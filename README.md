@@ -108,9 +108,9 @@ On the Pi:
     * `npm install serve-favicon` [https://www.npmjs.com/package/serve-favicon](https://www.npmjs.com/package/serve-favicon)
     * `npm install request` [https://www.npmjs.com/package/request](https://www.npmjs.com/package/request)
     * `npm install image-downloader` [https://www.npmjs.com/package/image-downloader](https://www.npmjs.com/package/image-downloader)
-
+<a id="local-ip"></a>
 11. Get the local IP of the PI  
-    * Run `ifconfig` from the CLI on the Pi and locate the local IP  
+    * Run `ifconfig` from the CLI on the Pi and locate the local IP, it should look something like this:  
     ![Local IP](assets/local-ip.png?raw=true)
 
 
@@ -251,7 +251,7 @@ Note: Step 6 and 7 can be done from uPyCraft, however mine only worked intermitt
 6. Save that file and drag and drop it onto the 'device' on the left, once you have done that it should upload to the board  
 ![utils download](assets/utils-download.png?raw=true)
 
-7. Next we open the main.py file and update the WIFI_SSID to the name of your network and update the JUKEBOX_IP to the local IP of the julebox we [found earlier] TODODODODODODODO  
+7. Next we open the main.py file and update the WIFI_SSID to the name of your network and update the JUKEBOX_IP to the local IP of the julebox we [found earlier](#local-ip)  
 ![IP](assets/main-ip.png?raw=true)
 
 8. Upload that file using the 'play' button on the right  
