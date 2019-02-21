@@ -1,7 +1,7 @@
 ![Catalyst Jukebox Banner](assets/catalyst.png?raw=true)
 
 
-# Conters
+# Contents
 * [Project Introduction](#catalyst-jukebox)
 * [Setup](#setup)
 * [Contributing](#how-to-contribute)
