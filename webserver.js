@@ -665,7 +665,8 @@ function PlaylistHandler() {
         }
         // So do it later
         for (let i = removeList.length - 1; i >= 0; i--) {
-            updatePlay = (updatePlay || this.removeSong(i));
+            let updRes = this.removeSong(i);
+            updatePlay = (updatePlay || updRes);
         }
 
         return updatePlay;
