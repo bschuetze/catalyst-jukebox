@@ -673,6 +673,8 @@ function PlaylistHandler() {
     }
 
     this.removeSong = function(pos) {
+        console.log("Request to remove " + pos + " with position " + this.position);
+        console.log(pos > this.position);
         if (pos == this.position) {
             console.log("Removing " + this.playlist[pos].uri)
             // Currently playing song to be removed
