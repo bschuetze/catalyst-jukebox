@@ -78,6 +78,16 @@ function draw() {
         text("Public (if not on same WiFi)", width * 0.55, height * 0.06);
         image(qrPublic, width * 0.6, height * 0.1, width * 0.3, width * 0.3);
     }
+
+    fill("#1ED761");
+    stroke(0);
+    textSize(28);
+    text("Catalyst Jukebox", width * 0.07, height * 0.65);
+    fill(0);
+    textSize(20);
+    text("- Scan one of the QR codes to visit the request page\n" + 
+         "- Paste a list of Spotify song URIs in the box and submit the request\n" +
+         "", width * 0.07, height * 0.7);
 }
 
 function getIPCallback(data) {
