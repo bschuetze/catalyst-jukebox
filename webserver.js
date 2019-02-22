@@ -647,15 +647,23 @@ function PlaylistHandler() {
 
     this.removeUserSongs = function(uid) {
         let updatePlay = false;
+        let removeList = [];
+
+        // Updating an array while iterating through it is bad
         for (let i = 0; i < this.playlist.length; i++) {
             if (this.playlist[i].owner == uid) {
                 if (this.playlist[i].played) {
                     console.log("Song " + this.playlist[i].uri + " already been played, no need to remove");
                 } else {
-                    updatePlay = (updatePlay || this.removeSong(i));
+                    removeList.push(i);
                 }
             }
         }
+        // So do it later
+        for (let i = removeList.length - 1; i >= 0; i--) {
+            updatePlay = (updatePlay || this.removeSong(i));
+        }
+
         return updatePlay;
     }
 
