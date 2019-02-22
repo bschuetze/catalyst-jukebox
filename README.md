@@ -4,6 +4,10 @@
 # Contents
 * [Project Introduction](#catalyst-jukebox)
 * [Setup](#setup)
+    * [Hardware](#hardware)
+    * [Raspberry Pi Config](#configuring-raspberry-pi)
+    * [Restaurant Pager Config](#configuring-restaurant-pager-(esp32))
+    * [Wiring](#wiring)
 * [Running the Jukebox](#running-the-jukebox)
 * [Contributing](#how-to-contribute)
 * [Contact](#contact)
@@ -16,7 +20,8 @@
 #### *A modern jukebox with a focus on social interactions*
 ## What is it?
 Catalyst Jukebox is a socailly driven, Spotify based jukebox for the modern era. It is a re-imagining and update on the jukeboxes of old, utilizing the IoT to encourage and provide social engagement around all topics music *(and beyond)*.  
-It uses a Raspberry Pi as the jukebox server and allows users to request songs on their phones via LAN or the internet. The user then connects their phone to the jukebox presented and will take a 'restaurant pager' style device in exchange, the songs are then added to the queue and as long as the pager isn't returned or the phone isn't removed it will then play them.
+It uses a Raspberry Pi as the jukebox server and allows users to request songs on their phones via LAN or the internet.  
+The user then connects their phone to the jukebox presented and will take a 'restaurant pager' style device in exchange, the songs are then added to the queue and as long as the pager isn't returned or the phone isn't removed it will then play them.
 
 ## Why should I care?  
 The current era we live in is hyper-connected, and music is more accessible than ever with the likes of YouTube, Spotify and Soundcloud etc.  
