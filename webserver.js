@@ -650,8 +650,12 @@ function PlaylistHandler() {
         let removeList = [];
 
         // Updating an array while iterating through it is bad
+        console.log("Length: " + this.playlist.length);
+        console.log("Pos: " + this.position);
+
         for (let i = 0; i < this.playlist.length; i++) {
             if (this.playlist[i].owner == uid) {
+                console.log("Song: " + this.playlist[i].uri + " matches owner");
                 if (this.playlist[i].played) {
                     console.log("Song " + this.playlist[i].uri + " already been played, no need to remove");
                 } else {
@@ -728,7 +732,7 @@ function PlaylistHandler() {
     }
 
     this.lastSong = function() {
-        return (this.position == this.playlist.length - 1);
+        return (this.position == (this.playlist.length - 1));
     }
 
     this.next = function() {
