@@ -6,7 +6,7 @@
 * [Setup](#setup)
     * [Hardware](#hardware)
     * [Raspberry Pi Config](#configuring-raspberry-pi)
-    * [Restaurant Pager Config](#configuring-restaurant-pager-(esp32))
+    * [Restaurant Pager Config](#configuring-restaurant-pager-esp32)
     * [Wiring](#wiring)
 * [Running the Jukebox](#running-the-jukebox)
 * [Contributing](#how-to-contribute)
