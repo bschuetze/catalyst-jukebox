@@ -51,7 +51,7 @@ function draw() {
     if (qrLocalLoaded) {
         textSize(28);
         fill(0);
-        text("Local (if on same WiFi)", width * 0.1, height * 0.05);
+        text("Local (if on same WiFi)", width * 0.07, height * 0.05);
         image(qrLocal, width * 0.1, height * 0.1, width * 0.3, width * 0.3);
     }
 
@@ -75,7 +75,7 @@ function draw() {
     if (qrPublicLoaded) {
         textSize(28);
         fill(0);
-        text("Public (if not on same WiFi)", width * 0.6, height * 0.05);
+        text("Public (if not on same WiFi)", width * 0.5, height * 0.06);
         image(qrPublic, width * 0.6, height * 0.1, width * 0.3, width * 0.3);
     }
 }
