@@ -659,13 +659,14 @@ function PlaylistHandler() {
                 if (this.playlist[i].played) {
                     console.log("Song " + this.playlist[i].uri + " already been played, no need to remove");
                 } else {
+                    console.log("Adding idx: " + i);
                     removeList.push(i);
                 }
             }
         }
         // So do it later
         for (let i = removeList.length - 1; i >= 0; i--) {
-            let updRes = this.removeSong(i);
+            let updRes = this.removeSong(removeList[i]);
             updatePlay = (updatePlay || updRes);
         }
 
