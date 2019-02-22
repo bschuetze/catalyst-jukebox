@@ -81,13 +81,18 @@ function draw() {
 
     fill("#1ED761");
     stroke(0);
+    strokeWeight(3);
     textSize(28);
     text("Catalyst Jukebox", width * 0.07, height * 0.65);
     fill(0);
+    strokeWeight(1);
     textSize(20);
     text("- Scan one of the QR codes to visit the request page\n" + 
          "- Paste a list of Spotify song URIs in the box and submit the request\n" +
-         "", width * 0.07, height * 0.7);
+         "- Connect your phone via USB to the Jukebox\n" + 
+         "- Take the indicated Pager\n" +
+         "- Leave your phone connected and keep your pager until your songs have played\n" + 
+         "- Press the blue button to locate the current songs requester", width * 0.07, height * 0.7);
 }
 
 function getIPCallback(data) {
