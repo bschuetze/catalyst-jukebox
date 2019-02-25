@@ -286,11 +286,24 @@ After completing the [setup](#setup) section, you're ready to run the jukebox ap
 
 4. That's it! Everything should be running as intended now
 
+*Bonus:*
+5. If you have a screen, boot to the UI on the Pi by entering `startx` on the CLI
+
+6. Open a browser and navigate to `http://(PI Local IP):6474/`
+
+7. Make the browser fullscreen *usually with `f11`*
+
+8. Refresh the page (`f5`) to make the page adjust to the new size
+
+9. You now have 2 QR codes that user can use to interact with the Jukebox as well as some basic instructions  
+![Catalyst Main](assets/catalyst-main.png?raw=true)
+
 ## Requesting a song
 1. Find the song(s) you want to add, and copy their URIs  
 ![Track URI](assets/spotify-uri.png?raw=true)
 
-2. Go to `http://(PI Local IP):6474/request` and paste in the URIs as a space separated list and click submit
+2. Go to `http://(PI Local IP):6474/request` and paste in the URIs as a space separated list and click submit  
+![Request Page](assets/catalyst-request.png?raw=true)
 
 3. **After** clicking submit, plug your phone in to the Pi using a USB cable
 
@@ -319,7 +332,8 @@ To locate a song's requester, simply press the button attached to the Pi, if thi
     For example if my local ip on the Pi was 192.168.1.20, my whitelisted redirect urls would look like this:  
     ![Redirect urls](assets/redirect-urls.png?raw=true)
 
-4. Navigate to `http://(PI Local IP):6474/login` and paste in the Client ID and Secret in the corresponding boxes and click 'submit'
+4. Navigate to `http://(PI Local IP):6474/login` and paste in the Client ID and Secret in the corresponding boxes and click 'submit'  
+![Login Page](assets/catalyst-login.png?raw=true)
 
 5. You will be redirected to the Spotify Authorization page, if you agree to the requested scope then click accept
 
